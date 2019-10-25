@@ -14,33 +14,41 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:hint="@string/register_first_name_hint"
-        app:layout_constraintBottom_toTopOf="@+id/register_nick_name"
+        android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@+id/register_last_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/register_last_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:hint="@string/register_last_name_hint"
-        app:layout_constraintBottom_toTopOf="@+id/register_first_name"
+        app:layout_constraintBottom_toTopOf="@+id/register_nick_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/register_nick_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:hint="@string/register_nickname_hint"
         app:layout_constraintBottom_toTopOf="@+id/register_email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/register_email"
@@ -104,7 +112,7 @@
         android:text="@string/login_button_register"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/register_last_name"
+        app:layout_constraintBottom_toTopOf="@+id/register_first_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />

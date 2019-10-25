@@ -1,20 +1,19 @@
 package edu.uw.tcss450.gavz63.project450.login;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import org.json.JSONObject;
+
+import java.io.Serializable;
+
 import edu.uw.tcss450.gavz63.project450.model.Credentials;
 import edu.uw.tcss450.gavz63.project450.R;
 
@@ -35,6 +34,10 @@ public class LoginFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Credentials mCredentials;
+    private EditText mEmailField;
+    private EditText mPasswordField;
+    private String mEmailString;
+    private String mPasswordString;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -79,44 +82,40 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        EditText email = view.findViewById(R.id.login_email);
-        EditText pass = view.findViewById(R.id.login_pass);
+        mEmailField = view.findViewById(R.id.login_email);
+        mPasswordField = view.findViewById(R.id.login_pass);
         //Comment out this block before going to prod
-        email.setText("test@test");
-        pass.setText("test123");
+//        mEmailField.setText("test@test");
+//        mPasswordField.setText("test123");
 
         Button b = view.findViewById(R.id.button_login_register);
-        b.setOnClickListener(v -> this.onRegisterClicked());
+        b.setOnClickListener(this::onRegisterClicked);
 
         b = view.findViewById(R.id.button_login_sign_in);
-        b.setOnClickListener(v -> this.validateLogin(view));
+        b.setOnClickListener(this::validateLogin);
     }
 
-    private void onRegisterClicked() {
+    private void onRegisterClicked(View view) {
         NavController nc = Navigation.findNavController(getView());
 
         nc.navigate(R.id.action_loginFragment_to_registerFragment);
     }
 
     private void validateLogin(View view) {
-        EditText emailView = view.findViewById(R.id.login_email);
-        EditText passView = view.findViewById(R.id.login_pass);
+        mEmailString = mEmailField.getText().toString();
+        mPasswordString = mPasswordField.getText().toString();
 
-        boolean emailErrors = emailErrors(emailView);
-        boolean passErrors = passwordErrors(passView);
-
-        if (!emailErrors && !passErrors) {
-            Credentials credentials = new Credentials.Builder(
-                    emailView.getText().toString(),
-                    passView.getText().toString())
-                    .build();
+        if (!anyErrors()) {
+            Credentials credentials = new Credentials.Builder(mEmailString, mPasswordString).build();
 
             mCredentials = credentials;
 
-            //LoginFragmentDirections
+            LoginFragmentDirections.ActionLoginFragmentToHomeActivity homeActivity =
+                    LoginFragmentDirections.actionLoginFragmentToHomeActivity(mCredentials);
+
             //homeActivity.setJwt(resultsJSON.getString(getString(R.string.keys_json_login_jwt)));
 
-            Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_home_Activity);
+            Navigation.findNavController(getView()).navigate(homeActivity);
 //            //build the web service URL
 //            Uri uri = new Uri.Builder()
 //                    .scheme("https")
@@ -138,35 +137,48 @@ public class LoginFragment extends Fragment {
 
         }
     }
+    //TODO server side verification
+    private boolean anyErrors() {
+        boolean anyErrors = false;
 
-    private boolean emailErrors(EditText theEmailField) {
-        String email = theEmailField.getText().toString();
-        boolean toReturn = false;
-
-        if (!email.contains("@")) {
-            theEmailField.setError("Please enter a valid email");
-            if (email.equals("")) {
-                theEmailField.setError("Email cannot be empty");
+        //If email does not contain exactly one '@'
+        if (mEmailString.length() - mEmailString.replace("@", "").length() != 1) {
+            //If email is empty
+            if (mEmailField.equals("")) {
+                mEmailField.setError("Email cannot be empty");
+            } else {
+                mEmailField.setError("Please enter a valid email");
             }
-            toReturn = true;
+            anyErrors = true;
         } else {
-            theEmailField.setError(null);
+            mEmailField.setError(null);
         }
 
-        return toReturn;
+        if (mPasswordString.equals("")) {
+            mPasswordField.setError("Password should not be empty");
+            anyErrors = true;
+        } else {
+            mPasswordField.setError(null);
+        }
+
+        return anyErrors;
     }
 
-    private boolean passwordErrors(EditText thePasswordField) {
-        String pass = thePasswordField.getText().toString();
-        boolean toReturn = false;
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        if (pass.equals("")) {
-            thePasswordField.setError("Password cannot be empty");
-            toReturn = true;
-        } else {
-            thePasswordField.setError(null);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Serializable serializable = bundle.getSerializable(getString(R.string.credentials_key));
+            if (serializable instanceof Credentials) {
+                Credentials cr = (Credentials) serializable;
+                String email = cr.getEmail() != null ? cr.getEmail() : "oops";
+                String pass = cr.getPassword() != null ? cr.getPassword() : "oops";
+
+                mEmailField.setText(email);
+                mPasswordField.setText(pass);
+            }
         }
-
-        return toReturn;
     }
 }

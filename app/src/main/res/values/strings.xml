@@ -25,6 +25,10 @@
     <string name="register_button_register">Submit?</string>
     <string name="register_retype_password_hint">Confirm Password</string>
 
+
+    <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->
+    <string name="credentials_key">Crdntls ky </string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -4,13 +4,20 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import edu.uw.tcss450.gavz63.project450.R;
+import edu.uw.tcss450.gavz63.project450.model.Credentials;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +35,19 @@ public class RegisterFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private EditText mFirstNameField;
+    private EditText mLastNameField;
+    private EditText mNicknameField;
+    private EditText mEmailField;
+    private EditText mPasswordField;
+    private EditText mPasswordConfirmField;
+    private String mFirstNameString;
+    private String mLastNameString;
+    private String mNicknameString;
+    private String mEmailString;
+    private String mPasswordString;
+    private String mPasswordConfirmString;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -65,5 +85,85 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mFirstNameField = view.findViewById(R.id.register_first_name);
+        mLastNameField = view.findViewById(R.id.register_last_name);
+        mNicknameField = view.findViewById(R.id.register_nick_name);
+        mEmailField = view.findViewById(R.id.register_email);
+        mPasswordField = view.findViewById(R.id.register_pass);
+        mPasswordConfirmField = view.findViewById(R.id.register_re_pass);
+
+        Button b = view.findViewById(R.id.button_register_register);
+        b.setOnClickListener(this::validateRegistration);
+    }
+
+    private void validateRegistration(View view) {
+        mFirstNameString = mFirstNameField.getText().toString();
+        mLastNameString = mLastNameField.getText().toString();
+        mNicknameString = mNicknameField.getText().toString();
+        mEmailString = mEmailField.getText().toString();
+        mPasswordString = mPasswordField.getText().toString();
+        mPasswordConfirmString = mPasswordConfirmField.getText().toString();
+
+        if (!anyErrors()) {
+            Bundle bundle = new Bundle();
+            Credentials theCredentials = new Credentials.
+                    Builder(mEmailString, mPasswordString).build();
+            bundle.putSerializable(getString(R.string.credentials_key), theCredentials);
+
+            NavController nc = Navigation.findNavController(view);
+            nc.navigate(R.id.action_registerFragment_to_loginFragment, bundle);
+        }
+    }
+
+    private boolean anyErrors() {
+        boolean anyErrors = false;
+
+        if (mFirstNameString != "") {
+            mFirstNameField.setError(null);
+        } else {
+            mFirstNameField.setError("Please enter your first name");
+        }
+
+        if (mLastNameString != "") {
+            mLastNameField.setError(null);
+        } else {
+            mLastNameField.setError("Please enter your first name");
+        }
+
+        //If email does not contain exactly one '@'
+        if (mEmailString.length() - mEmailString.replace("@", "").length() != 1) {
+            //If email is empty
+            if (mEmailField.equals("")) {
+                mEmailField.setError("Email cannot be empty");
+            } else {
+                mEmailField.setError("Please enter a valid email");
+            }
+            anyErrors = true;
+        } else {
+            mEmailField.setError(null);
+        }
+
+        if (mPasswordString.length() < 6) {
+            if (mPasswordString.equals("")) {
+                mPasswordField.setError("Password cannot be empty");
+            } else {
+                mPasswordField.setError("Your password must be 6 or more characters");
+            }
+            anyErrors = true;
+        } else {
+            mPasswordField.setError(null);
+        }
+        if (!mPasswordString.equals(mPasswordConfirmString)) {
+            mPasswordConfirmField.setError("Passwords must match");
+            anyErrors = true;
+        }
+
+        return anyErrors;
     }
 }
