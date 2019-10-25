@@ -24,6 +24,7 @@ import android.view.Menu;
 public class Home_Activity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private String mJwToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
