@@ -15,7 +15,7 @@
 
     <string name="login_email_hint">Email</string>
     <string name="login_password_hint">Password</string>
-
+    <string name="login_switch_stay_logged_in">Remember Me</string>
     <string name="login_button_login">Log In</string>
     <string name="login_button_register">Create Account</string>
 

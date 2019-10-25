@@ -49,6 +49,7 @@ public class Home_Activity extends AppCompatActivity {
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.setGraph(R.navigation.mobile_navigation, getIntent().getExtras());
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
