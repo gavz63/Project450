@@ -1,4 +1,4 @@
-package edu.uw.tcss450.gavz63.project450;
+package edu.uw.tcss450.inouek.test450;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="edu.uw.tcss450.gavz63.project450.ui.home.HomeFragment"
-        android:label="@string/menu_Chats"
+        android:name="edu.uw.tcss450.inouek.test450.ui.home.HomeFragment"
+        android:label="menu_home"
         tools:layout="@layout/fragment_home" />
 
 </navigation>

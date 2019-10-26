@@ -4,39 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_nav"
     app:startDestination="@id/loginFragment">
-
     <fragment
         android:id="@+id/loginFragment"
-        android:name="edu.uw.tcss450.gavz63.project450.login.LoginFragment"
+        android:name="edu.uw.tcss450.inouek.test450.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
+            android:id="@+id/action_loginFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+        <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_home_Activity"
-            app:destination="@id/home_Activity" />
     </fragment>
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="edu.uw.tcss450.inouek.test450.HomeActivity"
+        android:label="activity_home"
+        tools:layout="@layout/activity_home" >
+        <argument
+            android:name="credentials "
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+        <argument
+            android:name="jwt"
+            app:argType="string"
+            android:defaultValue='""' />
+    </activity>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="edu.uw.tcss450.gavz63.project450.login.RegisterFragment"
+        android:name="edu.uw.tcss450.inouek.test450.login.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
-    <activity
-        android:id="@+id/home_Activity"
-        android:name="edu.uw.tcss450.gavz63.project450.Home_Activity"
-        android:label="activity_home_"
-        tools:layout="@layout/activity_home_" >
-        <argument
-            android:name="credentials"
-            app:argType="edu.uw.tcss450.gavz63.project450.model.Credentials" />
-        <argument
-            android:name="jwt"
-            app:argType="string"
-            android:defaultValue='""' />
-    </activity>
 </navigation>

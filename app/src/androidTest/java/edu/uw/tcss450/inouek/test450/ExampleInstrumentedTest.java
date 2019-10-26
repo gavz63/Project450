@@ -1,4 +1,4 @@
-package edu.uw.tcss450.gavz63.project450;
+package edu.uw.tcss450.inouek.test450;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("edu.uw.tcss450.gavz63.project450", appContext.getPackageName());
+        assertEquals("edu.uw.tcss450.inouek.test450", appContext.getPackageName());
     }
 }

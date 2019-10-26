@@ -1,4 +1,4 @@
-package edu.uw.tcss450.gavz63.project450.ui.home;
+package edu.uw.tcss450.inouek.test450.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import edu.uw.tcss450.gavz63.project450.R;
+import edu.uw.tcss450.inouek.test450.R;
 
 public class HomeFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package edu.uw.tcss450.gavz63.project450.login;
+package edu.uw.tcss450.inouek.test450.login;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -11,11 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-
 import java.io.Serializable;
 
-import edu.uw.tcss450.gavz63.project450.model.Credentials;
-import edu.uw.tcss450.gavz63.project450.R;
+import edu.uw.tcss450.inouek.test450.login.LoginFragmentDirections;
+import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.model.Credentials;
+
+//import edu.uw.tcss450.gavz63.project450.model.Credentials;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,8 +88,8 @@ public class LoginFragment extends Fragment {
         mEmailField = view.findViewById(R.id.login_email);
         mPasswordField = view.findViewById(R.id.login_pass);
         //Comment out this block before going to prod
-//        mEmailField.setText("test@test");
-//        mPasswordField.setText("test123");
+        mEmailField.setText("test@test");
+        mPasswordField.setText("test123");
 
         Button b = view.findViewById(R.id.button_login_register);
         b.setOnClickListener(this::onRegisterClicked);
@@ -112,10 +115,11 @@ public class LoginFragment extends Fragment {
 
             LoginFragmentDirections.ActionLoginFragmentToHomeActivity homeActivity =
                     LoginFragmentDirections.actionLoginFragmentToHomeActivity(mCredentials);
+            Navigation.findNavController(getView()).navigate(homeActivity);
 
             //homeActivity.setJwt(resultsJSON.getString(getString(R.string.keys_json_login_jwt)));
 
-            Navigation.findNavController(getView()).navigate(homeActivity);
+            //Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_homeActivity);
 //            //build the web service URL
 //            Uri uri = new Uri.Builder()
 //                    .scheme("https")

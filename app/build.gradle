@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "edu.uw.tcss450.gavz63.project450"
+        applicationId "edu.uw.tcss450.inouek.test450"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
@@ -38,5 +38,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'com.google.android.material:material:1.0.0'
-
 }

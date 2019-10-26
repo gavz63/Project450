@@ -83,9 +83,8 @@
         app:layout_constraintBottom_toTopOf="@+id/button_login_register"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/button_login_register"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -94,9 +93,8 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/button_login_sign_in"
         app:layout_constraintEnd_toStartOf="@+id/button_login_sign_in" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/button_login_sign_in"
-        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

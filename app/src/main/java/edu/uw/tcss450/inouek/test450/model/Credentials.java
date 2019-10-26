@@ -1,8 +1,10 @@
-package edu.uw.tcss450.gavz63.project450.model;
+package edu.uw.tcss450.inouek.test450.model;
 
 import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
