@@ -121,16 +121,22 @@ public class RegisterFragment extends Fragment {
     private boolean anyErrors() {
         boolean anyErrors = false;
 
-        if (mFirstNameString != "") {
+        if (!mFirstNameString.equals("")) {
             mFirstNameField.setError(null);
         } else {
             mFirstNameField.setError("Please enter your first name");
         }
 
-        if (mLastNameString != "") {
+        if (!mLastNameString.equals("")) {
             mLastNameField.setError(null);
         } else {
             mLastNameField.setError("Please enter your first name");
+        }
+
+        if (!mNicknameString.equals("")) {
+            mNicknameField.setError(null);
+        } else {
+            mNicknameField.setError("Please enter your nickname");
         }
 
         //If email does not contain exactly one '@'
