@@ -9,6 +9,15 @@
         android:id="@+id/nav_home"
         android:name="edu.uw.tcss450.inouek.test450.ui.home.HomeFragment"
         android:label="menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_connections"
+            app:destination="@id/nav_connections" />
+    </fragment>
+    <activity
+        android:id="@+id/nav_connections"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsActivity"
+        android:label="activity_connections"
+        tools:layout="@layout/activity_connections" />
 
 </navigation>

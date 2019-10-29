@@ -25,10 +25,26 @@
     <string name="register_button_register">Submit?</string>
     <string name="register_retype_password_hint">Confirm Password</string>
 
+    <string name="connections_text_search">Search</string>
+    <string name="connections_text_display">Connections</string>
+    <string name="connections_text_expand">Expand</string>
+    <string name="connections_text_requests">Connection Requests</string>
+    <string name="connections_text_requests_sent">Sent</string>
+    <string name="connections_text_requests_received">Received</string>
+
+    <string name="profile_text_send_invite">Send Invite</string>
+    <string name="profile_text_remove_connection">Remove</string>
+    <string name="profile_text_bock_connection">Block</string>
+
+    <string-array name="connections_auto_complete">
+        <item>joel_johnson96@hotmail.com</item>
+        <item>jjohn96</item>
+        <item>Joel Johnson</item>
+    </string-array>
 
     <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->
     <string name="credentials_key">Crdntls ky </string>
-
+    <string name="profile_key">Profile!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
