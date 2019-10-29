@@ -13,11 +13,19 @@
         <action
             android:id="@+id/action_nav_home_to_nav_connections"
             app:destination="@id/nav_connections" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_weather"
+            app:destination="@id/nav_weather" />
     </fragment>
     <activity
         android:id="@+id/nav_connections"
         android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsActivity"
         android:label="activity_connections"
         tools:layout="@layout/activity_connections" />
+    <activity
+        android:id="@+id/nav_weather"
+        android:name="edu.uw.tcss450.inouek.test450.WeatherActivity"
+        android:label="activity_weather"
+        tools:layout="@layout/activity_weather" />
 
 </navigation>
