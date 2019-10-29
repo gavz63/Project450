@@ -25,6 +25,8 @@
     <string name="register_button_register">Submit?</string>
     <string name="register_retype_password_hint">Confirm Password</string>
 
+    <string name="Weather_Actvity">Weather_Actvity</string>
+
 
     <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->
     <string name="credentials_key">Crdntls ky </string>
