@@ -25,6 +25,7 @@
     <string name="register_button_register">Submit?</string>
     <string name="register_retype_password_hint">Confirm Password</string>
 
+<<<<<<< HEAD
     <string name="connections_text_search">Search</string>
     <string name="connections_text_display">Connections</string>
     <string name="connections_text_expand">Expand</string>
@@ -41,6 +42,10 @@
         <item>jjohn96</item>
         <item>Joel Johnson</item>
     </string-array>
+=======
+    <string name="Weather_Actvity">Weather_Actvity</string>
+
+>>>>>>> Weather
 
     <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->
     <string name="credentials_key">Crdntls ky </string>
