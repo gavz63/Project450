@@ -9,7 +9,7 @@
             android:icon="@drawable/ic_chat"
             android:title="@string/menu_Chats" />
         <item
-            android:id="@+id/nav_connection"
+            android:id="@+id/nav_connections"
             android:icon="@drawable/ic_connect"
             android:title="@string/menu_Connection" />
         <item
