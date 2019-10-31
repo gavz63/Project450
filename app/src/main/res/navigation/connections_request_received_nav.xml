@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/connections_request_received_nav"
+    app:startDestination="@id/requestReceivedFragment">
+
+    <fragment
+        android:id="@+id/viewProfileFragment4"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.ViewProfileFragment"
+        android:label="fragment_view_profile"
+        tools:layout="@layout/fragment_view_profile" >
+        <argument
+            android:name="ProfileRequestArgs"
+            app:argType="edu.uw.tcss450.inouek.test450.Connections.Profile.ProfileContent$Profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestReceivedFragment"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.RequestReceivedFragment"
+        android:label="fragmnet_request_received"
+        tools:layout="@layout/fragment_request_received" >
+        <action
+            android:id="@+id/action_requestReceivedFragment_to_viewProfileFragment4"
+            app:destination="@id/viewProfileFragment4" />
+    </fragment>
+</navigation>

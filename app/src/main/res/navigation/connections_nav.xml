@@ -6,31 +6,17 @@
     app:startDestination="@id/connectionsHomeDynamic">
 
     <fragment
-        android:id="@+id/viewProfileFragment"
-        android:name="edu.uw.tcss450.inouek.test450.Connections.ViewProfileFragment"
-        android:label="fragment_view_profile"
-        tools:layout="@layout/fragment_view_profile" >
-        <argument
-            android:name="profileArgs"
-            app:argType="edu.uw.tcss450.inouek.test450.Connections.Profile.ProfileContent$Profile" />
-    </fragment>
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="edu.uw.tcss450.inouek.test450.Connections.ProfileFragment"
-        android:label="fragment_profile_list"
-        tools:layout="@layout/fragment_profile_list" />
-    <fragment
-        android:id="@+id/connectionHome"
-        android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionHome"
-        android:label="fragment_connection_home"
-        tools:layout="@layout/fragment_connection_home" />
-    <fragment
         android:id="@+id/connectionsHomeDynamic"
         android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamic"
         android:label="fragment_connections_home_dynamic"
         tools:layout="@layout/fragment_connections_home_dynamic" >
         <action
-            android:id="@+id/action_connectionsHomeDynamic_to_connectionHome"
-            app:destination="@id/connectionHome" />
+            android:id="@+id/action_connectionsHomeDynamic_to_connectionsRequestFragment"
+            app:destination="@id/connectionsRequestFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/connectionsRequestFragment"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsRequestFragment"
+        android:label="fragment_connections_request"
+        tools:layout="@layout/fragment_connections_request" />
 </navigation>
