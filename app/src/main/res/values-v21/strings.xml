@@ -31,15 +31,36 @@
     <string name="connections_text_requests">Connection Requests</string>
     <string name="connections_text_requests_sent">Sent</string>
     <string name="connections_text_requests_received">Received</string>
+    <string name="connections_text_connections">Connections</string>
+    <string name="connections_text_connections_pending">Pending Requests</string>
+    <string name="connections_text_manage">Manage Connections</string>
+    <string name="connections_text_pending_sent">Requests Sent</string>
+    <string name="connections_text_pending_received">Requests Received</string>
+    <string name="connections_text_button_accept">Accept</string>
+    <string name="connections_text_button_decline">Decline</string>
+    <string name="connections_text_button_cancel">Cancel</string>
 
     <string name="profile_text_send_invite">Send Invite</string>
-    <string name="profile_text_remove_connection">Remove</string>
+    <string name="profile_text_remove_connection">Remove Contact</string>
     <string name="profile_text_bock_connection">Block</string>
 
-    <string-array name="connections_auto_complete">
-        <item>joel_johnson96@hotmail.com</item>
-        <item>jjohn96</item>
+    <string-array name="connections_auto_complete_names">
         <item>Joel Johnson</item>
+        <item>Joel Johnson</item>
+    </string-array>
+
+    <string-array name="connections_auto_complete_usernames">
+        <item>username1</item>
+        <item>tempusername</item>
+    </string-array>
+
+    <string-array name="connections_auto_complete_emails">
+        <item>joel_johnson96@hotmail.com</item>
+        <item>jjohn96@uw.edu</item>
+    </string-array>
+
+    <string-array name="connections_my_connections">
+        <item>1</item>
     </string-array>
 
     <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->

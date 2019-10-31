@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import edu.uw.tcss450.inouek.test450.R;
@@ -36,16 +38,35 @@ public class ConnectionsHomeDynamic extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button expand = (Button) view.findViewById(R.id.connections_button_manage_connections);
-        if(expand != null) {
+
+        Button requests = (Button) view.findViewById(R.id.connections_button_connections);
+        if(requests != null) {
             Log.e("Not NULL", "NOT NULL");
-            expand.setOnClickListener(new View.OnClickListener() {
+            requests.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Navigation.findNavController(view).navigate(R.id.action_connectionsHomeDynamic_to_connectionHome);
+                    Navigation.findNavController(view).navigate(R.id.action_connectionsHomeDynamic_to_connectionsRequestFragment);
                 }
             });
         }
+    }
+
+    String[] getAutoCompleteFields()
+    {
+        String[] names = getResources().getStringArray(R.array.connections_auto_complete_names);
+        String[] usernames = getResources().getStringArray(R.array.connections_auto_complete_usernames);
+        String[] emails = getResources().getStringArray(R.array.connections_auto_complete_emails);
+
+        int length = names.length + usernames.length + emails.length;
+        String[] array = new String[length];
+        for(int i = 0; i < length/3; i++)
+        {
+            int index = i * 3;
+            array[index] = names[i] + ", " + emails[i];
+            array[index+1] = usernames[i];
+            array[index+2] = emails[i];
+        }
+        return array;
     }
 
     @Override
@@ -53,9 +74,16 @@ public class ConnectionsHomeDynamic extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        View v = inflater.inflate(R.layout.fragment_connections_home_dynamic, container, false);
+        final String[] PROFILES = getAutoCompleteFields();
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(getActivity(),
+                        android.R.layout.simple_dropdown_item_1line,
+                        PROFILES);
+        AutoCompleteTextView text = (AutoCompleteTextView) v.findViewById(R.id.connections_text_search);
+        text.setAdapter(adapter);
 
-
-        return inflater.inflate(R.layout.fragment_connections_home_dynamic, container, false);
+        return v;
     }
 
 }

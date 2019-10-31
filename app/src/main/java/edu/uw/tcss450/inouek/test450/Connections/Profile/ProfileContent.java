@@ -1,11 +1,20 @@
 package edu.uw.tcss450.inouek.test450.Connections.Profile;
 
 
+import android.util.Log;
+
+import androidx.fragment.app.Fragment;
+
+import java.io.File;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+
+import edu.uw.tcss450.inouek.test450.R;
 
 /**
  * Helper class for providing sample name for user interfaces created by
@@ -26,8 +35,55 @@ public class ProfileContent {
     public static final Map<String, Profile> PROFILES_MAP = new HashMap<String, Profile>();
 
     private static final int COUNT = 25;
+    private static String[] names = null;
+    private static String[] emails = null;
+    private static String[] usernames = null;
+
+    private static void LoadStrings()
+    {
+        names = new String[11];
+        emails = new String[11];
+        usernames = new String[11];
+
+        Scanner sc = null;
+        try {
+           sc  = new Scanner(new File("/Temp/profiles.txt"));
+        }
+        catch(java.io.FileNotFoundException error)
+        {
+            String f = null;
+            try {
+                f = new File("profiles.txt").getCanonicalPath();
+            }
+            catch(java.io.IOException e)
+            {
+                Log.e("DONT KNOW WHY THIS HAPPENED","PRETTY PISSED");
+            }
+            if(f != null) {
+                Log.e("FOUND", f);
+            }
+            Log.e("ERROR", "FILE NOT FOUND");
+        }
+        if(sc != null)
+        {
+            int i = 0;
+            while(sc.hasNextLine())
+            {
+                names[i] = sc.nextLine();
+                usernames[i] = sc.nextLine();
+                emails[i] = sc.nextLine();
+                i++;
+            }
+        }
+    }
+
 
     static {
+
+        if(names == null) {
+            LoadStrings();
+        }
+
         // Add some sample items.
         for (int i = 1; i <= COUNT; i++) {
             addItem(createProfiles(i));
@@ -45,6 +101,8 @@ public class ProfileContent {
     }
 
     private static Profile createProfiles(int position) {
+        String id = String.valueOf(position);
+
         return new Profile(String.valueOf(position), "Profile Name " + position, "Email Name " + position, "Username " + position);
     }
 
