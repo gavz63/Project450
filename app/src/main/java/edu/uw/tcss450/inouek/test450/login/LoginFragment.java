@@ -96,8 +96,8 @@ public class LoginFragment extends Fragment {
         mEmailField = view.findViewById(R.id.login_email);
         mPasswordField = view.findViewById(R.id.login_pass);
         //Comment out this block before going to prod
-        mEmailField.setText("test@test");
-        mPasswordField.setText("test123");
+//        mEmailField.setText("gavz63@uw.edu");
+//        mPasswordField.setText("zeekers63");
 
         Button b = view.findViewById(R.id.button_login_register);
         b.setOnClickListener(this::onRegisterClicked);
@@ -233,8 +233,10 @@ public class LoginFragment extends Fragment {
                     mEmailField.setError("Missing Credentials");
                 } else if (err.startsWith("Credentials do not")) {
                     mPasswordField.setError("Password is incorrect");
-                } else if (err.startsWith("Email not")){
+                } else if (err.startsWith("Email not reg")){
                     mEmailField.setError("Email is not registered");
+                } else if (err.startsWith("Email not ver")) {
+                    mEmailField.setError("Email is not verified");
                 }
             }
             getActivity().findViewById(R.id.layout_login_wait)
