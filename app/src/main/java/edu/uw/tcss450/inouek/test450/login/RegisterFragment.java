@@ -1,6 +1,8 @@
 package edu.uw.tcss450.inouek.test450.login;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,12 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
+import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +38,8 @@ public class RegisterFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Credentials mCredentials;
 
     private EditText mFirstNameField;
     private EditText mLastNameField;
@@ -108,13 +116,27 @@ public class RegisterFragment extends Fragment {
         mPasswordConfirmString = mPasswordConfirmField.getText().toString();
 
         if (!anyErrors()) {
-            Bundle bundle = new Bundle();
-            Credentials theCredentials = new Credentials.
-                    Builder(mEmailString, mPasswordString).build();
-            bundle.putSerializable(getString(R.string.credentials_key), theCredentials);
+            mCredentials = new Credentials.Builder(mEmailString, mPasswordString)
+                    .addFirstName(mFirstNameString)
+                    .addLastName(mLastNameString)
+                    .addUsername(mNicknameString)
+                    .build();
 
-            NavController nc = Navigation.findNavController(view);
-            nc.navigate(R.id.action_registerFragment_to_loginFragment, bundle);
+            Uri uri = new Uri.Builder()
+                    .scheme("https")
+                    .appendPath(getString(R.string.ep_base_url))
+                    .appendPath(getString(R.string.ep_register))
+                    .build();
+
+            //build the JSONObject
+            JSONObject msg = mCredentials.asJSONObject();
+
+            //instantiate and execute the AsyncTask.
+            new SendPostAsyncTask.Builder(uri.toString(), msg)
+                    .onPreExecute(this::handleRegisterOnPre)
+                    .onPostExecute(this::handleRegisterOnPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
         }
     }
 
@@ -124,25 +146,28 @@ public class RegisterFragment extends Fragment {
         if (!mFirstNameString.equals("")) {
             mFirstNameField.setError(null);
         } else {
-            mFirstNameField.setError("Please enter your first name");
+            mFirstNameField.setError("First Name cannot be empty");
+            anyErrors = true;
         }
 
         if (!mLastNameString.equals("")) {
             mLastNameField.setError(null);
         } else {
-            mLastNameField.setError("Please enter your first name");
+            mLastNameField.setError("Last Name cannot be empty");
+            anyErrors = true;
         }
 
         if (!mNicknameString.equals("")) {
             mNicknameField.setError(null);
         } else {
-            mNicknameField.setError("Please enter your nickname");
+            mNicknameField.setError("Nickname cannot be empty");
+            anyErrors = true;
         }
 
         //If email does not contain exactly one '@'
         if (mEmailString.length() - mEmailString.replace("@", "").length() != 1) {
             //If email is empty
-            if (mEmailField.equals("")) {
+            if (mEmailString.equals("")) {
                 mEmailField.setError("Email cannot be empty");
             } else {
                 mEmailField.setError("Please enter a valid email");
@@ -163,10 +188,71 @@ public class RegisterFragment extends Fragment {
             mPasswordField.setError(null);
         }
         if (!mPasswordString.equals(mPasswordConfirmString)) {
-            mPasswordConfirmField.setError("Passwords must match");
+            mPasswordConfirmField.setError("Passwords do not match");
             anyErrors = true;
         }
 
         return anyErrors;
+    }
+
+    /**
+     * Handle errors that may occur during the AsyncTask.
+     * @param result the error message provide from the AsyncTask
+     */
+    private void handleErrorsInTask(String result) {
+        Log.e("ASYNC_TASK_ERROR",  result);
+    }
+
+    /**
+     * Handle the setup of the UI before the HTTP call to the webservice.
+     */
+    private void handleRegisterOnPre() {
+        getActivity().findViewById(R.id.layout_register_wait).setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Handle onPostExecute of the AsynceTask. The result from our webservice is
+     * a JSON formatted String. Parse it for success or failure.
+     * @param result the JSON formatted String response from the web service
+     */
+    private void handleRegisterOnPost(String result) {
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success =
+                    resultsJSON.getBoolean(
+                            getString(R.string.keys_json_register_success));
+
+            if (success) {
+                RegisterFragmentDirections.ActionRegisterFragmentToLoginFragment loginFragment =
+                        RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(mCredentials);
+                loginFragment.setCredentials(mCredentials);
+                Navigation.findNavController(getView()).navigate(loginFragment);
+                return;
+            } else {
+                //Login was unsuccessful. Don’t switch fragments and
+                // inform the user
+                String err =
+                        resultsJSON.getString(
+                                getString(R.string.keys_json_register_err));
+                if (err.startsWith("Missing required")) {
+                    mFirstNameField.setError(err);
+                } else if (err.startsWith("Key (username)")){
+                    mNicknameField.setError("Username is not available.");
+                } else if (err.startsWith("Key (email)")){
+                    mEmailField.setError("Email is already in use.");
+                }
+            }
+            getActivity().findViewById(R.id.layout_register_wait)
+                    .setVisibility(View.GONE);
+        } catch (JSONException e) {
+            //It appears that the web service did not return a JSON formatted
+            //String or it did not have what we expected in it.
+            Log.e("JSON_PARSE_ERROR",  result
+                    + System.lineSeparator()
+                    + e.getMessage());
+            getActivity().findViewById(R.id.layout_register_wait)
+                    .setVisibility(View.GONE);
+            mFirstNameField.setError("JSONException");
+        }
     }
 }

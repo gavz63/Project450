@@ -48,6 +48,7 @@
         <item>Joel Johnson</item>
         <item>Joel Johnson</item>
     </string-array>
+    <string name="Weather_Actvity">Weather_Actvity</string>
 
     <string-array name="connections_auto_complete_usernames">
         <item>username1</item>
