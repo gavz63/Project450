@@ -22,10 +22,18 @@
         android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsActivity"
         android:label="activity_connections"
         tools:layout="@layout/activity_connections" />
+
     <fragment
         android:id="@+id/nav_chats"
         android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat"/>
+
+    <activity
+        android:id="@+id/nav_weather"
+        android:name="edu.uw.tcss450.inouek.test450.WeatherActivity"
+        android:label="activity_weather"
+        tools:layout="@layout/activity_weather" />
+
 
 </navigation>

@@ -31,6 +31,11 @@ public class WeatherActivity extends AppCompatActivity {
     String zipCode;
     Button button;
 
+    public static float KelvinToFahrenheit(float degree)
+    {
+        return degree * 9/5 - 459.67f;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,8 +137,11 @@ public class WeatherActivity extends AppCompatActivity {
 
                 //infoTempToday : {"temp":280.33,"pressure":1028,"humidity":100,"temp_min":278.71,"temp_max":282.04}
                 String temp = jsonObject.getJSONObject("main").getString("temp");
+                temp = String.valueOf(KelvinToFahrenheit(Float.parseFloat(temp)));
                 String temp_min = jsonObject.getJSONObject("main").getString("temp_min");
+                temp_min = String.valueOf(KelvinToFahrenheit(Float.parseFloat(temp_min)));
                 String temp_max = jsonObject.getJSONObject("main").getString("temp_max");
+                temp_max = String.valueOf(KelvinToFahrenheit(Float.parseFloat(temp_max)));
                 String city = jsonObject.getString("name");
 
                 if (temp != "" && temp_min != "" && temp_max != "") {
