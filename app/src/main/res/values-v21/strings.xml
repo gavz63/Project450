@@ -40,6 +40,9 @@
     <string name="connections_text_button_decline">Decline</string>
     <string name="connections_text_button_cancel">Cancel</string>
 
+    <string name="weather_edit_zipcode">Enter your Zipcode.</string>
+    <string name="weather_button_start">Start</string>
+
     <string name="profile_text_send_invite">Send Invite</string>
     <string name="profile_text_remove_connection">Remove Contact</string>
     <string name="profile_text_bock_connection">Block</string>
