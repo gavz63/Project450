@@ -6,28 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/connections_button_requests_received"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/connections_text_requests_received"
-        app:layout_constraintBottom_toTopOf="@+id/connections_button_requests_sent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/connections_text_display"
-        android:layout_width="347dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/connections_text_display"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connections_text_search" />
-
     <AutoCompleteTextView
         android:id="@+id/connections_text_search"
         android:layout_width="0dp"
@@ -43,49 +21,27 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/connections_button_manage_connections"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/connections_text_expand"
-        app:layout_constraintBottom_toTopOf="@+id/connections_text_requests"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/connections_text_requests"
-        android:layout_width="136dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/connections_text_requests"
-        app:layout_constraintBottom_toTopOf="@+id/connections_button_requests_received"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/connections_button_requests_sent"
+        android:id="@+id/connections_button_connections"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/connections_text_requests_sent"
+        android:text="@string/connections_text_connections_pending"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <FrameLayout
-        android:id="@+id/connections_frame_display"
+        android:id="@+id/connections_frame_display_received"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/connections_button_manage_connections"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/connections_button_connections"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connections_text_display">
+        app:layout_constraintTop_toBottomOf="@+id/connections_text_search">
 
         <fragment
             android:id="@+id/fragment"
