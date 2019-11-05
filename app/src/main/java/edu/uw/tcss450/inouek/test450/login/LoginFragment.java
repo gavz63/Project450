@@ -99,8 +99,8 @@ public class LoginFragment extends Fragment {
         mEmailField = view.findViewById(R.id.login_email);
         mPasswordField = view.findViewById(R.id.login_pass);
         //Comment out this block before going to prod
-//        mEmailField.setText("gavz63@uw.edu");
-//        mPasswordField.setText("zeekers63");
+        mEmailField.setText("gavz63@uw.edu");
+        mPasswordField.setText("zeekers63");
 
         Button b = view.findViewById(R.id.button_login_register);
         b.setOnClickListener(this::onRegisterClicked);
