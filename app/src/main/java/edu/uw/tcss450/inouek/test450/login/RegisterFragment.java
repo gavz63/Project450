@@ -184,6 +184,10 @@ public class RegisterFragment extends Fragment {
                 mPasswordField.setError("Your password must be 6 or more characters");
             }
             anyErrors = true;
+        } else if (!mPasswordString.equals(mPasswordString.toLowerCase())) {
+            mPasswordField.setError("Password must contain at least one capital letter");
+        } else if (mPasswordString.matches("(.)*(\\d)(.)*")) {
+            mPasswordField.setError("Password must contain at least one number");
         } else {
             mPasswordField.setError(null);
         }
