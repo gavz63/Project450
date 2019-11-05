@@ -22,7 +22,7 @@
     <string name="register_first_name_hint">First Name</string>
     <string name="register_last_name_hint">Last Name</string>
     <string name="register_nickname_hint">Nickname</string>
-    <string name="register_button_register">Submit?</string>
+    <string name="register_button_register">Create!</string>
     <string name="register_retype_password_hint">Confirm Password</string>
 
     <string name="connections_text_search">Search</string>

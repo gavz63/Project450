@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
+
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -116,8 +119,6 @@ public class LoginFragment extends Fragment {
         mEmailString = mEmailField.getText().toString();
         mPasswordString = mPasswordField.getText().toString();
 
-
-
         if (!anyErrors()) {
             mCredentials = new Credentials.Builder(mEmailString, mPasswordString)
                     .build();
@@ -201,7 +202,7 @@ public class LoginFragment extends Fragment {
     }
 
     /**
-     * Handle onPostExecute of the AsynceTask. The result from our webservice is
+     * Handle onPostExecute of the AsyncTask. The result from our webservice is
      * a JSON formatted String. Parse it for success or failure.
      * @param result the JSON formatted String response from the web service
      */

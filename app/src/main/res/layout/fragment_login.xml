@@ -71,9 +71,10 @@
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_login_stay_logged"
         style="@style/AppTheme"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:layoutDirection="rtl"
         android:switchTextAppearance="@style/AppTheme"
@@ -81,6 +82,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/button_login_register"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
@@ -90,7 +92,7 @@
         android:layout_marginEnd="8dp"
         android:text="@string/login_button_register"
         android:textSize="16sp"
-        style="@style/Widget.MaterialComponents.Button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:layout_constraintBaseline_toBaselineOf="@+id/button_login_sign_in"
         app:layout_constraintEnd_toStartOf="@+id/button_login_sign_in" />
 
@@ -101,7 +103,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:text="@string/login_button_login"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Widget.MaterialComponents.Button"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
