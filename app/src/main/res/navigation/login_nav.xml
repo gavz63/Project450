@@ -18,6 +18,9 @@
         <argument
             android:name="credentials"
             app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+        <action
+            android:id="@+id/action_loginFragment_to_resendEmailDialog"
+            app:destination="@id/resendEmailDialog" />
     </fragment>
     <activity
         android:id="@+id/homeActivity"
@@ -41,4 +44,13 @@
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/resendEmailDialog"
+        android:name="edu.uw.tcss450.inouek.test450.login.ResendEmailDialog"
+        android:label="fragment_resend_email_dialog"
+        tools:layout="@layout/fragment_resend_email_dialog" >
+        <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+    </dialog>
 </navigation>

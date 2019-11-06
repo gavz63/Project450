@@ -4,32 +4,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
-
-import com.google.android.material.switchmaterial.SwitchMaterial;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.Serializable;
-
-import edu.uw.tcss450.inouek.test450.login.LoginFragmentDirections;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
-
-//import edu.uw.tcss450.gavz63.project450.model.Credentials;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,8 +88,17 @@ public class LoginFragment extends Fragment {
         mEmailField = view.findViewById(R.id.login_email);
         mPasswordField = view.findViewById(R.id.login_pass);
         //Comment out this block before going to prod
-        mEmailField.setText("gavz63@uw.edu");
-        mPasswordField.setText("zeekers63");
+        mEmailField.setText("zeekers63@gmail.com");
+        mPasswordField.setText("A123456");
+
+        try {
+            mCredentials = LoginFragmentArgs.fromBundle(getArguments()).getCredentials();
+            mEmailField.setText(mCredentials.getEmail());
+            mPasswordField.setText(mCredentials.getPassword());
+            validateLogin(null);
+        } catch (IllegalArgumentException e) {
+
+        }
 
         Button b = view.findViewById(R.id.button_login_register);
         b.setOnClickListener(this::onRegisterClicked);
@@ -168,24 +166,6 @@ public class LoginFragment extends Fragment {
         return anyErrors;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            Serializable serializable = bundle.getSerializable(getString(R.string.credentials_key));
-            if (serializable instanceof Credentials) {
-                Credentials cr = (Credentials) serializable;
-                String email = cr.getEmail() != null ? cr.getEmail() : "oops";
-                String pass = cr.getPassword() != null ? cr.getPassword() : "oops";
-
-                mEmailField.setText(email);
-                mPasswordField.setText(pass);
-            }
-        }
-    }
-
     /**
      * Handle errors that may occur during the AsyncTask.
      * @param result the error message provide from the AsyncTask
@@ -238,6 +218,9 @@ public class LoginFragment extends Fragment {
                     mEmailField.setError("Email is not registered");
                 } else if (err.startsWith("Email not ver")) {
                     mEmailField.setError("Email is not verified");
+
+                    DialogFragment dialogFragment = new ResendEmailDialog(mEmailString);
+                    dialogFragment.show(getFragmentManager(), "alert");
                 }
             }
             getActivity().findViewById(R.id.layout_login_wait)

@@ -3,4 +3,5 @@
     <string name="ep_base_url">group2-project450-backend.herokuapp.com</string>
     <string name="ep_login">login</string>
     <string name="ep_register">register</string>
+    <string name="ep_resend">resend</string>
 </resources>
