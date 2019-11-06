@@ -1,10 +1,8 @@
 <resources>
-    <string name="app_name">Project450</string>
+    <string name="app_name">Club House</string>
     <string name="title_activity_home_">Home_Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Project450</string>
-    <string name="nav_header_subtitle">Sprint1</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
