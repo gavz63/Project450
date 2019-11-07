@@ -2,6 +2,7 @@ package edu.uw.tcss450.inouek.test450;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.MenuItemCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,11 +37,21 @@ public class HomeActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-//        Menu menu = navigationView.getMenu();
-//        MenuItem menuItem = menu.findItem(R.id.nav_night_mode_switch);
-//        View actionView = MenuItemCompat.getActionView(menuItem);
-//        mNightModeSwitch = (SwitchMaterial) actionView.findViewById(R.id.nav_night_mode_switch);
-//        //mNightModeSwitch.setOnClickListener();
+        Menu menu = navigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.nav_night_mode_switch);
+        View actionView = menuItem.getActionView();
+        mNightModeSwitch = actionView.findViewById(R.id.night_mode_switch);
+        mNightModeSwitch.setOnCheckedChangeListener((mNightModeSwitch, isChecked) -> {
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(
+                        AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(
+                        AppCompatDelegate.MODE_NIGHT_NO);
+            }
+
+        });
+
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
