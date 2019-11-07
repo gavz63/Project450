@@ -14,8 +14,8 @@
             android:id="@+id/action_nav_home_to_nav_connections"
             app:destination="@id/nav_connections" />
         <action
-            android:id="@+id/action_nav_home_to_chatFragment"
-            app:destination="@id/nav_chats"/>
+            android:id="@+id/action_home_to_chatlist"
+            app:destination="@id/nav_chatlist"/>
     </fragment>
     <activity
         android:id="@+id/nav_connections"
@@ -24,7 +24,7 @@
         tools:layout="@layout/activity_connections" />
 
     <fragment
-        android:id="@+id/nav_chats"
+        android:id="@+id/nav_chat"
         android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat"/>
@@ -39,6 +39,15 @@
         android:name="edu.uw.tcss450.inouek.test450.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/nav_chatlist"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragment"
+        android:label="fragment_chat_list"
+        tools:layout="@layout/fragment_chat_list">
+        <action
+            android:id="@+id/action_chatlist_to_chat"
+            app:destination="@id/nav_chat"/>
+    </fragment>
 
 
 </navigation>

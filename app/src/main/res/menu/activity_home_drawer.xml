@@ -6,7 +6,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_chats"
+            android:id="@+id/nav_chatlist"
             android:icon="@drawable/ic_chat"
             android:title="@string/menu_Chats" />
         <item

@@ -3,7 +3,6 @@ package edu.uw.tcss450.inouek.test450;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.view.MenuItemCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,7 +16,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.action_nav_home_to_nav_connections, R.id.nav_chats, R.id.nav_weather)
+                R.id.nav_home, R.id.action_nav_home_to_nav_connections, R.id.nav_chat, R.id.nav_weather)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

@@ -18,7 +18,7 @@ public class ChatContent
 	/**
 	 * An array of sample (dummy) items.
 	 */
-	public static final List<Message> ITEMS = new ArrayList<Message>();
+	public static final List<Message> MESSAGES = new ArrayList<Message>();
 
 	/**
 	 * A map of sample (dummy) items, by ID.
@@ -38,7 +38,7 @@ public class ChatContent
 
 	private static void addMessage(Message item)
 	{
-		ITEMS.add(item);
+		MESSAGES.add(item);
 		ITEM_MAP.put(item.id, item);
 	}
 

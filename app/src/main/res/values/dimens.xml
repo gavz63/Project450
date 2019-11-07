@@ -17,4 +17,6 @@
     <dimen name="message_timesent_marg">6sp</dimen>
     <dimen name="message_contents_size">16sp</dimen>
     <dimen name="message_contents_marg">4dp</dimen>
+
+    <dimen name="chat_input_height">48dp</dimen>
 </resources>

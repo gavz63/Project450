@@ -37,13 +37,13 @@ public class ChatFragment extends Fragment
 	{
 		super.onViewCreated(view, savedInstanceState);
 
+		Bundle args = (savedInstanceState != null) ? savedInstanceState : getArguments();
+
 		RecyclerView recyclerView = view.findViewById(R.id.messages);
 		Context context = view.getContext();
 
-		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-		layoutManager.setReverseLayout(true);
-		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setLayoutManager(new LinearLayoutManager(context,RecyclerView.VERTICAL,true));
 
-		recyclerView.setAdapter(new ChatMessageRecyclerViewAdapter(ChatContent.ITEMS));
+		recyclerView.setAdapter(new ChatMessageRecyclerViewAdapter(ChatContent.MESSAGES));
 	}
 }
