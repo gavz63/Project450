@@ -6,7 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="nav_bg">@drawable/nav_drawer_foreground</item>
     </style>
+
+    <attr name="nav_bg" format="reference"/>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
