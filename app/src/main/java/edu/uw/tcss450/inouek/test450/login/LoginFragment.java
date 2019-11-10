@@ -1,10 +1,12 @@
 package edu.uw.tcss450.inouek.test450.login;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,64 +16,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
-import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LoginFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private Credentials mCredentials;
     private EditText mEmailField;
     private EditText mPasswordField;
+    private SwitchMaterial mStayLoggedInSwitch;
     private String mEmailString;
     private String mPasswordString;
-
-    public LoginFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,21 +49,9 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        mStayLoggedInSwitch = view.findViewById(R.id.switch_login_stay_logged);
         mEmailField = view.findViewById(R.id.login_email);
         mPasswordField = view.findViewById(R.id.login_pass);
-        //Comment out this block before going to prod
-        mEmailField.setText("zeekers63@gmail.com");
-        mPasswordField.setText("A123456");
-
-        try {
-            mCredentials = LoginFragmentArgs.fromBundle(getArguments()).getCredentials();
-            mEmailField.setText(mCredentials.getEmail());
-            mPasswordField.setText(mCredentials.getPassword());
-            validateLogin(null);
-        } catch (IllegalArgumentException e) {
-
-        }
 
         Button b = view.findViewById(R.id.button_login_register);
         b.setOnClickListener(this::onRegisterClicked);
@@ -106,6 +59,30 @@ public class LoginFragment extends Fragment {
         b = view.findViewById(R.id.button_login_sign_in);
         b.setOnClickListener(this::validateLogin);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //retrieve the stored credentials from SharedPrefs
+        if (prefs.contains(getString(R.string.keys_prefs_email)) &&
+                prefs.contains(getString(R.string.keys_prefs_password))) {
+
+            final String email = prefs.getString(getString(R.string.keys_prefs_email), "");
+            final String password = prefs.getString(getString(R.string.keys_prefs_password), "");
+            //Load the two login EditTexts with the credentials found in SharedPrefs
+            EditText emailEdit = getActivity().findViewById(R.id.login_email);
+            emailEdit.setText(email);
+            EditText passwordEdit = getActivity().findViewById(R.id.login_pass);
+            passwordEdit.setText(password);
+            mStayLoggedInSwitch.setChecked(true);
+        }
+    }
+
 
     private void onRegisterClicked(View view) {
         NavController nc = Navigation.findNavController(getView());
@@ -128,16 +105,8 @@ public class LoginFragment extends Fragment {
                     .appendPath(getString(R.string.ep_login))
                     .build();
 
-            //build the JSONObject
-            JSONObject msg = mCredentials.asJSONObject();
-
             //instantiate and execute the AsyncTask.
-            new SendPostAsyncTask.Builder(uri.toString(), msg)
-                    .onPreExecute(this::handleLoginOnPre)
-                    .onPostExecute(this::handleLoginOnPost)
-                    .onCancelled(this::handleErrorsInTask)
-                    .build().execute();
-
+            new AttemptLoginTask().execute(uri.toString());
         }
     }
     private boolean anyErrors() {
@@ -166,75 +135,129 @@ public class LoginFragment extends Fragment {
         return anyErrors;
     }
 
-    /**
-     * Handle errors that may occur during the AsyncTask.
-     * @param result the error message provide from the AsyncTask
-     */
-    private void handleErrorsInTask(String result) {
-        Log.e("ASYNC_TASK_ERROR",  result);
+    private void saveCredentials() {
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        prefs.edit().putString(getString(R.string.keys_prefs_email), mCredentials.getEmail()).apply();
+        prefs.edit().putString(getString(R.string.keys_prefs_password), mCredentials.getPassword()).apply();
     }
 
-    /**
-     * Handle the setup of the UI before the HTTP call to the webservice.
-     */
-    private void handleLoginOnPre() {
-        getActivity().findViewById(R.id.layout_login_wait).setVisibility(View.VISIBLE);
+    private void deleteCredentials() {
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //remove the saved credentials from StoredPrefs
+        prefs.edit().remove(getString(R.string.keys_prefs_password)).apply();
+        prefs.edit().remove(getString(R.string.keys_prefs_email)).apply();
     }
 
-    /**
-     * Handle onPostExecute of the AsyncTask. The result from our webservice is
-     * a JSON formatted String. Parse it for success or failure.
-     * @param result the JSON formatted String response from the web service
-     */
-    private void handleLoginOnPost(String result) {
-        try {
-            JSONObject resultsJSON = new JSONObject(result);
-            boolean success =
-                    resultsJSON.getBoolean(
-                            getString(R.string.keys_json_login_success));
+    class AttemptLoginTask extends AsyncTask<String, Void, String> {
 
-            if (success) {
-                LoginFragmentDirections
-                        .ActionLoginFragmentToHomeActivity homeActivity =
-                        LoginFragmentDirections
-                                .actionLoginFragmentToHomeActivity(mCredentials);
-                homeActivity.setJwt(
-                        resultsJSON.getString(
-                                getString(R.string.keys_json_login_jwt)));
-                Navigation.findNavController(getView())
-                        .navigate(homeActivity);
-                return;
-            } else {
-                //Login was unsuccessful. Don’t switch fragments and
-                // inform the user
-                String err =
-                        resultsJSON.getString(
-                                getString(R.string.keys_json_register_err));
-                if (err.startsWith("missing ")) {
-                    mEmailField.setError("Missing Credentials");
-                } else if (err.startsWith("Credentials do not")) {
-                    mPasswordField.setError("Password is incorrect");
-                } else if (err.startsWith("Email not reg")){
-                    mEmailField.setError("Email is not registered");
-                } else if (err.startsWith("Email not ver")) {
-                    mEmailField.setError("Email is not verified");
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            getActivity().findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        }
 
-                    DialogFragment dialogFragment = new ResendEmailDialog(mEmailString);
-                    dialogFragment.show(getFragmentManager(), "alert");
+        @Override
+        protected String doInBackground(String... urls) {
+            //get pushy token
+
+
+            //attempt to log in: Send credentials AND pushy token to the web service
+            StringBuilder response = new StringBuilder();
+            HttpURLConnection urlConnection = null;
+
+            try {
+                URL urlObject = new URL(urls[0]);
+                urlConnection = (HttpURLConnection) urlObject.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+
+
+                urlConnection.setDoOutput(true);
+                OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
+
+                JSONObject message = mCredentials.asJSONObject();
+//                message.put("token", deviceToken);
+
+                wr.write(message.toString());
+                wr.flush();
+                wr.close();
+
+                InputStream content = urlConnection.getInputStream();
+                BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                String s = "";
+                while((s = buffer.readLine()) != null) {
+                    response.append(s);
+                }
+                publishProgress();
+            } catch (Exception e) {
+                response = new StringBuilder("Unable to connect, Reason: "
+                        + e.getMessage());
+                cancel(true);
+            } finally {
+                if(urlConnection != null) {
+                    urlConnection.disconnect();
                 }
             }
-            getActivity().findViewById(R.id.layout_login_wait)
-                    .setVisibility(View.GONE);
-        } catch (JSONException e) {
-            //It appears that the web service did not return a JSON formatted
-            //String or it did not have what we expected in it.
-            Log.e("JSON_PARSE_ERROR",  result
-                    + System.lineSeparator()
-                    + e.getMessage());
-            getActivity().findViewById(R.id.layout_login_wait)
-                    .setVisibility(View.GONE);
-            mEmailField.setError("JSON error");
+
+            return response.toString();
+        }
+
+        @Override
+        protected void onCancelled(String s) {
+            super.onCancelled(s);
+            getActivity().findViewById(R.id.progressBar).setVisibility(View.GONE);
+            Log.e("LOGIN_ERROR", "Error in Login Async Task: " + s);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            try {
+
+                Log.d("JSON result",result);
+                JSONObject resultsJSON = new JSONObject(result);
+                boolean success = resultsJSON.getBoolean("success");
+
+
+                if (success) {
+                    if (mStayLoggedInSwitch.isChecked()) {
+                        saveCredentials();
+                    } else {
+                        deleteCredentials();
+                    }
+
+                    //Login was successful. Switch to the SuccessFragment.
+                    LoginFragmentDirections.ActionLoginFragmentToHomeActivity homeActivity =
+                            LoginFragmentDirections
+                                    .actionLoginFragmentToHomeActivity(mCredentials);
+                    homeActivity.setJwt(resultsJSON.getString(
+                            getString(R.string.keys_json_login_jwt)));
+
+                    Navigation.findNavController(getView()).navigate(homeActivity);
+                    getActivity().finish();
+                    return;
+                } else {
+                    //Saving the token wrong. Don’t switch fragments and inform the user
+                    ((TextView) getView().findViewById(R.id.login_email))
+                            .setError("Token Error");
+                }
+            } catch (JSONException e) {
+                //It appears that the web service didn’t return a JSON formatted String
+                //or it didn’t have what we expected in it.
+                Log.e("JSON_PARSE_ERROR",  result
+                        + System.lineSeparator()
+                        + e.getMessage());
+
+                ((TextView) getView().findViewById(R.id.login_email))
+                        .setError("JSON Error");
+            }
         }
     }
-
 }

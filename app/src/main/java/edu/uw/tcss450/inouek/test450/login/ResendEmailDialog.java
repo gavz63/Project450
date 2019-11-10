@@ -5,18 +5,10 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-
 import androidx.fragment.app.DialogFragment;
-import androidx.navigation.Navigation;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import edu.uw.tcss450.inouek.test450.R;
-import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 
 public class ResendEmailDialog extends DialogFragment {

@@ -77,6 +77,13 @@
     <string name="resend_popup_ok">Got It</string>
     <string name="resend_popup_info">Please check your email and click the verification link to continue. Haven\'t received the email? Try your spam folder or just click resend to try it again.</string>
 
+    <string name="action_logout">Logout</string>
+    <string name="action_cancel_popup">Cancel</string>
+    <string name="logout_info">Are you sure you want to log out?</string>
+    <string name="action_update_account">Confirm Update</string>
+    <string name="update_account_info">Would you like to confirm changes to your account?</string>
+
+
     <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->
     <string name="credentials_key">Crdntls ky </string>
     <string name="profile_key">Profile!</string>
