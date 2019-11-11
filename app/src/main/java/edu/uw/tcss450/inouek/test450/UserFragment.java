@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 
 public class UserFragment extends Fragment {
@@ -19,8 +18,11 @@ public class UserFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserFragmentArgs args = UserFragmentArgs.fromBundle(getArguments());
-        mCredentials = args.getCredentials();
+        try {
+            mCredentials = UserFragmentArgs.fromBundle(getArguments()).getCredentials();
+        } catch (IllegalArgumentException e) {
+
+        }
     }
 
     @Override
@@ -42,14 +44,13 @@ public class UserFragment extends Fragment {
         view.findViewById(R.id.button_account_update_info).setOnClickListener(v -> {
             HomeActivity h = (HomeActivity) getActivity();
 
-            EditText email = view.findViewById(R.id.account_email);
             EditText pass = view.findViewById(R.id.account_new_password);
             EditText first = view.findViewById(R.id.account_first_name);
             EditText last = view.findViewById(R.id.account_last_name);
             EditText username = view.findViewById(R.id.account_nickname);
 
             Credentials newCreds =
-                    new Credentials.Builder(email.getText().toString(), pass.getText().toString())
+                    new Credentials.Builder(mCredentials.getEmail(), pass.getText().toString())
                             .addFirstName(first.getText().toString())
                             .addLastName(last.getText().toString())
                             .addUsername(username.getText().toString())

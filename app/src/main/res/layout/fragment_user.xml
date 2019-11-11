@@ -83,7 +83,7 @@
         android:text="@string/register_nickname_hint"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aacount_last_name" />
+        app:layout_constraintTop_toBottomOf="@+id/account_avatar" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/account_nickname"
@@ -93,30 +93,9 @@
         android:layout_marginEnd="16dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/account_nickname_title" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/account_email_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/login_email_hint"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_nickname" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/account_email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_email_title" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/account_current_password_title"
@@ -127,7 +106,7 @@
         android:text="@string/account_current_password_hint"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_email" />
+        app:layout_constraintTop_toBottomOf="@+id/account_nickname" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/account_current_password"
@@ -137,6 +116,7 @@
         android:layout_marginEnd="16dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/account_current_password_title" />
 

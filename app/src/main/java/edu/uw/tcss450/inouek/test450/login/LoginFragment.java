@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -58,6 +59,16 @@ public class LoginFragment extends Fragment {
 
         b = view.findViewById(R.id.button_login_sign_in);
         b.setOnClickListener(this::validateLogin);
+
+        try {
+            mCredentials = LoginFragmentArgs.fromBundle(getArguments()).getCredentials();
+            mEmailField.setText(mCredentials.getEmail());
+            mPasswordField.setText(mCredentials.getPassword());
+            deleteCredentials();
+            validateLogin(null);
+        } catch (IllegalArgumentException e) {
+
+        }
     }
 
     @Override
@@ -163,6 +174,7 @@ public class LoginFragment extends Fragment {
         }
 
         @Override
+        //TODO Do pushy login stuff here get token and all that
         protected String doInBackground(String... urls) {
             //get pushy token
 
@@ -244,19 +256,35 @@ public class LoginFragment extends Fragment {
                     getActivity().finish();
                     return;
                 } else {
-                    //Saving the token wrong. Don’t switch fragments and inform the user
-                    ((TextView) getView().findViewById(R.id.login_email))
-                            .setError("Token Error");
+                    //Login was unsuccessful. Don’t switch fragments and
+                    // inform the user
+                    String err =
+                            resultsJSON.getString(
+                                    getString(R.string.keys_json_register_err));
+                    if (err.startsWith("missing ")) {
+                        mEmailField.setError("Missing Credentials");
+                    } else if (err.startsWith("Credentials do not")) {
+                        mPasswordField.setError("Password is incorrect");
+                    } else if (err.startsWith("Email not reg")){
+                        mEmailField.setError("Email is not registered");
+                    } else if (err.startsWith("Email not ver")) {
+                        mEmailField.setError("Email is not verified");
+
+                        DialogFragment dialogFragment = new ResendEmailDialog(mEmailString);
+                        dialogFragment.show(getFragmentManager(), "alert");
+                    }
                 }
+                getActivity().findViewById(R.id.login_progress)
+                        .setVisibility(View.GONE);
             } catch (JSONException e) {
-                //It appears that the web service didn’t return a JSON formatted String
-                //or it didn’t have what we expected in it.
+                //It appears that the web service did not return a JSON formatted
+                //String or it did not have what we expected in it.
                 Log.e("JSON_PARSE_ERROR",  result
                         + System.lineSeparator()
                         + e.getMessage());
-
-                ((TextView) getView().findViewById(R.id.login_email))
-                        .setError("JSON Error");
+                getActivity().findViewById(R.id.login_progress)
+                        .setVisibility(View.GONE);
+                mEmailField.setError("JSON error");
             }
         }
     }
