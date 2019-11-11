@@ -38,7 +38,11 @@
         android:id="@+id/nav_account"
         android:name="edu.uw.tcss450.inouek.test450.UserFragment"
         android:label="fragment_user"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_user" >
+        <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+    </fragment>
     <fragment
         android:id="@+id/nav_chatlist"
         android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragment"
@@ -48,6 +52,7 @@
             android:id="@+id/action_chatlist_to_chat"
             app:destination="@id/nav_chat"/>
     </fragment>
+    <action android:id="@+id/action_global_nav_account" app:destination="@id/nav_account" />
 
 
 </navigation>

@@ -159,7 +159,7 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            getActivity().findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            getActivity().findViewById(R.id.login_progress).setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -211,7 +211,7 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onCancelled(String s) {
             super.onCancelled(s);
-            getActivity().findViewById(R.id.progressBar).setVisibility(View.GONE);
+            getActivity().findViewById(R.id.login_progress).setVisibility(View.GONE);
             Log.e("LOGIN_ERROR", "Error in Login Async Task: " + s);
         }
 
