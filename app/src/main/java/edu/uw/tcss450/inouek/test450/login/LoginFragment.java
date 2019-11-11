@@ -29,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
+import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
 
 public class LoginFragment extends Fragment {
 
@@ -38,6 +39,7 @@ public class LoginFragment extends Fragment {
     private SwitchMaterial mStayLoggedInSwitch;
     private String mEmailString;
     private String mPasswordString;
+    private String mJwt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -171,6 +173,8 @@ public class LoginFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             getActivity().findViewById(R.id.login_progress).setVisibility(View.VISIBLE);
+            getActivity().findViewById(R.id.button_login_register).setEnabled(false);
+            getActivity().findViewById(R.id.button_login_sign_in).setEnabled(false);
         }
 
         @Override
@@ -245,16 +249,20 @@ public class LoginFragment extends Fragment {
                         deleteCredentials();
                     }
 
-                    //Login was successful. Switch to the SuccessFragment.
-                    LoginFragmentDirections.ActionLoginFragmentToHomeActivity homeActivity =
-                            LoginFragmentDirections
-                                    .actionLoginFragmentToHomeActivity(mCredentials);
-                    homeActivity.setJwt(resultsJSON.getString(
-                            getString(R.string.keys_json_login_jwt)));
+                    //build the web service URL
+                    Uri uri = new Uri.Builder()
+                            .scheme("https")
+                            .appendPath(getString(R.string.ep_base_url))
+                            .appendPath(getString(R.string.ep_login))
+                            .build();
 
-                    Navigation.findNavController(getView()).navigate(homeActivity);
-                    getActivity().finish();
-                    return;
+                    mJwt = resultsJSON.getString(getString(R.string.keys_json_login_jwt));
+
+                    //Get credentials fields from db
+                    new GetAsyncTask.Builder(uri.toString())
+                            .addHeaderField("email",mCredentials.getEmail())
+                            .onPostExecute(this::handleGetLoginOnPost)
+                            .build().execute();
                 } else {
                     //Login was unsuccessful. Don’t switch fragments and
                     // inform the user
@@ -276,6 +284,8 @@ public class LoginFragment extends Fragment {
                 }
                 getActivity().findViewById(R.id.login_progress)
                         .setVisibility(View.GONE);
+                getActivity().findViewById(R.id.button_login_register).setEnabled(true);
+                getActivity().findViewById(R.id.button_login_sign_in).setEnabled(true);
             } catch (JSONException e) {
                 //It appears that the web service did not return a JSON formatted
                 //String or it did not have what we expected in it.
@@ -285,6 +295,34 @@ public class LoginFragment extends Fragment {
                 getActivity().findViewById(R.id.login_progress)
                         .setVisibility(View.GONE);
                 mEmailField.setError("JSON error");
+            }
+        }
+
+        private void handleGetLoginOnPost(String result) {
+            try {
+                JSONObject resultsJSON = new JSONObject(result);
+                boolean success = resultsJSON.getBoolean("success");
+
+
+                if (success) {
+                    Credentials c = new Credentials
+                            .Builder(mCredentials.getEmail(), mCredentials.getPassword())
+                            .addFirstName(resultsJSON.getString("firstname"))
+                            .addLastName(resultsJSON.getString("lastname"))
+                            .addUsername(resultsJSON.getString("username"))
+                            .build();
+
+                    //Login was successful. Switch to the SuccessFragment.
+                    LoginFragmentDirections.ActionLoginFragmentToHomeActivity homeActivity =
+                            LoginFragmentDirections
+                                    .actionLoginFragmentToHomeActivity(c);
+                    homeActivity.setJwt(mJwt);
+
+                    Navigation.findNavController(getView()).navigate(homeActivity);
+                    getActivity().finish();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }

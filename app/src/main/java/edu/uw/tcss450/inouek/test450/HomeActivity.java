@@ -103,4 +103,8 @@ public class HomeActivity extends AppCompatActivity {
         ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawers();
         return true;
     }
+
+    void setCredentials(Credentials c) {
+        mCredentials = c;
+    }
 }

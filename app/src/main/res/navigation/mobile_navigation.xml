@@ -37,8 +37,8 @@
     <fragment
         android:id="@+id/nav_account"
         android:name="edu.uw.tcss450.inouek.test450.UserFragment"
-        android:label="fragment_user"
-        tools:layout="@layout/fragment_user" >
+        android:label="Account Information"
+        tools:layout="@layout/fragment_user">
         <argument
             android:name="credentials"
             app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
