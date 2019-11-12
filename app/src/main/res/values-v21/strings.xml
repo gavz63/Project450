@@ -39,6 +39,8 @@
     <string name="connections_text_button_accept">Accept</string>
     <string name="connections_text_button_decline">Decline</string>
     <string name="connections_text_button_cancel">Cancel</string>
+    <string name="connections_text_button_send_message">Send Message</string>
+    <string name="connections_text_button_remove">Remove Contact</string>
 
     <string name="weather_edit_zipcode">Enter your Zipcode.</string>
     <string name="weather_button_start">Start</string>

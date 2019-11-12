@@ -11,17 +11,9 @@
         android:label="menu_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_nav_home_to_nav_connections"
-            app:destination="@id/nav_connections" />
-        <action
             android:id="@+id/action_nav_home_to_nav_weather"
             app:destination="@id/nav_weather" />
     </fragment>
-    <activity
-        android:id="@+id/nav_connections"
-        android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsActivity"
-        android:label="activity_connections"
-        tools:layout="@layout/activity_connections" />
 
     <fragment
         android:id="@+id/nav_chat"
@@ -58,6 +50,18 @@
     <action android:id="@+id/action_global_nav_account" app:destination="@id/nav_account" />
     <action android:id="@+id/action_global_nav_home" app:destination="@id/nav_home" />
     <action android:id="@+id/action_global_nav_chatlist" app:destination="@id/nav_chatlist" />
+    <fragment
+        android:id="@+id/nav_connections"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamic"
+        android:label="fragment_connections_home_dynamic"
+        tools:layout="@layout/fragment_connections_home_dynamic" >
+        <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_nav_connections"
+        app:destination="@id/nav_connections" />
 
 
 </navigation>

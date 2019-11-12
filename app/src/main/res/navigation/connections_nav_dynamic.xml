@@ -3,24 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/connections_nav_dynamic"
-    app:startDestination="@id/profileFragment2">
+    app:startDestination="@id/nav_landing">
 
     <fragment
-        android:id="@+id/profileFragment2"
+        android:id="@+id/nav_landing"
         android:name="edu.uw.tcss450.inouek.test450.Connections.ProfileFragment"
         android:label="fragment_profile_list"
         tools:layout="@layout/fragment_profile_list" >
         <action
-            android:id="@+id/action_profileFragment2_to_viewProfileFragment22"
-            app:destination="@id/viewProfileFragment2" />
+            android:id="@+id/action_nav_landing_to_nav_received"
+            app:destination="@id/nav_received" />
+        <action
+            android:id="@+id/action_nav_landing_to_nav_sent"
+            app:destination="@id/nav_sent" />
     </fragment>
     <fragment
-        android:id="@+id/viewProfileFragment2"
-        android:name="edu.uw.tcss450.inouek.test450.Connections.ViewProfileFragment"
-        android:label="fragment_view_profile"
-        tools:layout="@layout/fragment_view_profile" >
-        <argument
-            android:name="profileArgs"
-            app:argType="edu.uw.tcss450.inouek.test450.Connections.Profile.ProfileContent$Profile" />
-    </fragment>
+        android:id="@+id/nav_received"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.RequestAcceptFragment"
+        android:label="fragment_request_received"
+        tools:layout="@layout/fragment_request_received" />
+    <fragment
+        android:id="@+id/nav_sent"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.RequestSentFragment"
+        android:label="fragment_request_sent"
+        tools:layout="@layout/fragment_request_sent" />
 </navigation>

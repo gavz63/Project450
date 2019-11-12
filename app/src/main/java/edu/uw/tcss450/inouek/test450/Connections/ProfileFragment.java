@@ -79,10 +79,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void displayProfile(final Profile theProfile) {
-        final Bundle args = new Bundle();
-        args.putSerializable(getString(R.string.profile_key), theProfile);
+        //final Bundle args = new Bundle();
+        //args.putSerializable(getString(R.string.profile_key), theProfile);
 
-        Navigation.findNavController(getView()).navigate(R.id.action_profileFragment2_to_viewProfileFragment22, args);
+        //Navigation.findNavController(getView()).navigate(R.id.action_profileFragment2_to_viewProfileFragment22, args);
         //Navigation.findNavController(getView()).navigate(R.id.viewProfileFragment2, args);
     }
 

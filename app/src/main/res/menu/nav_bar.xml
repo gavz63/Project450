@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/connections_nav_bar_connections"
+        android:icon="@drawable/ic_connections"
+        android:title="Connections"/>
+    <item
+        android:id="@+id/connections_nav_bar_sent"
+        android:icon="@drawable/ic_sent"
+        android:title="Sent"/>
+    <item
+        android:id="@+id/connections_nav_bar_received"
+        android:icon="@drawable/ic_received"
+        android:title="Received"/>
+
+</menu>

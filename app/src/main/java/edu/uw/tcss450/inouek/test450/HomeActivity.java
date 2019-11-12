@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamicDirections;
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 
@@ -95,9 +96,10 @@ public class HomeActivity extends AppCompatActivity {
                 navController.navigate(R.id.action_nav_home_to_nav_weather);
                 break;
             case R.id.nav_connections:
-                navController.navigate(R.id.action_nav_home_to_nav_connections);
+                MobileNavigationDirections.ActionGlobalNavConnections connectionsPage =
+                        ConnectionsHomeDynamicDirections.actionGlobalNavConnections(mCredentials);
+                navController.navigate(connectionsPage);
                 break;
-
         }
         //Close the drawer
         ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawers();
