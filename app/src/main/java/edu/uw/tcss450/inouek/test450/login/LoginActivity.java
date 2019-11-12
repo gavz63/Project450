@@ -1,10 +1,12 @@
-package edu.uw.tcss450.inouek.test450;
+package edu.uw.tcss450.inouek.test450.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import edu.uw.tcss450.inouek.test450.R;
+
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

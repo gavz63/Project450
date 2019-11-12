@@ -1,11 +1,14 @@
 package edu.uw.tcss450.inouek.test450.Connections;
 
 
+import android.app.ActionBar;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -16,13 +19,19 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.model.Credentials;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ConnectionsHomeDynamic extends Fragment {
 
+    private String mEmail;
+    private ActionBar toolbar;
 
     public ConnectionsHomeDynamic() {
         // Required empty public constructor
@@ -32,8 +41,34 @@ public class ConnectionsHomeDynamic extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Credentials cred = ConnectionsHomeDynamicArgs.fromBundle(getArguments()).getCredentials();
+        mEmail = cred.getEmail();
+        Log.e("ConnectionsHomeDynamic", "Received Email: " + mEmail);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navBarListener
+            = item ->
+            {
+                switch (item.getItemId())
+                {
+                    case R.id.connections_nav_bar_connections:
+                        loadFragment(new ProfileFragment());
+                        return true;
+                    case R.id.connections_nav_bar_sent:
+                        loadFragment(new RequestSentFragment());
+                        return true;
+                    case R.id.connections_nav_bar_received:
+                        loadFragment(new RequestReceivedFragment());
+                        return true;
+                }
+                return false;
+            };
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -45,10 +80,14 @@ public class ConnectionsHomeDynamic extends Fragment {
             requests.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Navigation.findNavController(view).navigate(R.id.action_connectionsHomeDynamic_to_connectionsRequestFragment);
+                    Navigation.findNavController(view).navigate(R.id.action_nav_landing_to_nav_received);
                 }
             });
         }
+        BottomNavigationView bottomNavigation = view.findViewById(R.id.connections_nav_bar_base);
+        bottomNavigation.setOnNavigationItemSelectedListener(navBarListener);
+
+        loadFragment(new ProfileFragment());
     }
 
     String[] getAutoCompleteFields()
@@ -75,6 +114,7 @@ public class ConnectionsHomeDynamic extends Fragment {
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_connections_home_dynamic, container, false);
+        /*
         final String[] PROFILES = getAutoCompleteFields();
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(getActivity(),
@@ -82,8 +122,16 @@ public class ConnectionsHomeDynamic extends Fragment {
                         PROFILES);
         AutoCompleteTextView text = (AutoCompleteTextView) v.findViewById(R.id.connections_text_search);
         text.setAdapter(adapter);
-
+*/
         return v;
+    }
+
+    private void loadFragment(Fragment fragment)
+    {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }

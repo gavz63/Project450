@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messages"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/chat_input_height"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/chat_input"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".Connections.chat.ChatFragment"
+        tools:layout_editor_absoluteX="16dp"
+        tools:listitem="@layout/fragment_message"
+        android:orientation="vertical">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chat_input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chat_input_height"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/colorPrimaryDark">
+
+        <EditText
+            android:id="@+id/chat_input_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:inputType="textShortMessage"
+            app:layout_constraintBottom_toBottomOf="@id/chat_input"
+            app:layout_constraintEnd_toStartOf="@id/chat_input_send"
+            app:layout_constraintStart_toStartOf="parent">
+        </EditText>
+        <Button
+            android:id="@+id/chat_input_send"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="@id/chat_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Send">
+        </Button>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

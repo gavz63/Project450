@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
-    <string name="keys_shared_prefs">edu.uw.tcss450.challengeapp.PREFS</string>
-    <string name="keys_prefs_username">username</string>
+    <string name="keys_shared_prefs">edu.uw.tcss450.inouek.test450.PREFS</string>
+    <string name="keys_prefs_email">traffic_light_wont_let_me_through</string>
+    <string name="keys_prefs_password">scooby_dooby_dooby_doo</string>
     <string name="keys_prefs_stay_logged_in">loggedIn</string>
 
     <string name="keys_json_login_success">success</string>

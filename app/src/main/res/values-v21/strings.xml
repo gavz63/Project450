@@ -1,17 +1,17 @@
 <resources>
-    <string name="app_name">Project450</string>
+    <string name="app_name">Club House</string>
     <string name="title_activity_home_">Home_Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Project450</string>
-    <string name="nav_header_subtitle">Sprint1</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
     <string name="menu_Chats">Chats</string>
     <string name="menu_Connection">Connection</string>
-    <string name="menu_Setting">Setting</string>
+    <string name="menu_Setting">Settings</string>
     <string name="menu_Weather">Weather</string>
+    <string name="menu_Account">Account</string>
+    <string name="menu_NightMode">Night Mode</string>
 
     <string name="login_email_hint">Email</string>
     <string name="login_password_hint">Password</string>
@@ -22,7 +22,7 @@
     <string name="register_first_name_hint">First Name</string>
     <string name="register_last_name_hint">Last Name</string>
     <string name="register_nickname_hint">Nickname</string>
-    <string name="register_button_register">Submit?</string>
+    <string name="register_button_register">Create!</string>
     <string name="register_retype_password_hint">Confirm Password</string>
 
     <string name="connections_text_search">Search</string>
@@ -39,6 +39,11 @@
     <string name="connections_text_button_accept">Accept</string>
     <string name="connections_text_button_decline">Decline</string>
     <string name="connections_text_button_cancel">Cancel</string>
+    <string name="connections_text_button_send_message">Send Message</string>
+    <string name="connections_text_button_remove">Remove Contact</string>
+
+    <string name="weather_edit_zipcode">Enter your Zipcode.</string>
+    <string name="weather_button_start">Start</string>
 
     <string name="profile_text_send_invite">Send Invite</string>
     <string name="profile_text_remove_connection">Remove Contact</string>
@@ -63,6 +68,23 @@
     <string-array name="connections_my_connections">
         <item>1</item>
     </string-array>
+
+    <string name="account_log_out">Log Out</string>
+    <string name="account_update_info">Update</string>
+    <string name="account_current_password_hint">Current Password</string>
+    <string name="account_new_password_hint">New Password</string>
+    <string name="account_new_passwprd_retype_hint">Confirm New Password</string>
+
+    <string name="resend_popup_resend">Resend Email</string>
+    <string name="resend_popup_ok">Got It</string>
+    <string name="resend_popup_info">Please check your email and click the verification link to continue. Haven\'t received the email? Try your spam folder or just click resend to try it again.</string>
+
+    <string name="action_logout">Logout</string>
+    <string name="action_cancel_popup">Cancel</string>
+    <string name="logout_info">Are you sure you want to log out?</string>
+    <string name="action_update_account">Confirm Update</string>
+    <string name="update_account_info">Would you like to confirm changes to your account?</string>
+
 
     <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->
     <string name="credentials_key">Crdntls ky </string>
