@@ -6,94 +6,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/connections_button_requests_received"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/connections_text_requests_received"
-        app:layout_constraintBottom_toTopOf="@+id/connections_button_requests_sent"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/connections_text_display"
-        android:layout_width="347dp"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/connections_nav_bar_base"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/connections_text_display"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connections_text_search" />
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:itemBackground="?selectableItemBackgroundBorderless"
+        app:itemHorizontalTranslationEnabled="true"
+        app:itemIconTint="@drawable/nav_item_color_state"
+        app:itemTextColor="@drawable/nav_item_color_state"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/nav_bar"
+        tools:layout_editor_absoluteX="16dp" />
 
-    <AutoCompleteTextView
-        android:id="@+id/connections_text_search"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:completionThreshold="1"
-        android:hint="@string/connections_text_search"
-        android:lines="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/connections_button_manage_connections"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/connections_text_expand"
-        app:layout_constraintBottom_toTopOf="@+id/connections_text_requests"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/connections_text_requests"
-        android:layout_width="136dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/connections_text_requests"
-        app:layout_constraintBottom_toTopOf="@+id/connections_button_requests_received"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/connections_button_requests_sent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/connections_text_requests_sent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/connections_frame_display"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/connections_button_manage_connections"
+        app:layout_constraintBottom_toTopOf="@+id/connections_nav_bar_base"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connections_text_display">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <fragment
-            android:id="@+id/fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/connections_nav_dynamic" />
     </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

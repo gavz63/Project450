@@ -11,21 +11,57 @@
         android:label="menu_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_nav_home_to_nav_connections"
-            app:destination="@id/nav_connections" />
-        <action
             android:id="@+id/action_nav_home_to_nav_weather"
             app:destination="@id/nav_weather" />
     </fragment>
-    <activity
-        android:id="@+id/nav_connections"
-        android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsActivity"
-        android:label="activity_connections"
-        tools:layout="@layout/activity_connections" />
+
+    <fragment
+        android:id="@+id/nav_chat"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat"/>
+
     <activity
         android:id="@+id/nav_weather"
         android:name="edu.uw.tcss450.inouek.test450.WeatherActivity"
         android:label="activity_weather"
         tools:layout="@layout/activity_weather" />
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="edu.uw.tcss450.inouek.test450.UserFragment"
+        android:label="Account Information"
+        tools:layout="@layout/fragment_user">
+        <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_chatlist"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragment"
+        android:label="fragment_chat_list"
+        tools:layout="@layout/fragment_chat_list">
+        <action
+            android:id="@+id/action_chatlist_to_chat"
+            app:destination="@id/nav_chat"/>
+        <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+    </fragment>
+    <action android:id="@+id/action_global_nav_account" app:destination="@id/nav_account" />
+    <action android:id="@+id/action_global_nav_home" app:destination="@id/nav_home" />
+    <action android:id="@+id/action_global_nav_chatlist" app:destination="@id/nav_chatlist" />
+    <fragment
+        android:id="@+id/nav_connections"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamic"
+        android:label="fragment_connections_home_dynamic"
+        tools:layout="@layout/fragment_connections_home_dynamic" >
+        <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_nav_connections"
+        app:destination="@id/nav_connections" />
+
 
 </navigation>

@@ -67,7 +67,7 @@ public class WeatherActivity extends AppCompatActivity {
         predictToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
 
