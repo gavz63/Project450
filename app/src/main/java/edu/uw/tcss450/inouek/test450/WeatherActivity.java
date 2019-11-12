@@ -1,7 +1,11 @@
 package edu.uw.tcss450.inouek.test450;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.os.AsyncTask;
@@ -23,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 public class WeatherActivity extends AppCompatActivity {
 
     EditText cityField;
@@ -30,6 +35,8 @@ public class WeatherActivity extends AppCompatActivity {
     TextView tempText;
     String zipCode;
     Button button;
+
+    Button predictToday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,7 @@ public class WeatherActivity extends AppCompatActivity {
         tempText = findViewById(R.id.tempText);
 
         button = (Button) findViewById(R.id.button);
+        predictToday = (Button) findViewById(R.id.button_today);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +61,19 @@ public class WeatherActivity extends AppCompatActivity {
 
             }
         });
+
+        //when click predict today button, will open a new fragment ,showing 24 hours forecasting
+
+        predictToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
+
+
+
+
     }
 
     // this method will excute the link and find the weather data and info
