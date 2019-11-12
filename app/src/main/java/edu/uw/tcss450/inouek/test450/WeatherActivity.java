@@ -2,9 +2,9 @@ package edu.uw.tcss450.inouek.test450;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+//import android.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -26,6 +27,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 
 
 public class WeatherActivity extends AppCompatActivity {
@@ -63,17 +65,25 @@ public class WeatherActivity extends AppCompatActivity {
         });
 
         //when click predict today button, will open a new fragment ,showing 24 hours forecasting
-
         predictToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // jump to a totally new fragment from activity
+                Fragment fragment = new WeatherForecast24();
+                ((LinearLayout)findViewById(R.id.rootView)).removeAllViews();
+                replaceFragment(fragment);
 
             }
         });
+    }
 
-
-
-
+    // show the somefrgment result into the weather activty page
+    public void replaceFragment(Fragment someFragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // replace weather activity by somefragment
+        transaction.replace(R.id.fragmentContainer, someFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     // this method will excute the link and find the weather data and info
