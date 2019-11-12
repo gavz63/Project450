@@ -1,7 +1,11 @@
 package edu.uw.tcss450.inouek.test450;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.os.AsyncTask;
@@ -23,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 public class WeatherActivity extends AppCompatActivity {
 
     EditText cityField;
@@ -31,10 +36,7 @@ public class WeatherActivity extends AppCompatActivity {
     String zipCode;
     Button button;
 
-    public static float KelvinToFahrenheit(float degree)
-    {
-        return degree * 9/5 - 459.67f;
-    }
+    Button predictToday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class WeatherActivity extends AppCompatActivity {
         tempText = findViewById(R.id.tempText);
 
         button = (Button) findViewById(R.id.button);
+        predictToday = (Button) findViewById(R.id.button_today);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +61,19 @@ public class WeatherActivity extends AppCompatActivity {
 
             }
         });
+
+        //when click predict today button, will open a new fragment ,showing 24 hours forecasting
+
+        predictToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
+
     }
 
     // this method will excute the link and find the weather data and info
@@ -137,11 +153,8 @@ public class WeatherActivity extends AppCompatActivity {
 
                 //infoTempToday : {"temp":280.33,"pressure":1028,"humidity":100,"temp_min":278.71,"temp_max":282.04}
                 String temp = jsonObject.getJSONObject("main").getString("temp");
-                temp = String.valueOf(KelvinToFahrenheit(Float.parseFloat(temp)));
                 String temp_min = jsonObject.getJSONObject("main").getString("temp_min");
-                temp_min = String.valueOf(KelvinToFahrenheit(Float.parseFloat(temp_min)));
                 String temp_max = jsonObject.getJSONObject("main").getString("temp_max");
-                temp_max = String.valueOf(KelvinToFahrenheit(Float.parseFloat(temp_max)));
                 String city = jsonObject.getString("name");
 
                 if (temp != "" && temp_min != "" && temp_max != "") {
