@@ -5,7 +5,7 @@
     android:id="@+id/predict24hours"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WeatherForecast24">
+    tools:context=".WeatherForecast24Fragment">
 
     <!-- TODO: Update blank fragment layout -->
 
