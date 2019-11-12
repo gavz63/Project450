@@ -45,6 +45,7 @@
     <string name="weather_edit_zipcode">Enter your Zipcode.</string>
     <string name="weather_button_start">Start</string>
     <string name="weather_button_today">Today</string>
+    <string name="weather_button_map">Map</string>
 
     <string name="profile_text_send_invite">Send Invite</string>
     <string name="profile_text_remove_connection">Remove Contact</string>

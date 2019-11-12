@@ -3,13 +3,11 @@ package edu.uw.tcss450.inouek.test450;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 //import android.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import android.content.Intent;
+
 import android.os.Bundle;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,9 +34,10 @@ public class WeatherActivity extends AppCompatActivity {
     TextView weatherText;
     TextView tempText;
     String zipCode;
-    Button button;
 
+    Button button;
     Button predictToday;
+    Button predictLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +53,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         button = (Button) findViewById(R.id.button);
         predictToday = (Button) findViewById(R.id.button_today);
+        predictLocation = (Button) findViewById(R.id.button_location);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,12 +69,25 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // jump to a totally new fragment from activity
-                Fragment fragment = new WeatherForecast24();
+                Fragment fragment = new WeatherForecast24Fragment();
+                // set the orignal layout of activity disappear
                 ((LinearLayout)findViewById(R.id.rootView)).removeAllViews();
                 replaceFragment(fragment);
 
             }
         });
+
+
+        predictLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // jump to a totally new fragment from activity
+                Fragment fragmentLocation = new WeatherLocationFragment();
+                ((LinearLayout)findViewById(R.id.rootView)).removeAllViews();
+                replaceFragment(fragmentLocation);
+            }
+        });
+
     }
 
     // show the somefrgment result into the weather activty page
