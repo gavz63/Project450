@@ -23,6 +23,8 @@ import android.widget.Button;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
+import edu.uw.tcss450.inouek.test450.MobileNavigationDirections;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 
@@ -66,7 +68,8 @@ public class ConnectionsHomeDynamic extends Fragment {
         switch (menuItem.getItemId())
         {
             case R.id.connections_nav_bar_connections:
-                loadFragment(new ProfileFragment());
+               // MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
+                 //       ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials);
                 return true;
             case R.id.connections_nav_bar_sent:
                 loadFragment(new RequestSentFragment());

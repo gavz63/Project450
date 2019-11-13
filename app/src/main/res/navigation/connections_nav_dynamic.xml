@@ -9,14 +9,7 @@
         android:id="@+id/nav_landing"
         android:name="edu.uw.tcss450.inouek.test450.Connections.ProfileFragment"
         android:label="fragment_profile_list"
-        tools:layout="@layout/fragment_profile_list" >
-        <action
-            android:id="@+id/action_nav_landing_to_nav_received"
-            app:destination="@id/nav_received" />
-        <action
-            android:id="@+id/action_nav_landing_to_nav_sent"
-            app:destination="@id/nav_sent" />
-    </fragment>
+        tools:layout="@layout/fragment_profile_list" />
     <fragment
         android:id="@+id/nav_received"
         android:name="edu.uw.tcss450.inouek.test450.Connections.RequestAcceptFragment"
@@ -27,4 +20,13 @@
         android:name="edu.uw.tcss450.inouek.test450.Connections.RequestSentFragment"
         android:label="fragment_request_sent"
         tools:layout="@layout/fragment_request_sent" />
+    <action
+        android:id="@+id/action_global_nav_received"
+        app:destination="@id/nav_received" />
+    <action
+        android:id="@+id/action_global_nav_sent"
+        app:destination="@id/nav_sent" />
+    <action
+        android:id="@+id/action_global_nav_landing"
+        app:destination="@id/nav_landing" />
 </navigation>
