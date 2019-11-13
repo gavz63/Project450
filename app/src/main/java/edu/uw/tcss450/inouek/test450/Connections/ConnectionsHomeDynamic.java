@@ -24,6 +24,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
+import edu.uw.tcss450.inouek.test450.ConnectionsNavDynamicDirections;
 import edu.uw.tcss450.inouek.test450.MobileNavigationDirections;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
@@ -60,22 +61,26 @@ public class ConnectionsHomeDynamic extends Fragment {
 
         BottomNavigationView bottomNavigation = view.findViewById(R.id.connections_nav_bar_base);
         bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationSelected);
-
-        loadFragment(new ProfileFragment());
     }
 
     private boolean onNavigationSelected(final MenuItem menuItem) {
+        NavController navController = Navigation.findNavController(getActivity(), R.id.fragment);
         switch (menuItem.getItemId())
         {
             case R.id.connections_nav_bar_connections:
-               // MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
-                 //       ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials);
+                ConnectionsNavDynamicDirections.ActionGlobalNavLanding connectionsHome =
+                        ConnectionsNavDynamicDirections.actionGlobalNavLanding(mCredentials);
+                navController.navigate(connectionsHome);
                 return true;
             case R.id.connections_nav_bar_sent:
-                loadFragment(new RequestSentFragment());
+                ConnectionsNavDynamicDirections.ActionGlobalNavSent sent =
+                        ConnectionsNavDynamicDirections.actionGlobalNavSent(mCredentials);
+                navController.navigate(sent);
                 return true;
             case R.id.connections_nav_bar_received:
-                loadFragment(new RequestReceivedFragment());
+                ConnectionsNavDynamicDirections.ActionGlobalNavReceived received =
+                        ConnectionsNavDynamicDirections.actionGlobalNavReceived(mCredentials);
+                navController.navigate(received);
                 return true;
         }
         return false;
@@ -97,16 +102,6 @@ public class ConnectionsHomeDynamic extends Fragment {
             array[index+2] = emails[i];
         }
         return array;
-    }
-
-
-
-    private void loadFragment(Fragment fragment)
-    {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 
 }
