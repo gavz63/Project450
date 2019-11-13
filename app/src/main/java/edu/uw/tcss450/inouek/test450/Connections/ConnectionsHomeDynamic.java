@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -30,8 +31,7 @@ import edu.uw.tcss450.inouek.test450.model.Credentials;
  */
 public class ConnectionsHomeDynamic extends Fragment {
 
-    private String mEmail;
-    private ActionBar toolbar;
+    private Credentials mCredentials;
 
     public ConnectionsHomeDynamic() {
         // Required empty public constructor
@@ -41,53 +41,41 @@ public class ConnectionsHomeDynamic extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Credentials cred = ConnectionsHomeDynamicArgs.fromBundle(getArguments()).getCredentials();
-        mEmail = cred.getEmail();
-        Log.e("ConnectionsHomeDynamic", "Received Email: " + mEmail);
+        mCredentials = ConnectionsHomeDynamicArgs.fromBundle(getArguments()).getCredentials();
+        Log.e("ConnectionsHomeDynamic", "Received Email: " + mCredentials.getEmail());
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_connections_home_dynamic, container, false);
     }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener navBarListener
-            = item ->
-            {
-                switch (item.getItemId())
-                {
-                    case R.id.connections_nav_bar_connections:
-                        loadFragment(new ProfileFragment());
-                        return true;
-                    case R.id.connections_nav_bar_sent:
-                        loadFragment(new RequestSentFragment());
-                        return true;
-                    case R.id.connections_nav_bar_received:
-                        loadFragment(new RequestReceivedFragment());
-                        return true;
-                }
-                return false;
-            };
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button requests = (Button) view.findViewById(R.id.connections_button_connections);
-        if(requests != null) {
-            Log.e("Not NULL", "NOT NULL");
-            requests.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Navigation.findNavController(view).navigate(R.id.action_nav_landing_to_nav_received);
-                }
-            });
-        }
         BottomNavigationView bottomNavigation = view.findViewById(R.id.connections_nav_bar_base);
-        bottomNavigation.setOnNavigationItemSelectedListener(navBarListener);
+        bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationSelected);
 
         loadFragment(new ProfileFragment());
+    }
+
+    private boolean onNavigationSelected(final MenuItem menuItem) {
+        switch (menuItem.getItemId())
+        {
+            case R.id.connections_nav_bar_connections:
+                loadFragment(new ProfileFragment());
+                return true;
+            case R.id.connections_nav_bar_sent:
+                loadFragment(new RequestSentFragment());
+                return true;
+            case R.id.connections_nav_bar_received:
+                loadFragment(new RequestReceivedFragment());
+                return true;
+        }
+        return false;
     }
 
     String[] getAutoCompleteFields()
@@ -108,23 +96,7 @@ public class ConnectionsHomeDynamic extends Fragment {
         return array;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-        View v = inflater.inflate(R.layout.fragment_connections_home_dynamic, container, false);
-        /*
-        final String[] PROFILES = getAutoCompleteFields();
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        PROFILES);
-        AutoCompleteTextView text = (AutoCompleteTextView) v.findViewById(R.id.connections_text_search);
-        text.setAdapter(adapter);
-*/
-        return v;
-    }
 
     private void loadFragment(Fragment fragment)
     {
