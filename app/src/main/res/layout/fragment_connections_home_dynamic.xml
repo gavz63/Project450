@@ -38,5 +38,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/connections_nav_dynamic" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/connections_floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:backgroundTint="@color/colorAccent"
+        android:clickable="true"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toTopOf="@+id/connections_nav_bar_base"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
