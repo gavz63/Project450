@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.uw.tcss450.inouek.test450.R;
+
 /**
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
@@ -61,6 +63,7 @@ public class ChatContent
 	{
 		private final long messageId;
 		private final long userId;
+		private final int iconId;
 		private final String username;
 		private final Timestamp timestamp;
 		private final String contents;
@@ -72,6 +75,7 @@ public class ChatContent
 			this.username = "Person "+userId;
 			this.timestamp = new Timestamp(timestamp);
 			this.contents = contents;
+			this.iconId = colorToIconId(((int)userId%5)+1);
 		}
 
 		public Message(String username, String contents)
@@ -81,6 +85,7 @@ public class ChatContent
 			this.username = username;
 			this.timestamp = new Timestamp(System.currentTimeMillis()/1000);
 			this.contents = contents;
+			this.iconId = colorToIconId((contents.hashCode()%5)+1);
 		}
 
 		public Message(JSONObject json)
@@ -90,11 +95,25 @@ public class ChatContent
 			this.username = json.optString("email");
 			this.timestamp = Timestamp.valueOf(json.optString("timestamp"));
 			this.contents = json.optString("message");
+			this.iconId = colorToIconId((contents.hashCode()%5)+1);
 		}
 
-		public String getUserIcon(){return "";}
+		public int getUserIcon(){return iconId;}
 		public String getUserName(){return username;}
 		public String getTimeSent(){return timestamp.toString();}//{return "12:00AM February 31st 2019";}
 		public String getContents(){return contents;}
+
+		private static int colorToIconId(int colorId)
+		{
+			switch(colorId)
+			{
+				case R.integer.avatar_red:   return R.drawable.ic_monkey_red;
+				case R.integer.avatar_green: return R.drawable.ic_monkey_green;
+				case R.integer.avatar_blue:  return R.drawable.ic_monkey_blue;
+				case R.integer.avatar_yellow:return R.drawable.ic_monkey_yellow;
+				case R.integer.avatar_pink:  return R.drawable.ic_monkey_pink;
+			}
+			return R.drawable.ic_monkey_red;
+		}
 	}
 }
