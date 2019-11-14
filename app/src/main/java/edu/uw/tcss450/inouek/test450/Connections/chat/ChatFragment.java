@@ -30,6 +30,7 @@ import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.utils.PushReceiver;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 
+//this is only a test
 public class ChatFragment extends Fragment
 {
 	private long chatId,userId;
