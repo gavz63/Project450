@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Random;
+
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
@@ -69,6 +72,7 @@ public class RegisterFragment extends Fragment {
                     .addFirstName(mFirstNameString)
                     .addLastName(mLastNameString)
                     .addUsername(mNicknameString)
+                    .addColor(new Random().nextInt(5) + 1)
                     .build();
 
             Uri uri = new Uri.Builder()
