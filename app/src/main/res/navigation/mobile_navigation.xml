@@ -9,11 +9,7 @@
         android:id="@+id/nav_home"
         android:name="edu.uw.tcss450.inouek.test450.ui.home.HomeFragment"
         android:label="menu_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_nav_home_to_nav_weather"
-            app:destination="@id/nav_weather" />
-    </fragment>
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_chat"
@@ -36,11 +32,6 @@
             app:argType="string"/>
     </fragment>
 
-    <activity
-        android:id="@+id/nav_weather"
-        android:name="edu.uw.tcss450.inouek.test450.WeatherActivity"
-        android:label="activity_weather"
-        tools:layout="@layout/activity_weather" />
     <fragment
         android:id="@+id/nav_account"
         android:name="edu.uw.tcss450.inouek.test450.UserFragment"
@@ -80,6 +71,16 @@
     <action
         android:id="@+id/action_global_nav_connections"
         app:destination="@id/nav_connections" />
+    <fragment
+        android:id="@+id/weatherMainFragment"
+        android:name="edu.uw.tcss450.inouek.test450.WeatherMainFragment"
+        android:label="fragment_wather_main"
+        tools:layout="@layout/fragment_wather_main" >
+        <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+    </fragment>
+    <action android:id="@+id/action_global_weatherMainFragment" app:destination="@id/weatherMainFragment" />
 
 
 </navigation>
