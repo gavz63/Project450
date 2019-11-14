@@ -327,6 +327,7 @@ public class LoginFragment extends Fragment {
                             .addFirstName(resultsJSON.getString("firstname"))
                             .addLastName(resultsJSON.getString("lastname"))
                             .addUsername(resultsJSON.getString("username"))
+                            .addColor(resultsJSON.getInt("color"))
                             .build();
 
                     //Login was successful. Switch to the SuccessFragment.

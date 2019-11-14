@@ -22,6 +22,14 @@ import edu.uw.tcss450.inouek.test450.model.Credentials;
 
 public class HomeActivity extends AppCompatActivity {
 
+    public static final int MONKEY_YELLOW = 1;
+    public static final int MONKEY_GREEN = 2;
+    public static final int MONKEY_RED = 3;
+    public static final int MONKEY_PINK = 4;
+    public static final int MONKEY_BLUE = 5;
+
+
+
     private SwitchMaterial mNightModeSwitch;
     private AppBarConfiguration mAppBarConfiguration;
     private Credentials mCredentials;
