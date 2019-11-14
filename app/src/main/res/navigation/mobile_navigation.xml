@@ -19,7 +19,22 @@
         android:id="@+id/nav_chat"
         android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat"/>
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="jwt"
+            app:argType="string"/>
+        <argument
+            android:name="userId"
+            app:argType="long"
+            android:defaultValue="1L"/>
+        <argument
+            android:name="chatId"
+            app:argType="long"
+            android:defaultValue="1L"/>
+        <argument
+            android:name="email"
+            app:argType="string"/>
+    </fragment>
 
     <activity
         android:id="@+id/nav_weather"
@@ -46,6 +61,9 @@
         <argument
             android:name="credentials"
             app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+        <argument
+            android:name="jwt"
+            app:argType="string"/>
     </fragment>
     <action android:id="@+id/action_global_nav_account" app:destination="@id/nav_account" />
     <action android:id="@+id/action_global_nav_home" app:destination="@id/nav_home" />

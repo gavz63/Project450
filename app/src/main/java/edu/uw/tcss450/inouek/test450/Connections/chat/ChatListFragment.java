@@ -12,16 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListContent.Chat;
 
 public class ChatListFragment extends Fragment
 {
+	private List<Chat> chats = new ArrayList<Chat>();
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
 	}
 
 	@Override
@@ -31,19 +35,23 @@ public class ChatListFragment extends Fragment
 
 		if (view instanceof RecyclerView)
 		{
+			chats.clear();
+			chats.add(new Chat(1, "Global Chat"));
+
 			Context context = view.getContext();
 			RecyclerView recyclerView = (RecyclerView) view;
 			recyclerView.setLayoutManager(new LinearLayoutManager(context));
-			recyclerView.setAdapter(new ChatListRecyclerViewAdapter(ChatListContent.CHATS, this::gotoChat));
+			recyclerView.setAdapter(new ChatListRecyclerViewAdapter(chats, this::gotoChat));
 		}
 		return view;
 	}
 
 	private void gotoChat(Chat chat)
 	{
-		Bundle args = new Bundle();
-		args.putSerializable(getString(R.string.chat_bundle_key), chat);
-		Navigation.findNavController(getView()).navigate(R.id.action_chatlist_to_chat, args);
+		ChatListFragmentArgs argsToList = ChatListFragmentArgs.fromBundle(getArguments());
+		ChatListFragmentDirections.ActionChatlistToChat argsToChat = ChatListFragmentDirections.actionChatlistToChat(argsToList.getJwt(),argsToList.getCredentials().getEmail());
+		//args.putSerializable(getString(R.string.chat_bundle_key), chat);
+		Navigation.findNavController(getView()).navigate(argsToChat);
 	}
 
 	public interface OnListFragmentInteractionListener

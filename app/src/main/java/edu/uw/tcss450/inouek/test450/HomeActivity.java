@@ -87,7 +87,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.nav_chatlist:
                 MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
-                        ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials);
+                        ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
                 navController.navigate(chatPage);
                 break;
             //TODO MAKE WEATHER AND CONNECTION ACTIVITIES INTO FRAGMENTS AND Navigate to them here
