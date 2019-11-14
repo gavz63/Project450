@@ -166,7 +166,8 @@ public class RegisterFragment extends Fragment {
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleRegisterOnPre() {
-        getActivity().findViewById(R.id.layout_register_wait).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.register_progress).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.button_register_register).setEnabled(false);
     }
 
     /**
@@ -201,16 +202,19 @@ public class RegisterFragment extends Fragment {
                     mEmailField.setError("Email is already in use.");
                 }
             }
-            getActivity().findViewById(R.id.layout_register_wait)
+            getActivity().findViewById(R.id.register_progress)
                     .setVisibility(View.GONE);
+            getActivity().findViewById(R.id.button_register_register).setEnabled(true);
         } catch (JSONException e) {
             //It appears that the web service did not return a JSON formatted
             //String or it did not have what we expected in it.
             Log.e("JSON_PARSE_ERROR",  result
                     + System.lineSeparator()
                     + e.getMessage());
-            getActivity().findViewById(R.id.layout_register_wait)
+            getActivity().findViewById(R.id.register_progress)
                     .setVisibility(View.GONE);
+            getActivity().findViewById(R.id.button_register_register).setEnabled(true);
+
             mFirstNameField.setError("JSONException");
         }
     }
