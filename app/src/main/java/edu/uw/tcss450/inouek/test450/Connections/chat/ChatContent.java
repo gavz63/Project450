@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.uw.tcss450.inouek.test450.HomeActivity;
 import edu.uw.tcss450.inouek.test450.R;
 
 /**
@@ -75,27 +76,27 @@ public class ChatContent
 			this.username = "Person "+userId;
 			this.timestamp = new Timestamp(timestamp);
 			this.contents = contents;
-			this.iconId = colorToIconId(((int)userId%5)+1);
+			this.iconId = colorToIconId(0);
 		}
 
-		public Message(String username, String contents)
+		public Message(String username, String contents, int color)
 		{
 			this.messageId = 0;
 			this.userId = 0;
 			this.username = username;
 			this.timestamp = new Timestamp(System.currentTimeMillis()/1000);
 			this.contents = contents;
-			this.iconId = colorToIconId((contents.hashCode()%5)+1);
+			this.iconId = colorToIconId(color);
 		}
 
 		public Message(JSONObject json)
 		{
 			this.messageId = json.optLong("messageId");
 			this.userId = json.optLong("userId");
-			this.username = json.optString("email");
+			this.username = json.optString("username");
 			this.timestamp = Timestamp.valueOf(json.optString("timestamp"));
 			this.contents = json.optString("message");
-			this.iconId = colorToIconId((contents.hashCode()%5)+1);
+			this.iconId = colorToIconId(json.optInt("color"));
 		}
 
 		public int getUserIcon(){return iconId;}
@@ -107,13 +108,17 @@ public class ChatContent
 		{
 			switch(colorId)
 			{
-				case R.integer.avatar_red:   return R.drawable.ic_monkey_red;
-				case R.integer.avatar_green: return R.drawable.ic_monkey_green;
-				case R.integer.avatar_blue:  return R.drawable.ic_monkey_blue;
-				case R.integer.avatar_yellow:return R.drawable.ic_monkey_yellow;
-				case R.integer.avatar_pink:  return R.drawable.ic_monkey_pink;
+				case HomeActivity.MONKEY_GREEN:
+					return R.drawable.ic_monkey_green;
+				case HomeActivity.MONKEY_BLUE:
+					return R.drawable.ic_monkey_blue;
+				case HomeActivity.MONKEY_YELLOW:
+					return R.drawable.ic_monkey_yellow;
+				case HomeActivity.MONKEY_PINK:
+					return R.drawable.ic_monkey_pink;
+				default:
+					return R.drawable.ic_monkey_red;
 			}
-			return R.drawable.ic_monkey_red;
 		}
 	}
 }

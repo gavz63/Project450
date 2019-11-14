@@ -28,8 +28,11 @@
             app:argType="long"
             android:defaultValue="1L"/>
         <argument
-            android:name="email"
+            android:name="username"
             app:argType="string"/>
+        <argument
+            android:name="color"
+            app:argType="integer" />
     </fragment>
 
     <fragment

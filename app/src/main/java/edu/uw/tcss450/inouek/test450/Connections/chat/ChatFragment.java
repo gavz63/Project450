@@ -33,7 +33,8 @@ import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 public class ChatFragment extends Fragment
 {
 	private long chatId,userId;
-	private String email,jwt;
+	private int color;
+	private String username,jwt;
 
 	private List<ChatContent.Message> messageOutput = new ArrayList<>();
 	private ChatMessageRecyclerViewAdapter viewAdapter;
@@ -79,8 +80,9 @@ public class ChatFragment extends Fragment
 		ChatFragmentArgs args = ChatFragmentArgs.fromBundle(getArguments());
 		chatId = args.getChatId();
 		userId = args.getUserId();
-		email = args.getEmail();
+		username = args.getUsername();
 		jwt = args.getJwt();
+		color = args.getColor();
 		//We will use this url every time the user hits send. Let's only build it once, ya?
 		Uri.Builder uriBuilder = new Uri.Builder();
 		uriBuilder.scheme("https");
@@ -142,9 +144,10 @@ public class ChatFragment extends Fragment
 		JSONObject messageJson = new JSONObject();
 		try
 		{
-			messageJson.put("email", email);
+			messageJson.put("username", username);
 			messageJson.put("message", msg);
 			messageJson.put("chatId", chatId);
+			messageJson.put("color", color);
 		}
 		catch (JSONException e)
 		{
@@ -207,11 +210,19 @@ public class ChatFragment extends Fragment
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
-			if(intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE"))
-			{
+			if(intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE")) {
 				String sender = intent.getStringExtra("SENDER");
+				String username = "";
+				int color = 0;
+				try {
+					JSONObject senderJSON = new JSONObject(sender);
+					username = senderJSON.getString("username");
+					color = senderJSON.getInt("color");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 				String messageText = intent.getStringExtra("MESSAGE");
-				messageOutput.add(0,new ChatContent.Message(sender,messageText));
+				messageOutput.add(0,new ChatContent.Message(username,messageText,color));
 				viewAdapter.notifyDataSetChanged();
 			}
 		}

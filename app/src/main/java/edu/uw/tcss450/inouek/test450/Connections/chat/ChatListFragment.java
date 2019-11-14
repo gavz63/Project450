@@ -49,7 +49,10 @@ public class ChatListFragment extends Fragment
 	private void gotoChat(Chat chat)
 	{
 		ChatListFragmentArgs argsToList = ChatListFragmentArgs.fromBundle(getArguments());
-		ChatListFragmentDirections.ActionChatlistToChat argsToChat = ChatListFragmentDirections.actionChatlistToChat(argsToList.getJwt(),argsToList.getCredentials().getEmail());
+		ChatListFragmentDirections.ActionChatlistToChat argsToChat =
+				ChatListFragmentDirections.actionChatlistToChat(argsToList.getJwt(),
+						argsToList.getCredentials().getUsername(),
+						argsToList.getCredentials().getColor());
 		//args.putSerializable(getString(R.string.chat_bundle_key), chat);
 		Navigation.findNavController(getView()).navigate(argsToChat);
 	}
