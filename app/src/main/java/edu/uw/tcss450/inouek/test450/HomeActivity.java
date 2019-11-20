@@ -195,9 +195,14 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
             //TODO MAKE WEATHER AND CONNECTION ACTIVITIES INTO FRAGMENTS AND Navigate to them here
                 //TODO PRobably pss the credentials (for friends and saved lcoations)
             case R.id.nav_weather:
+
                 MobileNavigationDirections.ActionGlobalWeatherMainFragment weatherPage =
                         WeatherMainFragmentDirections.actionGlobalWeatherMainFragment(mCredentials);
                 navController.navigate(weatherPage);
+
+                // test should put weather fragment, just put test for testing purpose
+                //navController.navigate(R.id.test_forecast24);
+
                 break;
             case R.id.nav_connections:
                 MobileNavigationDirections.ActionGlobalNavConnections connectionsPage =

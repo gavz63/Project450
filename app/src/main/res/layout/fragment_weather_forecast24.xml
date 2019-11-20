@@ -5,38 +5,32 @@
     android:id="@+id/predict24hours"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WeatherForecast24Fragment">
+    tools:context=".Forecast24Fragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="272dp"
-        android:text="@string/hello_blank_fragment"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/text_city"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="122dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/text_display"
-        android:layout_width="296dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/weather_recyclerView_holder_uniqueweather_recyclerView_holder_unique"
+        android:layout_width="309dp"
         android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="336dp"
-        android:text="TextView"
+        android:layout_marginBottom="26dp"
+        app:layout_constraintBottom_toTopOf="@+id/testINFO"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/testINFO"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginBottom="251dp"
+        android:text="@string/hello_blank_fragment"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather_recyclerView_holder_uniqueweather_recyclerView_holder_unique"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

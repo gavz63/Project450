@@ -18,7 +18,6 @@
         android:roundIcon="@drawable/ic_treehouse_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WeatherActivity"></activity>
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home_"
