@@ -9,7 +9,9 @@
         android:id="@+id/nav_home"
         android:name="edu.uw.tcss450.inouek.test450.ui.home.HomeFragment"
         android:label="menu_home"
+
         tools:layout="@layout/fragment_home" />
+
 
     <fragment
         android:id="@+id/nav_chat"
@@ -74,6 +76,7 @@
     <action
         android:id="@+id/action_global_nav_connections"
         app:destination="@id/nav_connections" />
+
     <fragment
         android:id="@+id/weatherMainFragment"
         android:name="edu.uw.tcss450.inouek.test450.WeatherMainFragment"
@@ -84,6 +87,7 @@
             app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
     </fragment>
     <action android:id="@+id/action_global_weatherMainFragment" app:destination="@id/weatherMainFragment" />
+
 
 
 </navigation>
