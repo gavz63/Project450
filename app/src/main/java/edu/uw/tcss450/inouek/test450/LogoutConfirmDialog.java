@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 
 import edu.uw.tcss450.inouek.test450.login.LoginActivity;
+import me.pushy.sdk.Pushy;
 
 public class LogoutConfirmDialog extends DialogFragment {
 
@@ -49,11 +51,22 @@ public class LogoutConfirmDialog extends DialogFragment {
         prefs.edit().remove(getString(R.string.keys_prefs_password)).apply();
         prefs.edit().remove(getString(R.string.keys_prefs_email)).apply();
 
+        new DeleteTokenAsyncTask().execute();
 
         //lose this activity and bring back the Login
         Intent i = new Intent(mActivity, LoginActivity.class);
         startActivity(i);
         //End this Activity and remove it from the Activity back stack.
         mActivity.finish();
+    }
+
+    private class DeleteTokenAsyncTask extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            Pushy.unregister(mActivity);
+            return null;
+        }
     }
 }

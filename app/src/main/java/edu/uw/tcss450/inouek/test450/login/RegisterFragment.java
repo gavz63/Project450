@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Random;
+
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
@@ -69,6 +72,7 @@ public class RegisterFragment extends Fragment {
                     .addFirstName(mFirstNameString)
                     .addLastName(mLastNameString)
                     .addUsername(mNicknameString)
+                    .addColor(new Random().nextInt(5) + 1)
                     .build();
 
             Uri uri = new Uri.Builder()
@@ -162,7 +166,8 @@ public class RegisterFragment extends Fragment {
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleRegisterOnPre() {
-        getActivity().findViewById(R.id.layout_register_wait).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.register_progress).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.button_register_register).setEnabled(false);
     }
 
     /**
@@ -197,16 +202,19 @@ public class RegisterFragment extends Fragment {
                     mEmailField.setError("Email is already in use.");
                 }
             }
-            getActivity().findViewById(R.id.layout_register_wait)
+            getActivity().findViewById(R.id.register_progress)
                     .setVisibility(View.GONE);
+            getActivity().findViewById(R.id.button_register_register).setEnabled(true);
         } catch (JSONException e) {
             //It appears that the web service did not return a JSON formatted
             //String or it did not have what we expected in it.
             Log.e("JSON_PARSE_ERROR",  result
                     + System.lineSeparator()
                     + e.getMessage());
-            getActivity().findViewById(R.id.layout_register_wait)
+            getActivity().findViewById(R.id.register_progress)
                     .setVisibility(View.GONE);
+            getActivity().findViewById(R.id.button_register_register).setEnabled(true);
+
             mFirstNameField.setError("JSONException");
         }
     }

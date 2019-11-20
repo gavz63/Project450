@@ -13,7 +13,6 @@
         android:layout_marginBottom="5dp"
         app:cardBackgroundColor="@color/colorPrimaryLight"
         app:cardCornerRadius="5dp">
-        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,11 +37,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_decline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
+                    style="@style/Widget.MaterialComponents.Button"
+                    app:backgroundTint="@color/colorAccent"
+                    android:textColor="@color/colorPrimaryText"
                     android:layout_marginEnd="32dp"
                     android:text="@string/connections_text_button_cancel"
                     app:layout_constraintBottom_toBottomOf="parent"

@@ -34,7 +34,7 @@ public class ChatMessageRecyclerViewAdapter extends RecyclerView.Adapter<ChatMes
 	public void onBindViewHolder(final ViewHolder holder, int position)
 	{
 		holder.item = mValues.get(position);
-		//holder.usericon.setImageURI(mValues.get(position).getUserIcon());
+		holder.usericon.setImageResource(mValues.get(position).getUserIcon());
 		holder.username.setText(mValues.get(position).getUserName());
 		holder.timesent.setText(mValues.get(position).getTimeSent());
 		holder.contents.setText(mValues.get(position).getContents());

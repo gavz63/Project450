@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 
 public class UserFragment extends Fragment {
@@ -20,6 +22,7 @@ public class UserFragment extends Fragment {
     private EditText mCurrentPassField;
     private EditText mNewPassField;
     private EditText mNewPassRetypeField;
+    private ImageView mAvatar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,10 +47,12 @@ public class UserFragment extends Fragment {
         mCurrentPassField = view.findViewById(R.id.account_current_password);
         mNewPassField = view.findViewById(R.id.account_new_password);
         mNewPassRetypeField = view.findViewById(R.id.account_new_password_retype);
+        mAvatar = view.findViewById(R.id.account_avatar);
 
         mFirstNameField.setText(mCredentials.getFirstName());
         mLastNameField.setText(mCredentials.getLastName());
         mUsernameField.setText(mCredentials.getUsername());
+        setAvatar();
 
         view.findViewById(R.id.button_account_log_out).setOnClickListener(v -> {
             DialogFragment dialogFragment = new LogoutConfirmDialog((HomeActivity)getActivity());
@@ -142,5 +147,27 @@ public class UserFragment extends Fragment {
 
     void setCredentials(Credentials c) {
         mCredentials = c;
+    }
+
+    private void setAvatar() {
+        switch (mCredentials.getColor()) {
+            case HomeActivity.MONKEY_YELLOW:
+                mAvatar.setImageResource(R.drawable.ic_monkey_yellow);
+                break;
+            case HomeActivity.MONKEY_BLUE:
+                mAvatar.setImageResource(R.drawable.ic_monkey_blue);
+                break;
+            case HomeActivity.MONKEY_RED:
+                mAvatar.setImageResource(R.drawable.ic_monkey_red);
+                break;
+            case HomeActivity.MONKEY_GREEN:
+                mAvatar.setImageResource(R.drawable.ic_monkey_green);
+                break;
+            case HomeActivity.MONKEY_PINK:
+                mAvatar.setImageResource(R.drawable.ic_monkey_pink);
+                break;
+            default:
+                break;
+        }
     }
 }

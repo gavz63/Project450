@@ -30,6 +30,7 @@ import java.net.URL;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
+import me.pushy.sdk.Pushy;
 
 public class LoginFragment extends Fragment {
 
@@ -116,6 +117,7 @@ public class LoginFragment extends Fragment {
                     .scheme("https")
                     .appendPath(getString(R.string.ep_base_url))
                     .appendPath(getString(R.string.ep_login))
+                    .appendPath(getString(R.string.ep_pushy))
                     .build();
 
             //instantiate and execute the AsyncTask.
@@ -181,7 +183,22 @@ public class LoginFragment extends Fragment {
         //TODO Do pushy login stuff here get token and all that
         protected String doInBackground(String... urls) {
             //get pushy token
-
+            String deviceToken = "";
+            try
+            {
+                // Assign a unique token to this device
+                deviceToken = Pushy.register(getActivity().getApplicationContext());
+                //subscribe to a topic (this is a Blocking call)
+                Pushy.subscribe("all", getActivity().getApplicationContext());
+            }
+            catch (Exception exc)
+            {
+                cancel(true);
+                // Return exc to onCancelled
+                return exc.getMessage();
+            }
+            //feel free to remove later.
+            Log.d("LOGIN", "Pushy Token: " + deviceToken);
 
             //attempt to log in: Send credentials AND pushy token to the web service
             StringBuilder response = new StringBuilder();
@@ -198,7 +215,7 @@ public class LoginFragment extends Fragment {
                 OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
 
                 JSONObject message = mCredentials.asJSONObject();
-//                message.put("token", deviceToken);
+                message.put("token", deviceToken);
 
                 wr.write(message.toString());
                 wr.flush();
@@ -310,6 +327,7 @@ public class LoginFragment extends Fragment {
                             .addFirstName(resultsJSON.getString("firstname"))
                             .addLastName(resultsJSON.getString("lastname"))
                             .addUsername(resultsJSON.getString("username"))
+                            .addColor(resultsJSON.getInt("color"))
                             .build();
 
                     //Login was successful. Switch to the SuccessFragment.

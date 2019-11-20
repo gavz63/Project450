@@ -11,6 +11,7 @@ import android.widget.TextView;
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragment.OnListFragmentInteractionListener;
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListContent.Chat;
 import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.model.Credentials;
 
 import java.util.List;
 
