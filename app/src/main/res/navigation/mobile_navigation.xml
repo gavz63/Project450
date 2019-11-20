@@ -11,8 +11,8 @@
         android:label="menu_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_nav_home_to_nav_weather"
-            app:destination="@id/nav_weather" />
+            android:id="@+id/test_forecast24"
+            app:destination="@id/nav_forcaset24" />
     </fragment>
 
     <fragment
@@ -21,11 +21,6 @@
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat"/>
 
-    <activity
-        android:id="@+id/nav_weather"
-        android:name="edu.uw.tcss450.inouek.test450.WeatherActivity"
-        android:label="activity_weather"
-        tools:layout="@layout/activity_weather" />
     <fragment
         android:id="@+id/nav_account"
         android:name="edu.uw.tcss450.inouek.test450.UserFragment"
@@ -62,6 +57,11 @@
     <action
         android:id="@+id/action_global_nav_connections"
         app:destination="@id/nav_connections" />
+    <fragment
+        android:id="@+id/nav_forcaset24"
+        android:name="edu.uw.tcss450.inouek.test450.Forecast24Fragment"
+        android:label="Forecast"
+        tools:layout="@layout/fragment_weather_forecast24" />
 
 
 </navigation>
