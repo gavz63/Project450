@@ -57,6 +57,7 @@ import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherPost;
 import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment;
 
+//Testing change on git
 public class HomeActivity extends AppCompatActivity implements Weather10Fragment.OnListFragmentInteractionListener, LocationListener {
 
     public static final int MONKEY_YELLOW = 1;
