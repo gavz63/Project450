@@ -27,21 +27,18 @@
         tools:layout_editor_absoluteX="264dp"
         tools:layout_editor_absoluteY="205dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/week_weather"
-            android:name="edu.uw.tcss450.inouek.test450.weather.weatherFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:orientation="horizontal"
-            app:layoutManager="LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:context=".weather.weatherFragment"
-            tools:listitem="@layout/fragment_weather_item">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="214dp">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <fragment
+                android:id="@+id/fragment_weathers"
+                android:name="edu.uw.tcss450.inouek.test450.weather.Weather10Fragment"
+                android:layout_width="match_parent"
+                android:layout_height="214dp"
+                tools:layout="@layout/fragment_10_days_weather_list" />
+
+        </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/saved_city"
