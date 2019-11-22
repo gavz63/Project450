@@ -27,6 +27,8 @@ import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment;
  * yeah
  * hi kota =)
  *
+ * now its getting tough
+ *
  */
 public class WeatherMainFragment extends Fragment {
     Credentials mCredentials;
