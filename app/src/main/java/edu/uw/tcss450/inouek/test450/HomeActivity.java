@@ -278,7 +278,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
                                 LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
                                 viewModel.changeLocation(location);
-                                //FindWeather();
+                                FindWeather();
 
                             }
                         }
@@ -414,54 +414,33 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                     long time = Integer.valueOf(day.getString("dt")).intValue();
                     Calendar currCal = Calendar.getInstance();
                     currCal.setTimeInMillis(time);
-                    Date currCalDate = new Date(time);
-                    String iconID = "http://openweathermap.org/img/w/" + day.getJSONArray("weather").getJSONObject(0).getString("icon");
+                    //Date currCalDate = new Date(time);
+                    String iconID = "http://openweathermap.org/img/w/" + day.getJSONArray("weather").getJSONObject(0).getString("icon") + ".png";
+                    System.out.println(iconID);
 
-                    URL url = null;
-
-                    url = new URL(iconID);
-
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setDoInput(true);
-                    conn.connect();
-                    BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
-                    Bitmap icon = BitmapFactory.decodeStream(in);
-                    in.close();
-                    conn.disconnect();
-
+                    String[] week_name = {"Sun", "Mon", "Tue", "Wed",
+                            "Thur", "Fri", "Sat"};
                     String temp = day.getJSONObject("temp").getString("day");
                     temp = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp)));
                     String temp_min = day.getJSONObject("temp").getString("min");
                     temp_min = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_min)));
                     String temp_max = day.getJSONObject("temp").getString("max");
                     temp_max = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_max)));
-                    weather[i] = (new TenDaysWeatherPost.Builder(icon,
-                            temp_min + "/" + temp_max,
-                            (currCalDate.getDay() + "/" + currCalDate.getMonth() + "\n" + currCalDate.getDate())).build());
-
-
-
-
-                    weathers = new ArrayList(Arrays.asList(weather));
-
-                    TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
-                    viewModel.changeData(weathers);
-
-
-                    //System.out.println("set array");
-
-
-                    //getFragmentManager().beginTransaction().replace(R.id.fragment_weathers, weatherFragment.this).commit();
-
-
+                    weather[i] = (new TenDaysWeatherPost.Builder(iconID,
+//                            (currCal.get(Calendar.DATE) + "/" + (currCal.get(Calendar.MONTH) + 1)+ "/"
+////                                    + week_name[currCal.get(Calendar.DAY_OF_WEEK)]),
+                            "test",
+                            temp_min + "/" + temp_max)
+                            .build());
                 }
+                weathers = new ArrayList(Arrays.asList(weather));
+
+                TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
+                viewModel.changeData(weathers);
 
             }catch(JSONException e){
-                e.printStackTrace();
-            }  catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
 }

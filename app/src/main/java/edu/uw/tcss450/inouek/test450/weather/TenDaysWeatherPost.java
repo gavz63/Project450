@@ -8,11 +8,11 @@ import java.io.Serializable;
 
 public class TenDaysWeatherPost implements Serializable, Parcelable {
 
-    private final Bitmap mIcon;
+    private final String mIcon;
     private final String mTemp;
     private final String mDate;
     protected TenDaysWeatherPost(Parcel in) {
-        mIcon = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
+        mIcon = in.readString();
         mTemp = in.readString();
         mDate = in.readString();
     }
@@ -47,7 +47,7 @@ public class TenDaysWeatherPost implements Serializable, Parcelable {
      * @author Charles Bryan
      */
     public static class Builder {
-        private final Bitmap mIcon;
+        private final String mIcon;
         private final String mTemp;
         private final String mDate;
 
@@ -59,7 +59,7 @@ public class TenDaysWeatherPost implements Serializable, Parcelable {
          * @param date
          * @param temp
          */
-        public Builder(Bitmap icon, String date, String temp) {
+        public Builder(String icon, String date, String temp) {
             this.mTemp = temp;
             this.mIcon = icon;
             this.mDate = date;
@@ -83,7 +83,7 @@ public class TenDaysWeatherPost implements Serializable, Parcelable {
         return mTemp;
     }
 
-    public Bitmap getIcon() {
+    public String getIcon() {
         return mIcon;
     }
 

@@ -47,7 +47,7 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
 
-        holder.mIcon.setImageBitmap(mValues.get(position).getIcon());
+        //holder.mIcon.setImageBitmap(mValues.get(position).getIcon());
 
 
         holder.mDate.setText(mValues.get(position).getDate());
@@ -78,7 +78,7 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final ImageView mIcon;
+        //public final ImageView mIcon;
         public final TextView mDate;
         public final TextView mTemp;
         public TenDaysWeatherPost mItem;
@@ -86,7 +86,7 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIcon = (ImageView) view.findViewById(R.id.weather_icon);
+            //mIcon = (ImageView) view.findViewById(R.id.weather_icon);
             mDate = (TextView) view.findViewById(R.id.Date);
             mTemp = (TextView) view.findViewById(R.id.Temp);
         }
