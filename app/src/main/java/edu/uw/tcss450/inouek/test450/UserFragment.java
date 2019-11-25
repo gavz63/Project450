@@ -1,5 +1,7 @@
 package edu.uw.tcss450.inouek.test450;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 
@@ -52,7 +56,29 @@ public class UserFragment extends Fragment {
         mFirstNameField.setText(mCredentials.getFirstName());
         mLastNameField.setText(mCredentials.getLastName());
         mUsernameField.setText(mCredentials.getUsername());
-        setAvatar();
+        setAvatar(mCredentials.getColor());
+        mAvatar.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.monkey_icon_list, null);
+            builder.setView(dialogView);
+            AlertDialog dialog = builder.create();
+
+            ArrayList<ImageView> avatars = new ArrayList<>();
+            avatars.add(dialogView.findViewById(R.id.monkey_blue));
+            avatars.add(dialogView.findViewById(R.id.monkey_green));
+            avatars.add(dialogView.findViewById(R.id.monkey_pink));
+            avatars.add(dialogView.findViewById(R.id.monkey_red));
+            avatars.add(dialogView.findViewById(R.id.monkey_yellow));
+
+            for (ImageView avatar : avatars) {
+                avatar.setOnClickListener(a -> {
+                    this.setAvatar(Integer.parseInt((String) avatar.getTag()));
+                    dialog.cancel();
+                });
+            }
+            dialog.show();
+        });
 
         view.findViewById(R.id.button_account_log_out).setOnClickListener(v -> {
             DialogFragment dialogFragment = new LogoutConfirmDialog((HomeActivity)getActivity());
@@ -70,6 +96,7 @@ public class UserFragment extends Fragment {
                                     .addFirstName(mFirstNameField.getText().toString())
                                     .addLastName(mLastNameField.getText().toString())
                                     .addUsername(mUsernameField.getText().toString())
+                                    .addColor((Integer) mAvatar.getTag())
                                     .build();
                 } else {
                     newCreds = new Credentials
@@ -77,6 +104,7 @@ public class UserFragment extends Fragment {
                                     .addFirstName(mFirstNameField.getText().toString())
                                     .addLastName(mLastNameField.getText().toString())
                                     .addUsername(mUsernameField.getText().toString())
+                                    .addColor((Integer) mAvatar.getTag())
                                     .build();
                 }
 
@@ -120,7 +148,8 @@ public class UserFragment extends Fragment {
             mNewPassRetypeField.setError(null);
         }
 
-        if (!(mNewPassField.getText().equals("") && mNewPassRetypeField.getText().equals(""))) {
+        if (!mNewPassField.getText().toString().equals("") &&
+                !mNewPassRetypeField.getText().toString().equals("")) {
             if (mNewPassField.getText().toString().length() < 6) {
                 mNewPassField.setError("Your password must be 6 or more characters");
                 anyErrors = true;
@@ -149,22 +178,27 @@ public class UserFragment extends Fragment {
         mCredentials = c;
     }
 
-    private void setAvatar() {
-        switch (mCredentials.getColor()) {
+    void setAvatar(int theColor) {
+        switch (theColor) {
             case HomeActivity.MONKEY_YELLOW:
                 mAvatar.setImageResource(R.drawable.ic_monkey_yellow);
+                mAvatar.setTag(HomeActivity.MONKEY_YELLOW);
                 break;
             case HomeActivity.MONKEY_BLUE:
                 mAvatar.setImageResource(R.drawable.ic_monkey_blue);
+                mAvatar.setTag(HomeActivity.MONKEY_BLUE);
                 break;
             case HomeActivity.MONKEY_RED:
                 mAvatar.setImageResource(R.drawable.ic_monkey_red);
+                mAvatar.setTag(HomeActivity.MONKEY_RED);
                 break;
             case HomeActivity.MONKEY_GREEN:
                 mAvatar.setImageResource(R.drawable.ic_monkey_green);
+                mAvatar.setTag(HomeActivity.MONKEY_GREEN);
                 break;
             case HomeActivity.MONKEY_PINK:
                 mAvatar.setImageResource(R.drawable.ic_monkey_pink);
+                mAvatar.setTag(HomeActivity.MONKEY_PINK);
                 break;
             default:
                 break;

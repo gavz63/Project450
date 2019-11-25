@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="avatar_red">1</integer>
-    <integer name="avatar_green">2</integer>
-    <integer name="avatar_blue">3</integer>
-    <integer name="avatar_yellow">4</integer>
-    <integer name="avatar_pink">5</integer>
+    <string name="avatar_red">3</string>
+    <string name="avatar_green">2</string>
+    <string name="avatar_blue">5</string>
+    <string name="avatar_yellow">1</string>
+    <string name="avatar_pink">4</string>
 </resources>

@@ -87,6 +87,7 @@
     <string name="logout_info">Are you sure you want to log out?</string>
     <string name="action_update_account">Confirm Update</string>
     <string name="update_account_info">Would you like to confirm changes to your account?</string>
+    <string name="choose">Choose</string>
 
 
     <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->
