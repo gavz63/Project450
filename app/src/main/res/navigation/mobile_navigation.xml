@@ -8,30 +8,29 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="edu.uw.tcss450.inouek.test450.ui.home.HomeFragment"
-        android:label="menu_home"
-
+        android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
 
     <fragment
         android:id="@+id/nav_chat"
         android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatFragment"
-        android:label="fragment_chat"
+        android:label="@string/chat_conversation_label"
         tools:layout="@layout/fragment_chat">
         <argument
             android:name="jwt"
-            app:argType="string"/>
+            app:argType="string" />
         <argument
             android:name="userId"
-            app:argType="long"
-            android:defaultValue="1L"/>
+            android:defaultValue="1L"
+            app:argType="long" />
         <argument
             android:name="chatId"
-            app:argType="long"
-            android:defaultValue="1L"/>
+            android:defaultValue="1L"
+            app:argType="long" />
         <argument
             android:name="username"
-            app:argType="string"/>
+            app:argType="string" />
         <argument
             android:name="color"
             app:argType="integer" />
@@ -40,7 +39,7 @@
     <fragment
         android:id="@+id/nav_account"
         android:name="edu.uw.tcss450.inouek.test450.UserFragment"
-        android:label="Account Information"
+        android:label="@string/account_fragment_label"
         tools:layout="@layout/fragment_user">
         <argument
             android:name="credentials"
@@ -49,7 +48,7 @@
     <fragment
         android:id="@+id/nav_chatlist"
         android:name="edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragment"
-        android:label="fragment_chat_list"
+        android:label="@string/chat_list_fragment_label"
         tools:layout="@layout/fragment_chat_list">
         <action
             android:id="@+id/action_chatlist_to_chat"
@@ -67,7 +66,7 @@
     <fragment
         android:id="@+id/nav_connections"
         android:name="edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamic"
-        android:label="fragment_connections_home_dynamic"
+        android:label="@string/connections_fragment_label"
         tools:layout="@layout/fragment_connections_home_dynamic" >
         <argument
             android:name="credentials"
@@ -80,7 +79,7 @@
     <fragment
         android:id="@+id/weatherMainFragment"
         android:name="edu.uw.tcss450.inouek.test450.WeatherMainFragment"
-        android:label="fragment_wather_main"
+        android:label="@string/weather_fragment_label"
         tools:layout="@layout/fragment_wather_main" >
         <argument
             android:name="credentials"

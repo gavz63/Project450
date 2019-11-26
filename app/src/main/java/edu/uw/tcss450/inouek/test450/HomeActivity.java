@@ -211,9 +211,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 navController.navigate(connectionsPage);
                 break;
             case R.id.nav_home:
-//                NavDirections.ActionGlobalNavHome homePage =
-//                    NavDirections.actionGlobalNavHome();
-//                navController.navigate(homePage);
+                navController.navigate(MobileNavigationDirections.actionGlobalNavHome());
                 break;
         }
         //Close the drawer
