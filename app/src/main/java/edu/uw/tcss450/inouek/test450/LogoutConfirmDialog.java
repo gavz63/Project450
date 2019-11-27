@@ -29,7 +29,6 @@ public class LogoutConfirmDialog extends DialogFragment {
         builder.setMessage(R.string.logout_info)
                 .setPositiveButton(R.string.action_logout, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //TODO figure out context to call HomeActivity.logout()
                         logout();
                     }
                 })

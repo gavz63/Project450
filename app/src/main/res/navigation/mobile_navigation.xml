@@ -88,5 +88,4 @@
     <action android:id="@+id/action_global_weatherMainFragment" app:destination="@id/weatherMainFragment" />
 
 
-
 </navigation>

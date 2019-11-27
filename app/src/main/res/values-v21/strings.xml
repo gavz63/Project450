@@ -97,6 +97,9 @@
     <string name="weather_fragment_label">Weather</string>
     <string name="weather_add_location_fragment_label">Add Location</string>
 
+    <string name="search_for_friends">Search for Friends</string>
+    <string name="button_send_friend_request">Send Friend Request</string>
+
     <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->
     <string name="credentials_key">Crdntls ky </string>
     <string name="profile_key">Profile!</string>
