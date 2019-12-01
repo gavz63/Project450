@@ -121,7 +121,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         };
         createLocationRequest();
 
-        findWeather();
+        //findWeather();
 
         //Set up menus and nav_host_fragment
         setContentView(R.layout.activity_home);
