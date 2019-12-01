@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     public static final int MONKEY_PINK = 4;
     public static final int MONKEY_BLUE = 5;
 
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000000000;
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
             UPDATE_INTERVAL_IN_MILLISECONDS / 2;
     private static final int MY_PERMISSIONS_LOCATIONS = 8414;
@@ -211,6 +211,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     @Override
     public void onResume(){
         super.onResume();
+        //findWeather();
         //Start location update
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED
@@ -358,7 +359,53 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
     private void getTenDayWeatherOnPost(String s) {
 
-        return;
+        try {
+
+            // s in there should be result
+            //JSONObject jsonObject = new JSONObject(s);
+
+            //String tenDaysWeather = jsonObject.getString("list");
+
+            JSONArray weatherArray = new JSONArray(s);
+
+            TenDaysWeatherPost[] weather = new TenDaysWeatherPost[weatherArray.length()];
+            //get 10 days weather info
+            for (int i = 0; i < weatherArray.length(); i++) {
+
+
+                JSONObject day = weatherArray.getJSONObject(i);
+
+                long time = Integer.valueOf(day.getString("dt")).intValue();
+                Calendar currCal = Calendar.getInstance();
+                currCal.setTimeInMillis(time);
+                //Date currCalDate = new Date(time);
+                String iconID = day.getJSONArray("weather").getJSONObject(0).getString("iconID");
+                //System.out.println(iconID);
+
+                String[] week_name = {"Sun", "Mon", "Tue", "Wed",
+                        "Thur", "Fri", "Sat"};
+                String temp_min = day.getString("min");
+                temp_min = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_min)));
+                String temp_max = day.getString("max");
+                temp_max = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_max)));
+
+                int date = currCal.get(Calendar.DAY_OF_MONTH);
+                int month = currCal.get(Calendar.MONTH) + 1;
+                weather[i] = (new TenDaysWeatherPost.Builder(iconID,
+                            "" + date + " / " + month + " / "
+                                    + week_name[currCal.get(Calendar.DAY_OF_WEEK)],
+                        temp_min + "/" + temp_max)
+                        .build());
+            }
+            weathers = new ArrayList(Arrays.asList(weather));
+
+            TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
+            viewModel.changeData(weathers);
+
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -422,7 +469,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                     Calendar currCal = Calendar.getInstance();
                     currCal.setTimeInMillis(time);
                     //Date currCalDate = new Date(time);
-                    String iconID = "http://openweathermap.org/img/w/" + day.getJSONArray("weather").getJSONObject(0).getString("icon") + ".png";
+                    String iconID = day.getJSONArray("weather").getJSONObject(0).getString("icon");
                     System.out.println(iconID);
 
                     String[] week_name = {"Sun", "Mon", "Tue", "Wed",

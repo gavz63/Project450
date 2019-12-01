@@ -84,8 +84,15 @@
         <argument
             android:name="credentials"
             app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+        <action
+            android:id="@+id/action_weatherMainFragment_to_forecast24Fragment"
+            app:destination="@id/forecast24Fragment" />
     </fragment>
     <action android:id="@+id/action_global_weatherMainFragment" app:destination="@id/weatherMainFragment" />
-
+    <fragment
+        android:id="@+id/forecast24Fragment"
+        android:name="edu.uw.tcss450.inouek.test450.Forecast24Fragment"
+        android:label="fragment_weather_forecast24"
+        tools:layout="@layout/fragment_weather_forecast24" />
 
 </navigation>
