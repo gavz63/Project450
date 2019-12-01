@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -52,6 +53,7 @@ import java.util.Date;
 import edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamicDirections;
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
+import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
 import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherPost;
@@ -83,11 +85,11 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     private Credentials mCredentials;
     private String mJwToken;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Get location and continuously update it.
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
@@ -117,9 +119,11 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
             }
         };
-
         createLocationRequest();
 
+        findWeather();
+
+        //Set up menus and nav_host_fragment
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -165,20 +169,6 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 || super.onSupportNavigateUp();
     }
 
-
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        startLocationUpdate();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        stopLocationUpdate();
-    }
-
     private boolean onNavigationSelected(final MenuItem menuItem) {
         NavController navController =
                 Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -193,8 +183,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                         ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
                 navController.navigate(chatPage);
                 break;
-            //TODO MAKE WEATHER AND CONNECTION ACTIVITIES INTO FRAGMENTS AND Navigate to them here
-                //TODO PRobably pss the credentials (for friends and saved lcoations)
+            //TODO WEATHER NAVIGATION
             case R.id.nav_weather:
 
                 MobileNavigationDirections.ActionGlobalWeatherMainFragment weatherPage =
@@ -219,12 +208,30 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         return true;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        //Start location update
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED ){
+
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
+        }
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        //Stop location update
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+    }
+
     void setCredentials(Credentials c) {
         mCredentials = c;
     }
 
-    //////////////Location part from Lab6
-    ///////////////////////////////////////////////////////////////////////////////////
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -247,16 +254,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 }
                 return;
             }
-            // other 'case' lines to check for other
-            // permissions this app might request
+            // other 'case' lines to check for otherpermissions this app might request
         }
-    }
-
-    private void createLocationRequest(){
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     private void requestLocation() {
@@ -276,7 +275,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
                                 LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
                                 viewModel.changeLocation(location);
-                                FindWeather();
+                                findWeather();
 
                             }
                         }
@@ -284,22 +283,12 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         }
     }
 
-    private void startLocationUpdate(){
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED ){
-
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-
-        }
+    private void createLocationRequest(){
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
-
-    private void stopLocationUpdate(){
-        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-    }
-
-////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void onListFragmentInteraction(TenDaysWeatherPost item) {
@@ -331,25 +320,45 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
 
     // this method will excute the link and find the weather data and info
-    public void FindWeather (){
-        try{
-            // want to make asynctask to get the data in background
-            HomeActivity.ExecuteTask tasky = new HomeActivity.ExecuteTask();
-            LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
-            Location location = viewModel.getCurrentLocation().getValue();
-            //tasky.execute("Here in the URL of the website"+cityToFind+"API key");
-            tasky.execute("https://samples.openweathermap.org/data/2.5/forecast/daily?lat=" + location.getLatitude()
-                    + "&lon=" + location.getLongitude() + "&cnt=10,us&appid=4e6149bb3debe832f3d55ff70ec9b2f4");
-        } catch(Exception e) {
-            e.printStackTrace();
+    public void findWeather (){
+        LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+        Location location = viewModel.getCurrentLocation().getValue();
 
-        }
+        Uri tenDayWeatherUri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_weather))
+                .appendPath(getString(R.string.ep_weather_10))
+                .appendQueryParameter("lat", Double.toString(location.getLatitude()))
+                .appendQueryParameter("lon", Double.toString(location.getLongitude()))
+                .build();
+        new GetAsyncTask.Builder(tenDayWeatherUri.toString())
+                .onPostExecute(this::getTenDayWeatherOnPost)
+                .addHeaderField("authorization", mJwToken) //add the JWT as a header
+                .build().execute();
+//        try{
+//            // want to make asynctask to get the data in background
+//            HomeActivity.ExecuteTask tasky = new HomeActivity.ExecuteTask();
+//            LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+//            Location location = viewModel.getCurrentLocation().getValue();
+//            //tasky.execute("Here in the URL of the website"+cityToFind+"API key");
+//            tasky.execute("https://samples.openweathermap.org/data/2.5/forecast/daily?lat=" + location.getLatitude()
+//                    + "&lon=" + location.getLongitude() + "&cnt=10,us&appid=4e6149bb3debe832f3d55ff70ec9b2f4");
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//
+//        }
     }
 
 
     public static float KelvinToFahrenheit(float degree)
     {
         return degree * 9/5 - 459.67f;
+    }
+
+    private void getTenDayWeatherOnPost(String s) {
+
+        return;
     }
 
 
