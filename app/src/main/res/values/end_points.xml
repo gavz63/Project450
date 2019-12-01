@@ -17,7 +17,7 @@
     <string name="ep_weather_locations">locations</string>
     <string name="ep_weather_locations_add">add</string>
     <string name="ep_weatehr_locations_delete">delete</string>
-    <string name="ep_weather_10">10day</string>
+    <string name="ep_weather_10">5day</string>
     <string name="ep_weather_24">24hr</string>
 
 </resources>

@@ -83,7 +83,7 @@ public class Weather10Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        weathersArray = new ArrayList<TenDaysWeatherPost>();
+        weathersArray = new ArrayList<>();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
