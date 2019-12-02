@@ -8,22 +8,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import edu.uw.tcss450.inouek.test450.Connections.Profile.ProfileContent;
-import edu.uw.tcss450.inouek.test450.Connections.RequestAcceptFragment.OnListFragmentInteractionListener;
 import edu.uw.tcss450.inouek.test450.R;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Profile} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyRequestReceivedRecyclerViewAdapter extends RecyclerView.Adapter<MyRequestReceivedRecyclerViewAdapter.ViewHolder> {
 
     private final List<ProfileContent.Profile> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final RequestReceivedFragment.OnListFragmentInteractionListener mListener;
 
-    public MyRequestReceivedRecyclerViewAdapter(List<ProfileContent.Profile> items, OnListFragmentInteractionListener listener) {
+    public MyRequestReceivedRecyclerViewAdapter(List<ProfileContent.Profile> items, RequestReceivedFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -38,7 +32,7 @@ public class MyRequestReceivedRecyclerViewAdapter extends RecyclerView.Adapter<M
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
+        holder.mIdView.setText(mValues.get(position).username);
         holder.mContentView.setText(mValues.get(position).name);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

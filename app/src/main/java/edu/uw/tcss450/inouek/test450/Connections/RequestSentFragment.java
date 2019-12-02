@@ -36,8 +36,8 @@ public class RequestSentFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static RequestCancelFragment newInstance(int columnCount) {
-        RequestCancelFragment fragment = new RequestCancelFragment();
+    public static RequestSentFragment newInstance(int columnCount) {
+        RequestSentFragment fragment = new RequestSentFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);

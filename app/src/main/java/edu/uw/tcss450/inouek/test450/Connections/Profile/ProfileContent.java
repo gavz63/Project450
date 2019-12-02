@@ -77,17 +77,22 @@ public class ProfileContent {
         }
     }
 
+//    static {
+//
+//        if(names == null) {
+//            LoadStrings();
+//        }
+//
+//        // Add some sample items.
+//        for (int i = 1; i <= COUNT; i++) {
+//            addItem(createProfiles(i));
+//        }
+//    }
 
-    static {
-
-        if(names == null) {
-            LoadStrings();
-        }
-
-        // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createProfiles(i));
-        }
+    public static void clear()
+    {
+        PROFILES.clear();
+        PROFILES_MAP.clear();
     }
 
     private static void addItem(Profile item) {

@@ -37,8 +37,8 @@ public class RequestReceivedFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static RequestAcceptFragment newInstance(int columnCount) {
-        RequestAcceptFragment fragment = new RequestAcceptFragment();
+    public static RequestReceivedFragment newInstance(int columnCount) {
+        RequestReceivedFragment fragment = new RequestReceivedFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);

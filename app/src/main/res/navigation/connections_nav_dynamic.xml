@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_received"
-        android:name="edu.uw.tcss450.inouek.test450.Connections.RequestAcceptFragment"
+        android:name="edu.uw.tcss450.inouek.test450.Connections.RequestReceivedFragment"
         android:label="fragment_request_received"
         tools:layout="@layout/fragment_request_received" >
         <argument
