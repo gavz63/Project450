@@ -54,13 +54,15 @@ import edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamicDirection
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
+import edu.uw.tcss450.inouek.test450.weather.CityFragment;
+import edu.uw.tcss450.inouek.test450.weather.CityPost;
 import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherPost;
 import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment;
 
 //Testing change on git
-public class HomeActivity extends AppCompatActivity implements Weather10Fragment.OnListFragmentInteractionListener/*, LocationListener*/ {
+public class HomeActivity extends AppCompatActivity implements Weather10Fragment.OnListFragmentInteractionListener, CityFragment.OnListFragmentInteractionListener {
 
     public static final int MONKEY_YELLOW = 1;
     public static final int MONKEY_GREEN = 2;
@@ -105,14 +107,14 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
             createLocationRequest();
         }
 
-        mLocationCallback = new LocationCallback(){
+        mLocationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult){
+            public void onLocationResult(LocationResult locationResult) {
 
-                if(locationResult == null){
+                if (locationResult == null) {
                     return;
                 }
-                for(Location location : locationResult.getLocations()) {
+                for (Location location : locationResult.getLocations()) {
                     LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
                     viewModel.changeLocation(location);
                     Log.d("Location Update", location.toString());
@@ -163,7 +165,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         mCredentials = args.getCredentials();
     }
 
-    private void createLocationRequest(){
+    private void createLocationRequest() {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
         mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
@@ -242,21 +244,21 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         //findWeather();
         //Start location update
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED ){
+                == PackageManager.PERMISSION_GRANTED) {
 
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         }
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         //Stop location update
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
@@ -294,7 +296,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     }
 
     // this method will execute the link and find the weather data and info
-    public void findWeather (){
+    public void findWeather() {
         LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
         Location location = viewModel.getCurrentLocation().getValue();
 
@@ -313,15 +315,14 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     }
 
 
-    public static float KelvinToFahrenheit(float degree)
-    {
-        return degree * 9/5 - 459.67f;
+    public static float KelvinToFahrenheit(float degree) {
+        return degree * 9 / 5 - 459.67f;
     }
 
     private void getTenDayWeatherOnPost(String s) {
 
         try {
-
+System.out.println(s);
             // s in there should be result
             //JSONObject jsonObject = new JSONObject(s);
 
@@ -336,25 +337,25 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
                 JSONObject day = weatherArray.getJSONObject(i);
 
-                long time = Integer.valueOf(day.getString("dt")).intValue();
+                long time = Integer.valueOf(day.getString("date")).intValue();
                 Calendar currCal = Calendar.getInstance();
                 currCal.setTimeInMillis(time);
                 //Date currCalDate = new Date(time);
-                String iconID = day.getJSONArray("weather").getJSONObject(0).getString("iconID");
-                //System.out.println(iconID);
+                String iconID = day.getString("iconId");
+                System.out.println(iconID);
 
                 String[] week_name = {"Sun", "Mon", "Tue", "Wed",
                         "Thur", "Fri", "Sat"};
-                String temp_min = day.getString("min");
+                String temp_min = day.getString("minTemp");
                 temp_min = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_min)));
-                String temp_max = day.getString("max");
+                String temp_max = day.getString("maxTemp");
                 temp_max = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_max)));
 
                 int date = currCal.get(Calendar.DAY_OF_MONTH);
                 int month = currCal.get(Calendar.MONTH) + 1;
                 weather[i] = (new TenDaysWeatherPost.Builder(iconID,
-                            "" + date + " / " + month + " / "
-                                    + week_name[currCal.get(Calendar.DAY_OF_WEEK)],
+                        "" + date + " / " + month + " / "
+                                + week_name[currCal.get(Calendar.DAY_OF_WEEK)],
                         temp_min + "/" + temp_max)
                         .build());
             }
@@ -363,7 +364,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
             TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
             viewModel.changeData(weathers);
 
-        }catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -372,6 +373,11 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
     @Override
     public void onListFragmentInteraction(TenDaysWeatherPost item) {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(CityPost item) {
 
     }
 }

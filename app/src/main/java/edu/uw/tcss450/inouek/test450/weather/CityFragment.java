@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.WeatherMainFragment;
+import edu.uw.tcss450.inouek.test450.WeatherMainFragmentArgs;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
 
 import static edu.uw.tcss450.inouek.test450.HomeActivity.KelvinToFahrenheit;
@@ -65,7 +67,7 @@ public class CityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        cities = new ArrayList<>();
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -75,10 +77,13 @@ public class CityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_city_list, container, false);
-
-
-
-
+        LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+        Location location = viewModel.getCurrentLocation().getValue();
+        cities.add(new CityPost.Builder("Current",
+                                        String.valueOf(location.getLongitude()),
+                                        String.valueOf(location.getLatitude())).build());
+        getCityList();
+        
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -102,6 +107,7 @@ public class CityFragment extends Fragment {
             recyclerViewAdapter.swap(cities);
             recyclerViewAdapter.notifyDataSetChanged();
         });
+
     }
 
     @Override

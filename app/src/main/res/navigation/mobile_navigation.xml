@@ -87,6 +87,9 @@
         <action
             android:id="@+id/action_weatherMainFragment_to_forecast24Fragment"
             app:destination="@id/forecast24Fragment" />
+        <argument
+            android:name="jwt"
+            app:argType="string" />
     </fragment>
     <action android:id="@+id/action_global_weatherMainFragment" app:destination="@id/weatherMainFragment" />
     <fragment

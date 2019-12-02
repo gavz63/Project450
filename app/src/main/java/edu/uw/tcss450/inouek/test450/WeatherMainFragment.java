@@ -58,13 +58,9 @@ public class WeatherMainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wather_main, container, false);
 
-//        weathersArray.add(new TenDaysWeatherPost.Builder( null,
-//                "0",
-//                "0").build());
         TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
         weathersArray = viewModel.getCurrentWeather().getValue();
 
-        //FindWeather();
 
         // Set the adapter
         // TODO: ここで処理を実行する
