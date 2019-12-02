@@ -322,11 +322,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     private void getTenDayWeatherOnPost(String s) {
 
         try {
-System.out.println(s);
-            // s in there should be result
-            //JSONObject jsonObject = new JSONObject(s);
-
-            //String tenDaysWeather = jsonObject.getString("list");
+            System.out.println(s);
 
             JSONArray weatherArray = new JSONArray(s);
 
@@ -339,7 +335,8 @@ System.out.println(s);
 
                 long time = Integer.valueOf(day.getString("date")).intValue();
                 Calendar currCal = Calendar.getInstance();
-                currCal.setTimeInMillis(time);
+                Date dateObject = new Date(time * 1000);
+                currCal.setTime(dateObject);
                 //Date currCalDate = new Date(time);
                 String iconID = day.getString("iconId");
                 System.out.println(iconID);
@@ -354,7 +351,7 @@ System.out.println(s);
                 int date = currCal.get(Calendar.DAY_OF_MONTH);
                 int month = currCal.get(Calendar.MONTH) + 1;
                 weather[i] = (new TenDaysWeatherPost.Builder(iconID,
-                        "" + date + " / " + month + " / "
+                        "" + month + " / " + date + " / "
                                 + week_name[currCal.get(Calendar.DAY_OF_WEEK)],
                         temp_min + "/" + temp_max)
                         .build());

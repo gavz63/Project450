@@ -60,25 +60,49 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
                 case "02d":
                     holder.mIcon.setImageResource(R.drawable.ic_02d);
                     break;
+                case "02n":
+                    holder.mIcon.setImageResource(R.drawable.ic_02n);
+                    break;
                 case "03d":
+                    holder.mIcon.setImageResource(R.drawable.ic_03d);
+                    break;
+                case "03n":
                     holder.mIcon.setImageResource(R.drawable.ic_03d);
                     break;
                 case "04d":
                     holder.mIcon.setImageResource(R.drawable.ic_04d);
                     break;
+                case "04n":
+                    holder.mIcon.setImageResource(R.drawable.ic_04d);
+                    break;
                 case "09d":
+                    holder.mIcon.setImageResource(R.drawable.ic_09d);
+                    break;
+                case "09n":
                     holder.mIcon.setImageResource(R.drawable.ic_09d);
                     break;
                 case "10d":
                     holder.mIcon.setImageResource(R.drawable.ic_10d);
                     break;
+                case "10n":
+                    holder.mIcon.setImageResource(R.drawable.ic_10n);
+                    break;
                 case "11d":
+                    holder.mIcon.setImageResource(R.drawable.ic_11d);
+                    break;
+                case "11n":
                     holder.mIcon.setImageResource(R.drawable.ic_11d);
                     break;
                 case "13d":
                     holder.mIcon.setImageResource(R.drawable.ic_13d);
                     break;
+                case "13n":
+                    holder.mIcon.setImageResource(R.drawable.ic_13d);
+                    break;
                 case "50d":
+                    holder.mIcon.setImageResource(R.drawable.ic_50d);
+                    break;
+                case "50n":
                     holder.mIcon.setImageResource(R.drawable.ic_50d);
                     break;
                 default:
