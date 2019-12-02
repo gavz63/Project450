@@ -60,7 +60,7 @@ import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherPost;
 import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment;
 
 //Testing change on git
-public class HomeActivity extends AppCompatActivity implements Weather10Fragment.OnListFragmentInteractionListener, LocationListener {
+public class HomeActivity extends AppCompatActivity implements Weather10Fragment.OnListFragmentInteractionListener/*, LocationListener*/ {
 
     public static final int MONKEY_YELLOW = 1;
     public static final int MONKEY_GREEN = 2;
@@ -101,7 +101,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                     MY_PERMISSIONS_LOCATIONS);
         } else {
             //The user has already allowed the use of Locations. Get the current location.
-            requestLocation();
+            //requestLocation();
+            createLocationRequest();
         }
 
         mLocationCallback = new LocationCallback(){
@@ -162,6 +163,38 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         mCredentials = args.getCredentials();
     }
 
+    private void createLocationRequest(){
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        requestLocation();
+    }
+
+    private void requestLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.d("REQUEST LOCATION", "User did NOT allow permission to request location!");
+        } else {
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                Log.d("LOCATION", location.toString());
+
+                                LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+                                viewModel.changeLocation(location);
+                                findWeather();
+                            }
+                        }
+                    });
+        }
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -187,7 +220,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
             case R.id.nav_weather:
 
                 MobileNavigationDirections.ActionGlobalWeatherMainFragment weatherPage =
-                        WeatherMainFragmentDirections.actionGlobalWeatherMainFragment(mCredentials);
+                        WeatherMainFragmentDirections.actionGlobalWeatherMainFragment(mCredentials, mJwToken);
                 navController.navigate(weatherPage);
 
                 // test should put weather fragment, just put test for testing purpose
@@ -255,72 +288,12 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 }
                 return;
             }
-            // other 'case' lines to check for otherpermissions this app might request
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 
-    private void requestLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            Log.d("REQUEST LOCATION", "User did NOT allow permission to request location!");
-        } else {
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                Log.d("LOCATION", location.toString());
-
-                                LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
-                                viewModel.changeLocation(location);
-                                findWeather();
-
-                            }
-                        }
-                    });
-        }
-    }
-
-    private void createLocationRequest(){
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
-    @Override
-    public void onListFragmentInteraction(TenDaysWeatherPost item) {
-
-    }
-
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-
-
-
-    // this method will excute the link and find the weather data and info
+    // this method will execute the link and find the weather data and info
     public void findWeather (){
         LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
         Location location = viewModel.getCurrentLocation().getValue();
@@ -337,18 +310,6 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 .onPostExecute(this::getTenDayWeatherOnPost)
                 .addHeaderField("authorization", mJwToken) //add the JWT as a header
                 .build().execute();
-//        try{
-//            // want to make asynctask to get the data in background
-//            HomeActivity.ExecuteTask tasky = new HomeActivity.ExecuteTask();
-//            LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
-//            Location location = viewModel.getCurrentLocation().getValue();
-//            //tasky.execute("Here in the URL of the website"+cityToFind+"API key");
-//            tasky.execute("https://samples.openweathermap.org/data/2.5/forecast/daily?lat=" + location.getLatitude()
-//                    + "&lon=" + location.getLongitude() + "&cnt=10,us&appid=4e6149bb3debe832f3d55ff70ec9b2f4");
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//
-//        }
     }
 
 
@@ -409,92 +370,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     }
 
 
+    @Override
+    public void onListFragmentInteraction(TenDaysWeatherPost item) {
 
-    // this task will get all from website in background
-    public class ExecuteTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            StringBuilder sb = new StringBuilder();
-            HttpURLConnection urlConnection = null;
-            String url = strings[0];
-
-            try {
-                // strings[0] is the urls
-                URL urlObject = new URL(url);
-                urlConnection = (HttpURLConnection) urlObject.openConnection();
-                InputStream content = urlConnection.getInputStream();
-                BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-                String line;
-
-                while (null != (line = buffer.readLine())) {
-
-                    sb.append(line);
-
-                }
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            return sb.toString();
-        }
-
-        @Override
-        // used to update the UI
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            try {
-
-                // s in there should be result
-                JSONObject jsonObject = new JSONObject(result);
-
-                String tenDaysWeather = jsonObject.getString("list");
-
-                JSONArray weatherArray = new JSONArray(tenDaysWeather);
-
-                TenDaysWeatherPost[] weather = new TenDaysWeatherPost[weatherArray.length()];
-                //get 10 days weather info
-                for (int i = 0; i < weatherArray.length(); i++) {
-
-
-                    JSONObject day = weatherArray.getJSONObject(i);
-
-                    long time = Integer.valueOf(day.getString("dt")).intValue();
-                    Calendar currCal = Calendar.getInstance();
-                    currCal.setTimeInMillis(time);
-                    //Date currCalDate = new Date(time);
-                    String iconID = day.getJSONArray("weather").getJSONObject(0).getString("icon");
-                    System.out.println(iconID);
-
-                    String[] week_name = {"Sun", "Mon", "Tue", "Wed",
-                            "Thur", "Fri", "Sat"};
-                    String temp = day.getJSONObject("temp").getString("day");
-                    temp = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp)));
-                    String temp_min = day.getJSONObject("temp").getString("min");
-                    temp_min = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_min)));
-                    String temp_max = day.getJSONObject("temp").getString("max");
-                    temp_max = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_max)));
-                    weather[i] = (new TenDaysWeatherPost.Builder(iconID,
-//                            (currCal.get(Calendar.DATE) + "/" + (currCal.get(Calendar.MONTH) + 1)+ "/"
-////                                    + week_name[currCal.get(Calendar.DAY_OF_WEEK)]),
-                            "test",
-                            temp_min + "/" + temp_max)
-                            .build());
-                }
-                weathers = new ArrayList(Arrays.asList(weather));
-
-                TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
-                viewModel.changeData(weathers);
-
-            }catch(JSONException e){
-                e.printStackTrace();
-            }
-        }
     }
 }
