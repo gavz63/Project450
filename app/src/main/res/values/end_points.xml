@@ -16,4 +16,10 @@
     <string name="ep_contacts_send">send</string>
     <string name="ep_contacts_received">received</string>
     <string name="ep_contacts_profile">profile</string>
+    <string name="ep_weather">weather</string>
+    <string name="ep_weather_locations">locations</string>
+    <string name="ep_weather_locations_add">add</string>
+    <string name="ep_weatehr_locations_delete">delete</string>
+    <string name="ep_weather_10">5day</string>
+    <string name="ep_weather_24">24hr</string>
 </resources>

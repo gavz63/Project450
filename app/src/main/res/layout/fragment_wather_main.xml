@@ -40,10 +40,18 @@
 
         </FrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/saved_city"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="520dp">
+
+            <fragment
+                android:id="@+id/fragment_city"
+                android:name="edu.uw.tcss450.inouek.test450.weather.CityFragment"
+                android:layout_width="match_parent"
+                android:layout_height="522dp"
+                tools:layout="@layout/fragment_city_list" />
+
+        </FrameLayout>
 
     </LinearLayout>
 

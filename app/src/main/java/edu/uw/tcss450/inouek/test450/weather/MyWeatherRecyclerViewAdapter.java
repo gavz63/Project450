@@ -47,22 +47,85 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
 
+        String icon = mValues.get(position).getIcon();
+
+        if(icon != null){
+            switch(icon) {
+                case "01d":
+                    holder.mIcon.setImageResource(R.drawable.ic_01d);
+                    break;
+                case "01n":
+                    holder.mIcon.setImageResource(R.drawable.ic_01n);
+                    break;
+                case "02d":
+                    holder.mIcon.setImageResource(R.drawable.ic_02d);
+                    break;
+                case "02n":
+                    holder.mIcon.setImageResource(R.drawable.ic_02n);
+                    break;
+                case "03d":
+                    holder.mIcon.setImageResource(R.drawable.ic_03d);
+                    break;
+                case "03n":
+                    holder.mIcon.setImageResource(R.drawable.ic_03d);
+                    break;
+                case "04d":
+                    holder.mIcon.setImageResource(R.drawable.ic_04d);
+                    break;
+                case "04n":
+                    holder.mIcon.setImageResource(R.drawable.ic_04d);
+                    break;
+                case "09d":
+                    holder.mIcon.setImageResource(R.drawable.ic_09d);
+                    break;
+                case "09n":
+                    holder.mIcon.setImageResource(R.drawable.ic_09d);
+                    break;
+                case "10d":
+                    holder.mIcon.setImageResource(R.drawable.ic_10d);
+                    break;
+                case "10n":
+                    holder.mIcon.setImageResource(R.drawable.ic_10n);
+                    break;
+                case "11d":
+                    holder.mIcon.setImageResource(R.drawable.ic_11d);
+                    break;
+                case "11n":
+                    holder.mIcon.setImageResource(R.drawable.ic_11d);
+                    break;
+                case "13d":
+                    holder.mIcon.setImageResource(R.drawable.ic_13d);
+                    break;
+                case "13n":
+                    holder.mIcon.setImageResource(R.drawable.ic_13d);
+                    break;
+                case "50d":
+                    holder.mIcon.setImageResource(R.drawable.ic_50d);
+                    break;
+                case "50n":
+                    holder.mIcon.setImageResource(R.drawable.ic_50d);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         //holder.mIcon.setImageBitmap(mValues.get(position).getIcon());
 
 
         holder.mDate.setText(mValues.get(position).getDate());
         holder.mTemp.setText(mValues.get(position).getTemp());
 
-//        holder.mView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (null != mListener) {
-//                    // Notify the active callbacks interface (the activity, if the
-//                    // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction(holder.mItem);
-//                }
-//            }
-//        });
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onListFragmentInteraction(holder.mItem);
+                }
+            }
+        });
     }
 
     public void swap(ArrayList<TenDaysWeatherPost> data){
@@ -78,7 +141,7 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        //public final ImageView mIcon;
+        public final ImageView mIcon;
         public final TextView mDate;
         public final TextView mTemp;
         public TenDaysWeatherPost mItem;
@@ -86,7 +149,7 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            //mIcon = (ImageView) view.findViewById(R.id.weather_icon);
+            mIcon = (ImageView) view.findViewById(R.id.weather_icon);
             mDate = (TextView) view.findViewById(R.id.Date);
             mTemp = (TextView) view.findViewById(R.id.Temp);
         }

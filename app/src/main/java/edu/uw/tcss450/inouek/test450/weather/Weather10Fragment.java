@@ -83,7 +83,7 @@ public class Weather10Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        weathersArray = new ArrayList<TenDaysWeatherPost>();
+        weathersArray = new ArrayList<>();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -96,13 +96,9 @@ public class Weather10Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_10_days_weather_list, container, false);
         //container.removeAllViews();
 
-        weathersArray.add(new TenDaysWeatherPost.Builder( null,
+        weathersArray.add(new TenDaysWeatherPost.Builder( "01d",
                 "0",
                 "0").build());
-//        TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
-//        weathers = viewModel.getCurrentLocation().getValue();
-
-        //FindWeather();
 
         // Set the adapter
         // TODO: ここで処理を実行する
@@ -166,136 +162,4 @@ public class Weather10Fragment extends Fragment {
         void onListFragmentInteraction(TenDaysWeatherPost item);
     }
 
-
-
-    // this method will excute the link and find the weather data and info
-//    public void FindWeather (){
-//        try{
-//            // want to make asynctask to get the data in background
-//            Weather10Fragment.ExecuteTask tasky = new Weather10Fragment.ExecuteTask();
-//            LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
-//            Location location = viewModel.getCurrentLocation().getValue();
-//            //tasky.execute("Here in the URL of the website"+cityToFind+"API key");
-//            tasky.execute("https://samples.openweathermap.org/data/2.5/forecast/daily?lat=" + location.getLatitude()
-//                    + "&lon=" + location.getLongitude() + "&cnt=10,us&appid=4e6149bb3debe832f3d55ff70ec9b2f4");
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//
-//        }
-//    }
-
-
-//    public static float KelvinToFahrenheit(float degree)
-//    {
-//        return degree * 9/5 - 459.67f;
-//    }
-
-
-
-    // this task will get all from website in background
-//    public class ExecuteTask extends AsyncTask<String, Void, String> {
-//
-//        @Override
-//        protected String doInBackground(String... strings) {
-//
-//            StringBuilder sb = new StringBuilder();
-//            HttpURLConnection urlConnection = null;
-//            String url = strings[0];
-//
-//            try {
-//                // strings[0] is the urls
-//                URL urlObject = new URL(url);
-//                urlConnection = (HttpURLConnection) urlObject.openConnection();
-//                InputStream content = urlConnection.getInputStream();
-//                BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-//                String line;
-//
-//                while (null != (line = buffer.readLine())) {
-//
-//                    sb.append(line);
-//
-//                }
-//
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//
-//            return sb.toString();
-//        }
-//
-//        @Override
-//        // used to update the UI
-//        protected void onPostExecute(String result) {
-//            super.onPostExecute(result);
-//
-//            try {
-//
-//                // s in there should be result
-//                JSONObject jsonObject = new JSONObject(result);
-//
-//                String tenDaysWeather = jsonObject.getString("list");
-//
-//                JSONArray weatherArray = new JSONArray(tenDaysWeather);
-//
-//                TenDaysWeatherPost[] weather = new TenDaysWeatherPost[weatherArray.length()];
-//                //get 10 days weather info
-//                //weathers.clear();
-//                for (int i = 0; i < weatherArray.length(); i++) {
-//
-//
-//                    JSONObject day = weatherArray.getJSONObject(i);
-//
-//                    long time = Integer.valueOf(day.getString("dt")).intValue();
-//                    Calendar currCal = Calendar.getInstance();
-//                    currCal.setTimeInMillis(time);
-//                    Date currCalDate = new Date(time);
-//                    String iconID = "http://openweathermap.org/img/w/" +day.getJSONArray("weather").getJSONObject(0).getString("icon");
-//
-//                    URL url = new URL(iconID);
-//                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//                    conn.setDoInput(true);
-//                    conn.connect();
-//                    BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
-//                    Bitmap icon = BitmapFactory.decodeStream(in);
-//                    in.close();
-//                    conn.disconnect();
-//
-//
-//                    String temp = day.getJSONObject("temp").getString("day");
-//                    temp = String.format("%.2f",KelvinToFahrenheit(Float.parseFloat(temp)));
-//                    String temp_min = day.getJSONObject("temp").getString("min");
-//                    temp_min = String.format("%.2f",KelvinToFahrenheit(Float.parseFloat(temp_min)));
-//                    String temp_max = day.getJSONObject("temp").getString("max");
-//                    temp_max = String.format("%.2f",KelvinToFahrenheit(Float.parseFloat(temp_max)));
-//                    weathers.add(new TenDaysWeatherPost.Builder(icon,
-//                            temp_min+"/"+temp_max,
-//                            (currCalDate.getDay() + "/" + currCalDate.getMonth() +"\n" + currCalDate.getDate())).build());
-//
-//
-//                }
-//
-//                //weathers = new ArrayList(Arrays.asList(weather));
-//                //TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
-//                //weathers = viewModel.getCurrentLocation().getValue();
-//                recyclerViewAdapter.swap(weathers);
-//                //recyclerViewAdapter.notifyDataSetChanged();
-//
-//                //System.out.println("set array");
-//
-//
-//                //getFragmentManager().beginTransaction().replace(R.id.fragment_weathers, weatherFragment.this).commit();
-//
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 }
