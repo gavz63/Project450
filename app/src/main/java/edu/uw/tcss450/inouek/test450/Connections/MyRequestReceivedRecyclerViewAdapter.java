@@ -16,6 +16,7 @@ public class MyRequestReceivedRecyclerViewAdapter extends RecyclerView.Adapter<M
 
     private final List<ProfileContent.Profile> mValues;
     private final RequestReceivedFragment.OnListFragmentInteractionListener mListener;
+    private String myUsername;
 
     public MyRequestReceivedRecyclerViewAdapter(List<ProfileContent.Profile> items, RequestReceivedFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -26,11 +27,28 @@ public class MyRequestReceivedRecyclerViewAdapter extends RecyclerView.Adapter<M
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_request_accept, parent, false);
+
+        view.findViewById(R.id.button_decline).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileContent.DenyRequest(myUsername);
+            }
+        });
+
+        view.findViewById(R.id.button_accept).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileContent.AcceptRequest(myUsername);
+            }
+        });
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        myUsername = mValues.get(position).username;
+
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).username);
         holder.mContentView.setText(mValues.get(position).name);

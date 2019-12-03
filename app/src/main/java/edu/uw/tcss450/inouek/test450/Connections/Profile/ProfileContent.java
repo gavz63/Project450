@@ -1,20 +1,29 @@
 package edu.uw.tcss450.inouek.test450.Connections.Profile;
 
 
+import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamic;
 import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 
 /**
  * Helper class for providing sample name for user interfaces created by
@@ -23,6 +32,12 @@ import edu.uw.tcss450.inouek.test450.R;
  * TODO: Replace all uses of this class before publishing your app.
  */
 public class ProfileContent {
+
+    public static String myUsername;
+    public static Uri DeleteEndpointUri;
+    public static Uri AcceptEndpointUri;
+
+    public static ConnectionsHomeDynamic object;
 
     /**
      * An array of sample (dummy) items.
@@ -38,6 +53,8 @@ public class ProfileContent {
     private static String[] names = null;
     private static String[] emails = null;
     private static String[] usernames = null;
+
+    private static int option = 0;
 
     private static void LoadStrings()
     {
@@ -88,6 +105,110 @@ public class ProfileContent {
 //            addItem(createProfiles(i));
 //        }
 //    }
+
+    public static void AcceptRequest(String username)
+    {
+        option = -1;
+        DeleteRequest(myUsername, username);
+
+        JSONObject message = new JSONObject();
+
+        try {
+            message.put("sender", username);
+            message.put("receiver",myUsername);
+        }
+        catch (JSONException e)
+        {
+
+        }
+
+        new SendPostAsyncTask.Builder(AcceptEndpointUri.toString(), message)
+                .onPostExecute(result -> {
+                    try {
+                        Log.e("DeleteConnectionRequest", result);
+                        JSONObject resultsJSON = new JSONObject(result);
+
+                        boolean success = resultsJSON.getBoolean("success");
+
+                        if (success) {
+
+                        } else {
+                            Log.e("DeleteConnectionRequest", "Failure");
+                        }
+
+                    } catch (JSONException e) {
+                    }
+                    object.LoadReceivedConnectionRequests();
+                })
+                .build().execute();
+    }
+
+    public static void DeleteConnections(String username)
+    {
+        option = 0;
+        DeleteRequest(myUsername, username);
+
+    }
+
+    public static void CancelRequest(String username)
+    {
+        option = 1;
+        DeleteRequest(myUsername, username);
+
+    }
+
+    public static void DenyRequest(String username)
+    {
+        option = 2;
+        DeleteRequest(username, myUsername);
+
+    }
+
+    public static void DeleteRequest(String u1, String u2)
+    {
+        JSONObject message = new JSONObject();
+
+        try {
+            message.put("sender", u1);
+            message.put("receiver", u2);
+        } catch (JSONException e) {
+
+        }
+
+        new SendPostAsyncTask.Builder(DeleteEndpointUri.toString(), message)
+                .onPostExecute(result -> {
+                    try {
+                        Log.e("DeleteConnectionRequest", result);
+                        JSONObject resultsJSON = new JSONObject(result);
+
+                        boolean success = resultsJSON.getBoolean("success");
+
+                        if (success) {
+
+                        } else {
+                            Log.e("DeleteConnectionRequest", "Failure");
+                        }
+
+                    } catch (JSONException e) {
+                    }
+                    if(option == 0)
+                    {
+                        object.LoadBaseConnections();
+                    }
+                    else if(option == 1)
+                    {
+                        object.LoadSentConnectionRequests();
+                    }
+                    else if(option == 2) {
+                        object.LoadReceivedConnectionRequests();
+                    }
+                    else
+                    {
+
+                    }
+                })
+                .build().execute();
+    }
 
     public static void clear()
     {

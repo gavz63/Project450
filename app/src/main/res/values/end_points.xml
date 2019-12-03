@@ -14,8 +14,11 @@
     <string name="ep_contacts_find_new">find_new</string>
     <string name="ep_contacts_base">base</string>
     <string name="ep_contacts_send">send</string>
+    <string name="ep_contacts_sent">sent</string>
     <string name="ep_contacts_received">received</string>
     <string name="ep_contacts_profile">profile</string>
+    <string name="ep_contacts_delete">delete</string>
+    <string name="ep_contacts_accept">accept</string>
     <string name="ep_weather">weather</string>
     <string name="ep_weather_locations">locations</string>
     <string name="ep_weather_locations_add">add</string>
