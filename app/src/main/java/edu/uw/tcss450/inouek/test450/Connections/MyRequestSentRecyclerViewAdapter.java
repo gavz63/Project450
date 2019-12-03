@@ -17,6 +17,7 @@ public class MyRequestSentRecyclerViewAdapter extends RecyclerView.Adapter<MyReq
 
     private final List<ProfileContent.Profile> mValues;
     private final RequestSentFragment.OnListFragmentInteractionListener mListener;
+    private String myUsername;
 
     public MyRequestSentRecyclerViewAdapter(List<ProfileContent.Profile> items, RequestSentFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -27,11 +28,21 @@ public class MyRequestSentRecyclerViewAdapter extends RecyclerView.Adapter<MyReq
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_request_cancel, parent, false);
+
+        view.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileContent.CancelRequest(myUsername);
+            }
+        });
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        myUsername = mValues.get(position).username;
+
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).username);
         holder.mContentView.setText(mValues.get(position).name);

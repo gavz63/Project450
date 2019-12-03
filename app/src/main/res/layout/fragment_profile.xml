@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_send_message"
+                    android:id="@+id/button_accept"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimaryText"
