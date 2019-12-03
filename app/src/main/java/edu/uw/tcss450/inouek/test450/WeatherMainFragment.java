@@ -63,22 +63,21 @@ public class WeatherMainFragment extends Fragment {
 
 
         // Set the adapter
-        // TODO: ここで処理を実行する
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(recyclerViewAdapter = new MyWeatherRecyclerViewAdapter(weathersArray, this::onClick));
-        }
+//        if (view instanceof RecyclerView) {
+//            Context context = view.getContext();
+//            RecyclerView recyclerView = (RecyclerView) view;
+//            if (mColumnCount <= 1) {
+//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//            } else {
+//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+//            }
+//            recyclerView.setAdapter(recyclerViewAdapter = new MyWeatherRecyclerViewAdapter(weathersArray, this::onClick));
+//        }
         return view;
     }
 
-    private void onClick(TenDaysWeatherPost weather){
-    }
+//    private void onClick(TenDaysWeatherPost weather){
+//    }
 
 
 }

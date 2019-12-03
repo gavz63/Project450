@@ -56,6 +56,7 @@ import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
 import edu.uw.tcss450.inouek.test450.weather.CityFragment;
 import edu.uw.tcss450.inouek.test450.weather.CityPost;
+import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
 import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherPost;
@@ -162,6 +163,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
         HomeActivityArgs args = HomeActivityArgs.fromBundle(getIntent().getExtras());
         mJwToken = args.getJwt();
+        JwTokenModel jwTokenModel = JwTokenModel.getFactory().create(JwTokenModel.class);
+        jwTokenModel.changeJwToken(mJwToken);
         mCredentials = args.getCredentials();
     }
 
@@ -339,7 +342,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 currCal.setTime(dateObject);
                 //Date currCalDate = new Date(time);
                 String iconID = day.getString("iconId");
-                System.out.println(iconID);
+                //System.out.println(iconID);
 
                 String[] week_name = {"Sun", "Mon", "Tue", "Wed",
                         "Thur", "Fri", "Sat"};

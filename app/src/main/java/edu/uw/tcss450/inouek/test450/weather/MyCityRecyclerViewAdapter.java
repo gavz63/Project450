@@ -39,7 +39,8 @@ public class MyCityRecyclerViewAdapter extends RecyclerView.Adapter<MyCityRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getCity());
-        //holder.mContentView.setText(mValues.get(position).getIcon());
+        holder.mContentView.setText(String.format("Lat: %s, Long: %s",
+                mValues.get(position).getLat(), mValues.get(position).getLong()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,14 +62,14 @@ public class MyCityRecyclerViewAdapter extends RecyclerView.Adapter<MyCityRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
-        //public final TextView mContentView;
+        public final TextView mContentView;
         public CityPost mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.item_number);
-            //mContentView = (TextView) view.findViewById(R.id.content);
+            mContentView = (TextView) view.findViewById(R.id.content);
         }
 
         @Override

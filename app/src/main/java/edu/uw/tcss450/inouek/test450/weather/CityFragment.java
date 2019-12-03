@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.WeatherMainFragment;
@@ -79,9 +80,16 @@ public class CityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_city_list, container, false);
         LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
         Location location = viewModel.getCurrentLocation().getValue();
-        cities.add(new CityPost.Builder("Current",
-                                        String.valueOf(location.getLongitude()),
-                                        String.valueOf(location.getLatitude())).build());
+
+        cities.add(new CityPost.Builder("Current Location",
+                String.valueOf(location.getLongitude()),
+                String.valueOf(location.getLatitude())).build());
+        cities.add(new CityPost.Builder("Tokyo",
+                                        "35.652832",
+                                        "139.839478").build());
+        JwTokenModel jwTokenModel = JwTokenModel.getFactory().create(JwTokenModel.class);
+        mJwToken = jwTokenModel.getJwToken().toString();
+
         getCityList();
         
         // Set the adapter
@@ -143,6 +151,7 @@ public class CityFragment extends Fragment {
                 .onPostExecute(this::getTenDayWeatherOnPost)
                 .addHeaderField("authorization", mJwToken) //add the JWT as a header
                 .build().execute();
+        System.out.println("clicked");
     }
 
 
@@ -227,24 +236,25 @@ public class CityFragment extends Fragment {
 
                 JSONObject day = weatherArray.getJSONObject(i);
 
-                long time = Integer.valueOf(day.getString("dt")).intValue();
+                long time = Integer.valueOf(day.getString("date")).intValue();
                 Calendar currCal = Calendar.getInstance();
-                currCal.setTimeInMillis(time);
+                Date dateObject = new Date(time * 1000);
+                currCal.setTime(dateObject);
                 //Date currCalDate = new Date(time);
-                String iconID = day.getJSONArray("weather").getJSONObject(0).getString("iconID");
-                //System.out.println(iconID);
+                String iconID = day.getString("iconId");
+               //System.out.println(iconID);
 
                 String[] week_name = {"Sun", "Mon", "Tue", "Wed",
                         "Thur", "Fri", "Sat"};
-                String temp_min = day.getString("min");
+                String temp_min = day.getString("minTemp");
                 temp_min = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_min)));
-                String temp_max = day.getString("max");
+                String temp_max = day.getString("maxTemp");
                 temp_max = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_max)));
 
                 int date = currCal.get(Calendar.DAY_OF_MONTH);
                 int month = currCal.get(Calendar.MONTH) + 1;
                 weather[i] = (new TenDaysWeatherPost.Builder(iconID,
-                        "" + date + " / " + month + " / "
+                        "" + month + " / " + date + " / "
                                 + week_name[currCal.get(Calendar.DAY_OF_WEEK)],
                         temp_min + "/" + temp_max)
                         .build());
@@ -254,6 +264,7 @@ public class CityFragment extends Fragment {
             TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
             viewModel.changeData(weathers);
 
+            System.out.println("end update");
         }catch(JSONException e){
             e.printStackTrace();
         }
