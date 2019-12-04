@@ -17,7 +17,6 @@ public class MyRequestSentRecyclerViewAdapter extends RecyclerView.Adapter<MyReq
 
     private final List<ProfileContent.Profile> mValues;
     private final RequestSentFragment.OnListFragmentInteractionListener mListener;
-    private String myUsername;
 
     public MyRequestSentRecyclerViewAdapter(List<ProfileContent.Profile> items, RequestSentFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -29,32 +28,19 @@ public class MyRequestSentRecyclerViewAdapter extends RecyclerView.Adapter<MyReq
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_request_cancel, parent, false);
 
-        view.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProfileContent.CancelRequest(myUsername);
-            }
-        });
-
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        myUsername = mValues.get(position).username;
-
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).username);
         holder.mContentView.setText(mValues.get(position).name);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.mView.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
+                ProfileContent.CancelRequest(holder.mIdView.getText().toString());
             }
         });
     }
