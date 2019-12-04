@@ -71,6 +71,9 @@
         <argument
             android:name="credentials"
             app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+        <argument
+            android:name="jwt"
+            app:argType="string" />
     </fragment>
     <action
         android:id="@+id/action_global_nav_connections"

@@ -234,7 +234,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 break;
             case R.id.nav_connections:
                 MobileNavigationDirections.ActionGlobalNavConnections connectionsPage =
-                        ConnectionsHomeDynamicDirections.actionGlobalNavConnections(mCredentials);
+                        ConnectionsHomeDynamicDirections.actionGlobalNavConnections(mCredentials, mJwToken);
                 navController.navigate(connectionsPage);
                 break;
             case R.id.nav_home:

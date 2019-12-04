@@ -8,7 +8,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_Chats">Chats</string>
-    <string name="menu_Connection">Connection</string>
+    <string name="menu_Connection">Friends</string>
     <string name="menu_Setting">Settings</string>
     <string name="menu_Weather">Weather</string>
     <string name="menu_Account">Account</string>
@@ -27,21 +27,21 @@
     <string name="register_retype_password_hint">Confirm Password</string>
 
     <string name="connections_text_search">Search</string>
-    <string name="connections_text_display">Connections</string>
+    <string name="connections_text_display">Friends</string>
     <string name="connections_text_expand">Expand</string>
-    <string name="connections_text_requests">Connection Requests</string>
+    <string name="connections_text_requests">Friend Requests</string>
     <string name="connections_text_requests_sent">Sent</string>
     <string name="connections_text_requests_received">Received</string>
-    <string name="connections_text_connections">Connections</string>
+    <string name="connections_text_connections">Friends</string>
     <string name="connections_text_connections_pending">Pending Requests</string>
-    <string name="connections_text_manage">Manage Connections</string>
+    <string name="connections_text_manage">Manage Friends</string>
     <string name="connections_text_pending_sent">Requests Sent</string>
     <string name="connections_text_pending_received">Requests Received</string>
     <string name="connections_text_button_accept">Accept</string>
     <string name="connections_text_button_decline">Decline</string>
     <string name="connections_text_button_cancel">Cancel</string>
     <string name="connections_text_button_send_message">Send Message</string>
-    <string name="connections_text_button_remove">Remove Contact</string>
+    <string name="connections_text_button_remove">Remove Friend</string>
 
     <string name="weather_edit_zipcode">Enter your Zipcode.</string>
     <string name="weather_button_start">Start</string>
