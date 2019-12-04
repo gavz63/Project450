@@ -48,6 +48,7 @@ public class ConnectionsHomeDynamic extends Fragment {
     private AutoCompleteTextView mAutoCompleteTextView;
     private MaterialButton mSendFriendRequestButton;
     private String mJwToken;
+    BottomNavigationView mBottomNav;
 
     String[] ContactsIds;
     String[] ContactsUsernames;
@@ -94,8 +95,8 @@ public class ConnectionsHomeDynamic extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        BottomNavigationView bottomNavigation = view.findViewById(R.id.connections_nav_bar_base);
-        bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationSelected);
+        mBottomNav = view.findViewById(R.id.connections_nav_bar_base);
+        mBottomNav.setOnNavigationItemSelectedListener(this::onNavigationSelected);
 
         FloatingActionButton fab = view.findViewById(R.id.connections_floatingActionButton);
         fab.setOnClickListener(this::fabOnClick);
@@ -109,8 +110,6 @@ public class ConnectionsHomeDynamic extends Fragment {
     }
 
     private boolean onNavigationSelected(final MenuItem menuItem) {
-
-
 
         switch (menuItem.getItemId())
         {
@@ -247,7 +246,8 @@ public class ConnectionsHomeDynamic extends Fragment {
                 }
             }
             mSendFriendRequestButton.setEnabled(true);
-            LoadSentConnectionRequests();
+            mBottomNav.setSelectedItemId(R.id.connections_nav_bar_sent);
+            //LoadSentConnectionRequests();
         } catch (JSONException e) {
             mAutoCompleteTextView.setError("JSONException Sending request");
             mSendFriendRequestButton.setEnabled(true);
