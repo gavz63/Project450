@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -39,6 +43,7 @@ public class WeatherMainFragment extends Fragment {
     private Weather10Fragment.OnListFragmentInteractionListener mListener;
     private MyWeatherRecyclerViewAdapter recyclerViewAdapter;
 
+
     public WeatherMainFragment() {
         // Required empty public constructor
     }
@@ -61,6 +66,16 @@ public class WeatherMainFragment extends Fragment {
         TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
         weathersArray = viewModel.getCurrentWeather().getValue();
 
+        // open map fragment
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.add_city_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(getActivity().findViewById(R.id.nav_host_fragment))
+                        .navigate(R.id.action_weatherMainFragment_to_mapFragment);
+            }
+        });
+
 
         // Set the adapter
 //        if (view instanceof RecyclerView) {
@@ -75,6 +90,8 @@ public class WeatherMainFragment extends Fragment {
 //        }
         return view;
     }
+
+
 
 //    private void onClick(TenDaysWeatherPost weather){
 //    }
