@@ -38,6 +38,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         // Required empty public constructor
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_map, container, false);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -48,7 +54,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         //add this fragment as the OnMapReadyCallback -> See onMapReady()
         mapFragment.getMapAsync(this);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -82,38 +87,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapClick(LatLng latLng) {
-        Log.d("LAT/LONG", latLng.toString());
+//        Log.d("LAT/LONG", latLng.toString());
+//
+//        geoInfo = latLng.toString();
+//
+//        Marker marker = mMap.addMarker(new MarkerOptions()
+//                .position(latLng)
+//                .title("New Marker"));
+//
+//        Double l1=latLng.latitude;
+//        Double l2=latLng.longitude;
+//        String coordl1 = l1.toString();
+//        String coordl2 = l2.toString();
+//
+//        // latlng will return
+//        // bundle to store the longtitude and latitude information
+//        Fragment fragment = new Fragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("geoInfoFromMap", geoInfo);
+//        bundle.putString("geoLatitude", coordl1);
+//        bundle.putString("geoLongtitude", coordl2);
+//        fragment.setArguments(bundle);
+//
+//        // TODO set location to be saved
 
-        geoInfo = latLng.toString();
-
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title("New Marker"));
-
-        Double l1=latLng.latitude;
-        Double l2=latLng.longitude;
-        String coordl1 = l1.toString();
-        String coordl2 = l2.toString();
-
-        // latlng will return
-        // bundle to store the longtitude and latitude information
-        Fragment fragment = new Fragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("geoInfoFromMap", geoInfo);
-        bundle.putString("geoLatitude", coordl1);
-        bundle.putString("geoLongtitude", coordl2);
-        fragment.setArguments(bundle);
-
-        // display the map forecast
-        Log.d("open fragment", "beofre opening");
-        openForecastFragment();
-        Log.d("open fragment", "already openned");
-
-    }
-
-    public void openForecastFragment(){
-        Navigation.findNavController(getActivity().findViewById(R.id.nav_host_fragment))
-                .navigate(R.id.action_mapFragment_to_mapForecast);
     }
 }
 
