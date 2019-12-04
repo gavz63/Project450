@@ -258,7 +258,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 break;
             case R.id.nav_connections:
                 MobileNavigationDirections.ActionGlobalNavConnections connectionsPage =
-                        ConnectionsHomeDynamicDirections.actionGlobalNavConnections(mCredentials);
+                        ConnectionsHomeDynamicDirections.actionGlobalNavConnections(mCredentials, mJwToken);
                 navController.navigate(connectionsPage);
                 break;
             case R.id.nav_home:
@@ -390,9 +390,10 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 int date = currCal.get(Calendar.DAY_OF_MONTH);
                 int month = currCal.get(Calendar.MONTH) + 1;
                 weather[i] = (new TenDaysWeatherPost.Builder(iconID,
-                        "" + month + " / " + date + " / "
-                                + week_name[currCal.get(Calendar.DAY_OF_WEEK)-1],
-                        temp_min + "/" + temp_max)
+                        week_name[currCal.get(Calendar.DAY_OF_WEEK)-1] + " "
+                                + month + "/" + date,
+                        "High: " + temp_max + "°F\n"
+                            + "Low: " + temp_min + "°F")
                         .build());
             }
             weathers = new ArrayList(Arrays.asList(weather));

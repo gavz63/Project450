@@ -29,10 +29,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.uw.tcss450.inouek.test450.Connections.Profile.ProfileContent;
+import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
 import edu.uw.tcss450.inouek.test450.ConnectionsNavDynamicDirections;
+import edu.uw.tcss450.inouek.test450.MobileNavigationDirections;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
+import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
 
 import static edu.uw.tcss450.inouek.test450.Connections.Profile.ProfileContent.PROFILES;
 
@@ -44,6 +47,8 @@ public class ConnectionsHomeDynamic extends Fragment {
     private Credentials mCredentials;
     private AutoCompleteTextView mAutoCompleteTextView;
     private MaterialButton mSendFriendRequestButton;
+    private String mJwToken;
+    BottomNavigationView mBottomNav;
 
     String[] ContactsIds;
     String[] ContactsUsernames;
@@ -58,6 +63,8 @@ public class ConnectionsHomeDynamic extends Fragment {
         super.onCreate(savedInstanceState);
 
         mCredentials = ConnectionsHomeDynamicArgs.fromBundle(getArguments()).getCredentials();
+        mJwToken = ConnectionsHomeDynamicArgs.fromBundle(getArguments()).getJwt();
+
         Log.e("ConnectionsHomeDynamic", "Received Email: " + mCredentials.getEmail());
 
         ProfileContent.myUsername = mCredentials.getUsername();
@@ -88,8 +95,8 @@ public class ConnectionsHomeDynamic extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        BottomNavigationView bottomNavigation = view.findViewById(R.id.connections_nav_bar_base);
-        bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationSelected);
+        mBottomNav = view.findViewById(R.id.connections_nav_bar_base);
+        mBottomNav.setOnNavigationItemSelectedListener(this::onNavigationSelected);
 
         FloatingActionButton fab = view.findViewById(R.id.connections_floatingActionButton);
         fab.setOnClickListener(this::fabOnClick);
@@ -103,8 +110,6 @@ public class ConnectionsHomeDynamic extends Fragment {
     }
 
     private boolean onNavigationSelected(final MenuItem menuItem) {
-
-
 
         switch (menuItem.getItemId())
         {
@@ -241,7 +246,8 @@ public class ConnectionsHomeDynamic extends Fragment {
                 }
             }
             mSendFriendRequestButton.setEnabled(true);
-            LoadSentConnectionRequests();
+            mBottomNav.setSelectedItemId(R.id.connections_nav_bar_sent);
+            //LoadSentConnectionRequests();
         } catch (JSONException e) {
             mAutoCompleteTextView.setError("JSONException Sending request");
             mSendFriendRequestButton.setEnabled(true);
@@ -610,5 +616,14 @@ public class ConnectionsHomeDynamic extends Fragment {
         ConnectionsNavDynamicDirections.ActionGlobalNavReceived received =
                 ConnectionsNavDynamicDirections.actionGlobalNavReceived(mCredentials);
         navController.navigate(received);
+    }
+
+    public void SendMessageNavigation(String u)
+    {
+        NavController navController =
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
+                ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
+        navController.navigate(chatPage);
     }
 }

@@ -14,6 +14,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +45,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import edu.uw.tcss450.inouek.test450.ConnectionsNavDynamicDirections;
 import edu.uw.tcss450.inouek.test450.R;
 
 /**
@@ -144,6 +147,8 @@ public class Weather10Fragment extends Fragment {
     }
 
     private void onClick(TenDaysWeatherPost weather){
+        NavController navController = Navigation.findNavController(getActivity(), R.id.weatherMainFragment);
+        navController.navigate(R.id.action_weatherMainFragment_to_forecast24Fragment);
     }
 
 

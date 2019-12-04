@@ -15,7 +15,7 @@
             android:title="@string/menu_Chats" />
         <item
             android:id="@+id/nav_connections"
-            android:icon="@drawable/ic_connect"
+            android:icon="@drawable/ic_supervisor_contacts"
             android:title="@string/menu_Connection" />
         <item
             android:id="@+id/nav_weather"

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,7 +31,7 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // inflating each individual view
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.display24hours, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_24_hours_weather_list, parent, false);
         // put individual view to view holder and return the viewholder (a list of individual view)
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -57,13 +58,13 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView description;
-        LinearLayout parentLayout;
+        //RelativeLayout parentLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            description = itemView.findViewById(R.id.display_24_forecast);
-            parentLayout = itemView.findViewById(R.id.predict24);
+            description = (TextView)itemView.findViewById(R.id.item_24_forecast);
+            //parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
 
