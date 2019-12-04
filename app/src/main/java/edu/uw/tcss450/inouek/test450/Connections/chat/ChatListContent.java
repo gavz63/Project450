@@ -54,5 +54,6 @@ public class ChatListContent
 
 		public Uri getIcon(){return Uri.EMPTY;}
 		public String getName(){return name;}
+		public long getId(){return id;}
 	}
 }

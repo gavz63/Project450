@@ -3,6 +3,8 @@ package edu.uw.tcss450.inouek.test450.Connections.chat;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +28,8 @@ public class ChatListFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+
 	}
 
 	@Override
@@ -46,13 +50,36 @@ public class ChatListFragment extends Fragment
 		return view;
 	}
 
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+	{
+		super.onViewCreated(view, savedInstanceState);
+
+		ChatListFragmentArgs args = ChatListFragmentArgs.fromBundle(getArguments());
+		if(args.getChatMessage() != null)
+		{
+			gotoChat(args.getChatMessage().getChatId());
+		}
+		else if(args.getGotoChat() != null)
+		{
+			gotoChat(args.getGotoChat());
+		}
+	}
+
 	private void gotoChat(Chat chat)
 	{
+		gotoChat(chat.getId());
+	}
+	private void gotoChat(long chatId)
+	{
 		ChatListFragmentArgs argsToList = ChatListFragmentArgs.fromBundle(getArguments());
-		ChatListFragmentDirections.ActionChatlistToChat argsToChat =
-				ChatListFragmentDirections.actionChatlistToChat(argsToList.getJwt(),
-						argsToList.getCredentials().getUsername(),
-						argsToList.getCredentials().getColor());
+		ChatListFragmentDirections.ActionChatlistToChat argsToChat = ChatListFragmentDirections.actionChatlistToChat
+		(
+			argsToList.getJwt(),
+			chatId,
+			argsToList.getCredentials().getUsername(),
+			argsToList.getCredentials().getColor()
+		);
 		//args.putSerializable(getString(R.string.chat_bundle_key), chat);
 		Navigation.findNavController(getView()).navigate(argsToChat);
 	}

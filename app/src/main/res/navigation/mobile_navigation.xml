@@ -26,7 +26,6 @@
             app:argType="long" />
         <argument
             android:name="chatId"
-            android:defaultValue="1L"
             app:argType="long" />
         <argument
             android:name="username"
@@ -59,6 +58,16 @@
         <argument
             android:name="jwt"
             app:argType="string"/>
+        <argument
+            android:name="chatMessage"
+            app:argType="edu.uw.tcss450.inouek.test450.Connections.chat.ChatMessageNotification"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="gotoChat"
+            app:argType="java.lang.Long"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <action android:id="@+id/action_global_nav_account" app:destination="@id/nav_account" />
     <action android:id="@+id/action_global_nav_home" app:destination="@id/nav_home" />
