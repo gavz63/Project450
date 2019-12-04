@@ -241,6 +241,7 @@ public class ConnectionsHomeDynamic extends Fragment {
                 }
             }
             mSendFriendRequestButton.setEnabled(true);
+            LoadSentConnectionRequests();
         } catch (JSONException e) {
             mAutoCompleteTextView.setError("JSONException Sending request");
             mSendFriendRequestButton.setEnabled(true);

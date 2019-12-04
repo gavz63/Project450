@@ -125,7 +125,7 @@ public class ProfileContent {
         new SendPostAsyncTask.Builder(AcceptEndpointUri.toString(), message)
                 .onPostExecute(result -> {
                     try {
-                        Log.e("DeleteConnectionRequest", result);
+                        Log.e("AcceptRequest", result);
                         JSONObject resultsJSON = new JSONObject(result);
 
                         boolean success = resultsJSON.getBoolean("success");
@@ -133,7 +133,7 @@ public class ProfileContent {
                         if (success) {
 
                         } else {
-                            Log.e("DeleteConnectionRequest", "Failure");
+                            Log.e("AcceptRequest", "Failure");
                         }
 
                     } catch (JSONException e) {

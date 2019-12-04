@@ -24,8 +24,6 @@ public class MyProfileRecyclerViewAdapter extends RecyclerView.Adapter<MyProfile
     private final List<ProfileContent.Profile> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    private ViewHolder myHolder;
-
     public MyProfileRecyclerViewAdapter(List<ProfileContent.Profile> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -36,14 +34,6 @@ public class MyProfileRecyclerViewAdapter extends RecyclerView.Adapter<MyProfile
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_profile, parent, false);
 
-        view.findViewById(R.id.button_delete).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProfileContent.DeleteConnections(myHolder.mIdView.getText().toString());
-                Log.e("DeletionError", myHolder.mIdView.getText().toString());
-            }
-        });
-
         return new ViewHolder(view);
     }
 
@@ -53,18 +43,11 @@ public class MyProfileRecyclerViewAdapter extends RecyclerView.Adapter<MyProfile
         holder.mIdView.setText(mValues.get(position).username);
         holder.mContentView.setText(mValues.get(position).name);
 
-        myHolder = holder;
-
-        Log.e("SettingUpProfiles",myHolder.mIdView.getText().toString());
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.mView.findViewById(R.id.button_delete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
+                ProfileContent.DeleteConnections(holder.mItem.username);
+                Log.e("DeletionError", holder.mItem.username);
             }
         });
     }
