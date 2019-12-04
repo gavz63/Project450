@@ -1,9 +1,16 @@
 package edu.uw.tcss450.inouek.test450;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
@@ -12,6 +19,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -54,6 +62,7 @@ import edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamicDirection
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
+import edu.uw.tcss450.inouek.test450.utils.PushReceiver;
 import edu.uw.tcss450.inouek.test450.weather.CityFragment;
 import edu.uw.tcss450.inouek.test450.weather.CityPost;
 import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
@@ -76,6 +85,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
             UPDATE_INTERVAL_IN_MILLISECONDS / 2;
     private static final int MY_PERMISSIONS_LOCATIONS = 8414;
 
+    private ColorFilter mDefault;
+    private HomePushMessageReceiver mPushMessageReciever;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
@@ -159,13 +170,25 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         navController.setGraph(R.navigation.mobile_navigation, getIntent().getExtras());
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        navigationView.setNavigationItemSelectedListener(this::onNavigationSelected);
 
         HomeActivityArgs args = HomeActivityArgs.fromBundle(getIntent().getExtras());
         mJwToken = args.getJwt();
         JwTokenModel jwTokenModel = JwTokenModel.getFactory().create(JwTokenModel.class);
         jwTokenModel.changeJwToken(mJwToken);
         mCredentials = args.getCredentials();
+
+        if (args.getChatMessage() != null)
+        {
+            MobileNavigationDirections.ActionGlobalNavChatlist directions =
+                MobileNavigationDirections.actionGlobalNavChatlist(args.getCredentials(),args.getJwt());
+            directions.setChatMessage(args.getChatMessage());
+            navController.navigate(directions);
+        }
+        else
+        {
+            navigationView.setNavigationItemSelectedListener(this::onNavigationSelected);
+        }
+        mDefault = toolbar.getNavigationIcon().getColorFilter();
     }
 
     private void createLocationRequest() {
@@ -217,6 +240,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 navController.navigate(userPage);
                 break;
             case R.id.nav_chatlist:
+                ((Toolbar) findViewById(R.id.toolbar)).getNavigationIcon().setColorFilter(mDefault);
                 MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
                         ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
                 navController.navigate(chatPage);
@@ -258,6 +282,13 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         }
+
+        if(mPushMessageReciever == null)
+        {
+            mPushMessageReciever = new HomePushMessageReceiver();
+        }
+        IntentFilter iFilter = new IntentFilter(PushReceiver.RECEIVED_NEW_MESSAGE);
+        registerReceiver(mPushMessageReciever, iFilter);
     }
 
     @Override
@@ -265,6 +296,11 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         super.onPause();
         //Stop location update
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+
+        if(mPushMessageReciever != null)
+        {
+            unregisterReceiver(mPushMessageReciever);
+        }
     }
 
     void setCredentials(Credentials c) {
@@ -380,5 +416,27 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     @Override
     public void onListFragmentInteraction(CityPost item) {
 
+    }
+
+    /** A BroadcastReceiver that listens for messages sent from PushReceiver */
+    private class HomePushMessageReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            NavController nc = Navigation.findNavController(HomeActivity.this, R.id.nav_host_fragment);
+            NavDestination nd = nc.getCurrentDestination();
+            if (nd.getId() != R.id.nav_chat)
+            {
+                if (intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE"))
+                {
+                    String sender = intent.getStringExtra("SENDER");
+                    String messageText = intent.getStringExtra("MESSAGE");
+                    //change the hamburger icon to red alerting the user of the notification
+                    ((Toolbar) findViewById(R.id.toolbar)).getNavigationIcon().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                    Log.d("HOME", sender + ": " + messageText);
+                }
+            }
+        }
     }
 }
