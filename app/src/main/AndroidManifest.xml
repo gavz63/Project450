@@ -39,9 +39,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-        <activity
             android:name=".HomeActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:label="@string/title_activity_home_"
