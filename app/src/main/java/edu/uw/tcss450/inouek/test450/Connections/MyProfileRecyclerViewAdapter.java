@@ -2,6 +2,7 @@ package edu.uw.tcss450.inouek.test450.Connections;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ public class MyProfileRecyclerViewAdapter extends RecyclerView.Adapter<MyProfile
     private final List<ProfileContent.Profile> mValues;
     private final OnListFragmentInteractionListener mListener;
 
+    private ViewHolder myHolder;
+
     public MyProfileRecyclerViewAdapter(List<ProfileContent.Profile> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -32,6 +35,15 @@ public class MyProfileRecyclerViewAdapter extends RecyclerView.Adapter<MyProfile
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_profile, parent, false);
+
+        view.findViewById(R.id.button_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileContent.DeleteConnections(myHolder.mIdView.getText().toString());
+                Log.e("DeletionError", myHolder.mIdView.getText().toString());
+            }
+        });
+
         return new ViewHolder(view);
     }
 
@@ -40,6 +52,10 @@ public class MyProfileRecyclerViewAdapter extends RecyclerView.Adapter<MyProfile
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).username);
         holder.mContentView.setText(mValues.get(position).name);
+
+        myHolder = holder;
+
+        Log.e("SettingUpProfiles",myHolder.mIdView.getText().toString());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
