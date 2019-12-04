@@ -1,5 +1,7 @@
 package edu.uw.tcss450.inouek.test450.Connections;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -50,6 +52,15 @@ public class MyProfileRecyclerViewAdapter extends RecyclerView.Adapter<MyProfile
                 Log.e("DeletionError", holder.mItem.username);
             }
         });
+
+        holder.mView.findViewById(R.id.button_send_message).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileContent.object.SendMessageNavigation(holder.mItem.username);
+            }
+        });
+
+
     }
 
     @Override

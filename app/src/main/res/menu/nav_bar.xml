@@ -4,7 +4,7 @@
     <item
         android:id="@+id/connections_nav_bar_connections"
         android:icon="@drawable/ic_connections"
-        android:title="Connections"/>
+        android:title="Friends"/>
     <item
         android:id="@+id/connections_nav_bar_sent"
         android:icon="@drawable/ic_sent"
