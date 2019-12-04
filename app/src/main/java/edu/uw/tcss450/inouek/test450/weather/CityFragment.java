@@ -138,7 +138,7 @@ public class CityFragment extends Fragment {
         String cityName = city.getCity();
         String lat = city.getLat();
         String lon = city.getLong();
-
+        System.out.println("City Name: " + cityName + " / " + "Lat: " + lat + "/ Lon: " + lon);
         Uri tenDayWeatherUri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -206,10 +206,16 @@ public class CityFragment extends Fragment {
                 cityPosts[i] = (new CityPost.Builder(cityName, lon, lat)
                         .build());
             }
-            cities = new ArrayList(Arrays.asList(cityPosts));
+            cities = new ArrayList();
+            LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+            Location location = viewModel.getCurrentLocation().getValue();
 
-            CityViewModel viewModel = CityViewModel.getFactory().create(CityViewModel.class);
-            viewModel.changeData(cities);
+            cities.add(new CityPost.Builder("Current Location",
+                    String.valueOf(location.getLongitude()),
+                    String.valueOf(location.getLatitude())).build());
+            cities.addAll(Arrays.asList(cityPosts));
+            CityViewModel cityViewModel = CityViewModel.getFactory().create(CityViewModel.class);
+            cityViewModel.changeData(cities);
 
         }catch(JSONException e){
             e.printStackTrace();
@@ -255,7 +261,7 @@ public class CityFragment extends Fragment {
                 int month = currCal.get(Calendar.MONTH) + 1;
                 weather[i] = (new TenDaysWeatherPost.Builder(iconID,
                         "" + month + " / " + date + " / "
-                                + week_name[currCal.get(Calendar.DAY_OF_WEEK)],
+                                + week_name[currCal.get(Calendar.DAY_OF_WEEK)-1],
                         temp_min + "/" + temp_max)
                         .build());
             }

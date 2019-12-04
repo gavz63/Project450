@@ -47,7 +47,7 @@ public class CityViewModel extends ViewModel {
      * @param "List<TenDaysWeatherPost>" the new Location
      */
     public void changeData(final ArrayList<CityPost> theCities) {
-        this.cities.getValue().addAll(theCities);
+        this.cities.setValue(theCities);
     }
 
 

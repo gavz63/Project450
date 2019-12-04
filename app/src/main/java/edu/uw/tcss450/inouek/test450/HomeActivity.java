@@ -355,7 +355,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 int month = currCal.get(Calendar.MONTH) + 1;
                 weather[i] = (new TenDaysWeatherPost.Builder(iconID,
                         "" + month + " / " + date + " / "
-                                + week_name[currCal.get(Calendar.DAY_OF_WEEK)],
+                                + week_name[currCal.get(Calendar.DAY_OF_WEEK)-1],
                         temp_min + "/" + temp_max)
                         .build());
             }
