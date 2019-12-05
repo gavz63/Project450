@@ -56,6 +56,7 @@ public class WeatherMainFragment extends Fragment {
         try {
             mCredentials = WeatherMainFragmentArgs.fromBundle(getArguments()).getCredentials();
             CityFragment.mCredentials = mCredentials;
+            Weather10Fragment.mCredentials = mCredentials;
             Log.e("setting", "mCredentials");
         } catch (IllegalArgumentException e) {
 
@@ -74,7 +75,7 @@ public class WeatherMainFragment extends Fragment {
         FloatingActionButton fab = view.findViewById(R.id.add_city_button);
         fab.setOnClickListener(v ->
                 Navigation.findNavController(getActivity().findViewById(R.id.nav_host_fragment))
-                        .navigate(R.id.action_weatherMainFragment_to_addLocationFragment));
+                        .navigate(R.id.action_weatherMainFragment_to_forecast24Fragment));
 
 
 
