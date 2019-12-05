@@ -72,9 +72,12 @@ import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherPost;
 import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment;
+import edu.uw.tcss450.inouek.test450.weather.Weather10FragmentInMain;
 
 //Testing change on git
-public class HomeActivity extends AppCompatActivity implements Weather10Fragment.OnListFragmentInteractionListener, CityFragment.OnListFragmentInteractionListener {
+public class HomeActivity extends AppCompatActivity implements Weather10Fragment.OnListFragmentInteractionListener,
+                                                                Weather10FragmentInMain.OnListFragmentInteractionListener,
+                                                                CityFragment.OnListFragmentInteractionListener {
 
     public static final int MONKEY_YELLOW = 1;
     public static final int MONKEY_GREEN = 2;
@@ -183,6 +186,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         jwTokenModel.changeJwToken(mJwToken);
         mCredentials = args.getCredentials();
         Weather10Fragment.mCredentials = mCredentials;
+        Weather10FragmentInMain.mCredentials = mCredentials;
 
 
         if (args.getChatMessage() != null)
