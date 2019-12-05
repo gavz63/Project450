@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,8 +122,10 @@ public class Weather10Fragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle saveInstanceState){
         super.onViewCreated(view,saveInstanceState);
+        Log.e("result", "weather");
         TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
         viewModel.getCurrentWeather().observe(this, weathers->{
+            Log.e("Observer of 5 days weather", "observe change");
             recyclerViewAdapter.swap(weathers);
             recyclerViewAdapter.notifyDataSetChanged();
         });
