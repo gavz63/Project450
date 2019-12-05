@@ -59,14 +59,17 @@ public class ConnectionsHomeDynamic extends Fragment {
     BottomNavigationView mBottomNav;
     private PushRequestReceiver mPushRequestReceiver;
 
-    ArrayList<SendPostAsyncTask> list = new ArrayList<SendPostAsyncTask>();
+    public static ArrayList<SendPostAsyncTask> list = new ArrayList<SendPostAsyncTask>();
 
     int currentOption = 0;
 
     String[] ContactsIds;
     String[] ContactsUsernames;
-    int count = 0;
-    int target = 100;
+    public static int count = 0;
+    public static int target = 0;
+    public static int counter = 0;
+
+    public static boolean stillVisible = true;
 
     public ConnectionsHomeDynamic() {
         // Required empty public constructor
@@ -119,6 +122,8 @@ public class ConnectionsHomeDynamic extends Fragment {
 
         NavController nc = Navigation.findNavController(getActivity(), R.id.hostFragment);
         nc.setGraph(R.navigation.connections_nav_dynamic, getArguments());
+
+        stillVisible = true;
 
         LoadBaseConnections();
     }
@@ -275,6 +280,7 @@ public class ConnectionsHomeDynamic extends Fragment {
     {
             Lock();
             count = 0;
+            counter = 0;
 
             PROFILES.clear();
             NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
@@ -320,7 +326,6 @@ public class ConnectionsHomeDynamic extends Fragment {
                 JSONArray Contacts = resultsJSON.getJSONArray("contacts");
 
                 ContactsIds = new String[Contacts.length()];
-                target = Contacts.length();
 
                 for (int i = 0; i < Contacts.length(); i++) {
                     JSONObject userJSON = Contacts.getJSONObject(i);
@@ -387,11 +392,6 @@ public class ConnectionsHomeDynamic extends Fragment {
                 ContactsUsernames[count++] = username;
                 PROFILES.add(new ProfileContent.Profile(id, name, email, username));
 
-                if(count == target-1)
-                {
-
-                }
-
             } else {
 
             }
@@ -400,10 +400,11 @@ public class ConnectionsHomeDynamic extends Fragment {
             Log.e("Profiles", e.toString());
         }
 
-        NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
-        ConnectionsNavDynamicDirections.ActionGlobalNavLanding connectionsHome =
-                ConnectionsNavDynamicDirections.actionGlobalNavLanding(mCredentials);
-        navController.navigate(connectionsHome);
+            NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
+            ConnectionsNavDynamicDirections.ActionGlobalNavLanding connectionsHome =
+                    ConnectionsNavDynamicDirections.actionGlobalNavLanding(mCredentials);
+            navController.navigate(connectionsHome);
+            counter++;
     }
 
     public void LoadSentConnectionRequests()
@@ -411,6 +412,7 @@ public class ConnectionsHomeDynamic extends Fragment {
             Lock();
 
             count = 0;
+            counter++;
 
             PROFILES.clear();
             NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
@@ -521,9 +523,6 @@ public class ConnectionsHomeDynamic extends Fragment {
                 ContactsUsernames[count++] = username;
                 PROFILES.add(new ProfileContent.Profile(id, name, email, username));
 
-                if(count == target-1)
-                {
-                }
             } else {
             }
 
@@ -531,10 +530,11 @@ public class ConnectionsHomeDynamic extends Fragment {
             Log.e("SentProfiles", e.toString());
         }
 
-        NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
-        ConnectionsNavDynamicDirections.ActionGlobalNavSent sent =
-                ConnectionsNavDynamicDirections.actionGlobalNavSent(mCredentials);
-        navController.navigate(sent);
+            NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
+            ConnectionsNavDynamicDirections.ActionGlobalNavSent sent =
+                    ConnectionsNavDynamicDirections.actionGlobalNavSent(mCredentials);
+            navController.navigate(sent);
+            counter++;
     }
 
     public void LoadReceivedConnectionRequests()
@@ -659,10 +659,11 @@ public class ConnectionsHomeDynamic extends Fragment {
             Log.e("Received", e.toString());
         }
 
-        NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
-        ConnectionsNavDynamicDirections.ActionGlobalNavReceived received =
-                ConnectionsNavDynamicDirections.actionGlobalNavReceived(mCredentials);
-        navController.navigate(received);
+            NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
+            ConnectionsNavDynamicDirections.ActionGlobalNavReceived received =
+                    ConnectionsNavDynamicDirections.actionGlobalNavReceived(mCredentials);
+                navController.navigate(received);
+                counter++;
     }
 
     public void SendMessageNavigation(String u)
