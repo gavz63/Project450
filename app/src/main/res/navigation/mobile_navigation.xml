@@ -26,7 +26,6 @@
             app:argType="long" />
         <argument
             android:name="chatId"
-            android:defaultValue="1L"
             app:argType="long" />
         <argument
             android:name="username"
@@ -59,6 +58,16 @@
         <argument
             android:name="jwt"
             app:argType="string"/>
+        <argument
+            android:name="chatMessage"
+            app:argType="edu.uw.tcss450.inouek.test450.Connections.chat.ChatMessageNotification"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="gotoChat"
+            app:argType="java.lang.Long"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <action android:id="@+id/action_global_nav_account" app:destination="@id/nav_account" />
     <action android:id="@+id/action_global_nav_home" app:destination="@id/nav_home" />
@@ -93,6 +102,9 @@
         <argument
             android:name="jwt"
             app:argType="string" />
+        <action
+            android:id="@+id/action_weatherMainFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_weatherMainFragment"
@@ -102,5 +114,19 @@
         android:name="edu.uw.tcss450.inouek.test450.Forecast24Fragment"
         android:label="fragment_weather_forecast24"
         tools:layout="@layout/fragment_weather_forecast24" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="edu.uw.tcss450.inouek.test450.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_mapForecast"
+            app:destination="@id/mapForecast" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapForecast"
+        android:name="edu.uw.tcss450.inouek.test450.MapForecast"
+        android:label="fragment_map_forecase"
+        tools:layout="@layout/fragment_map_forecase" />
 
 </navigation>

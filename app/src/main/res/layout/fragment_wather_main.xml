@@ -27,18 +27,21 @@
         tools:layout_editor_absoluteX="264dp"
         tools:layout_editor_absoluteY="205dp">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="214dp">
 
             <fragment
                 android:id="@+id/fragment_weathers"
                 android:name="edu.uw.tcss450.inouek.test450.weather.Weather10Fragment"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="214dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:layout="@layout/fragment_10_days_weather_list" />
 
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
             android:layout_width="match_parent"

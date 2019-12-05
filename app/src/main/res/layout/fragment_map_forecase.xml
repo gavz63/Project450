@@ -3,23 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="testFragmentFromWeatherFragment">
+    tools:context=".MapForecast">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
-
-
-
-
-    <Button
-        android:id="@+id/predict"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="113dp"
-        android:text="TestRun" />
 
 </FrameLayout>

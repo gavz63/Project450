@@ -7,6 +7,8 @@
     <string name="ep_messaging_base">messaging</string>
     <string name="ep_messaging_send">send</string>
     <string name="ep_messaging_getall">getAll</string>
+    <string name="ep_messaging_chatlist">chatlist</string>
+    <string name="ep_messaging_chat">chat</string>
     <string name="ep_pushy">pushy</string>
     <string name="ep_register">register</string>
     <string name="ep_resend">resend</string>
