@@ -416,6 +416,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     @Override
     public void onListFragmentInteraction(TenDaysWeatherPost item) {
 
+
     }
 
     @Override

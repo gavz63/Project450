@@ -69,6 +69,8 @@ public class Weather10Fragment extends Fragment {
     private MyWeatherRecyclerViewAdapter recyclerViewAdapter;
     public static Credentials mCredentials;
 
+    public static int position = 0;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
