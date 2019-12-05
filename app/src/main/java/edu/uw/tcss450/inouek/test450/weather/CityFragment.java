@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -205,10 +207,12 @@ public class CityFragment extends Fragment {
                         cities = new ArrayList();
                         LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
                         Location location = viewModel.getCurrentLocation().getValue();
+                        BigDecimal lat = new BigDecimal(location.getLatitude());
+                        BigDecimal lon = new BigDecimal(location.getLongitude());
 
                         cities.add(new CityPost.Builder("Current Location",
-                                Double.toString(location.getLongitude()),
-                                Double.toString(location.getLatitude())).build());
+                                (lat.setScale(6, RoundingMode.HALF_UP).toString()),
+                                 lon.setScale(6, RoundingMode.HALF_UP).toString()).build());
 
                         cities.add(new CityPost.Builder("New York",
                                 "40.730610",

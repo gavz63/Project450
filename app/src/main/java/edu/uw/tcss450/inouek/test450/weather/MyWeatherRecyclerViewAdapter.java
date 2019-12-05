@@ -111,7 +111,6 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
             }
         }
 
-        //holder.mIcon.setImageBitmap(mValues.get(position).getIcon());
 
 
         holder.mDate.setText(mValues.get(position).getDate());
@@ -134,8 +133,6 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
     public void swap(ArrayList<TenDaysWeatherPost> data){
         mValues.clear();
         mValues.addAll(data);
-        Log.e("swap", "swapped");
-        //notifyDataSetChanged();
     }
 
     @Override
