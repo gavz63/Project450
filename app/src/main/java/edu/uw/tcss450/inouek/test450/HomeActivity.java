@@ -67,6 +67,7 @@ import edu.uw.tcss450.inouek.test450.utils.PushReceiver;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 import edu.uw.tcss450.inouek.test450.weather.CityFragment;
 import edu.uw.tcss450.inouek.test450.weather.CityPost;
+import edu.uw.tcss450.inouek.test450.weather.CurrentFiveDaysWeatherModel;
 import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
 import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherModel;
@@ -386,7 +387,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     private void getTenDayWeatherOnPost(String s) {
 
         try {
-            System.out.println(s);
+            Log.e("weather info :", s);
 
             JSONArray weatherArray = new JSONArray(s);
 
@@ -396,14 +397,14 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
 
                 JSONObject day = weatherArray.getJSONObject(i);
-
-                long time = Integer.valueOf(day.getString("date")).intValue();
+                Log.e("day: ", day.toString());
                 Calendar currCal = Calendar.getInstance();
-                Date dateObject = new Date(time * 1000);
+                long time = Long.parseLong(day.getString("date"));
+                Log.e("time: ", Long.toString(time));
+                Date dateObject = new Date(time * 1000L);
+                Log.e("Date: ", dateObject.toString());
                 currCal.setTime(dateObject);
-                //Date currCalDate = new Date(time);
                 String iconID = day.getString("iconId");
-                //System.out.println(iconID);
 
                 String[] week_name = {"Sun", "Mon", "Tue", "Wed",
                         "Thur", "Fri", "Sat"};
@@ -413,6 +414,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 temp_max = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_max)));
 
                 int date = currCal.get(Calendar.DAY_OF_MONTH);
+                Log.e("Day of Month " , String.valueOf(currCal.get(Calendar.DAY_OF_MONTH)));
                 int month = currCal.get(Calendar.MONTH) + 1;
                 weather[i] = (new TenDaysWeatherPost.Builder(iconID,
                         "" + month + " / " + date + " / "
@@ -425,6 +427,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
             TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
             viewModel.changeData(weathers);
+            CurrentFiveDaysWeatherModel view = CurrentFiveDaysWeatherModel.getFactory().create(CurrentFiveDaysWeatherModel.class);
+            view.changeData(weathers);
 
         } catch (JSONException e) {
             e.printStackTrace();
