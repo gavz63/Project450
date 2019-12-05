@@ -94,7 +94,9 @@
             android:name="jwt"
             app:argType="string" />
     </fragment>
-    <action android:id="@+id/action_global_weatherMainFragment" app:destination="@id/weatherMainFragment" />
+    <action
+        android:id="@+id/action_global_weatherMainFragment"
+        app:destination="@+id/weatherMainFragment" />
     <fragment
         android:id="@+id/forecast24Fragment"
         android:name="edu.uw.tcss450.inouek.test450.Forecast24Fragment"
