@@ -618,12 +618,55 @@ public class ConnectionsHomeDynamic extends Fragment {
         navController.navigate(received);
     }
 
-    public void SendMessageNavigation(String u)
+    public void SendMessageNavigation(String contactUsername)
     {
-        NavController navController =
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
-                ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
-        navController.navigate(chatPage);
+        Uri uri = new Uri.Builder()
+            .scheme("https")
+            .appendPath(getString(R.string.ep_base_url))
+            .appendPath(getString(R.string.ep_messaging_base))
+            .appendPath(getString(R.string.ep_messaging_chat))
+            .build();
+
+        JSONObject args = new JSONObject();
+        try
+        {
+            args.put
+            (
+                "members",
+                new JSONArray(new String[]{mCredentials.getUsername(),contactUsername})
+            );
+        }
+        catch (JSONException e)
+        {
+            Log.e("JsonFailure","Failed to set up json args for chat navigation.");
+        }
+
+        new SendPostAsyncTask.Builder(uri.toString(),args)
+        .addHeaderField("authorization", mJwToken)
+        .onPostExecute(this::NavigateToChat)
+        .onCancelled(str->Log.e("SendMessageNavigation",str))
+        .build()
+        .execute();
+    }
+
+    private void NavigateToChat(String jsonMsg)
+    {
+        try
+        {
+            JSONObject msg = new JSONObject(jsonMsg);
+            if (msg.has("chatId"))
+            {
+                NavController navController =
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+                MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
+                    ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
+                chatPage.setGotoChat(msg.getLong("chatId"));
+                navController.navigate(chatPage);
+            }
+        }
+        catch (JSONException e)
+        {
+            Log.e("JsonFailure","Failed to parse returned json");
+        }
     }
 }
