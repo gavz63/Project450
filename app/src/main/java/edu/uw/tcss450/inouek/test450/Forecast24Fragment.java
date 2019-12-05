@@ -139,8 +139,8 @@ public class Forecast24Fragment extends Fragment {
                             data = new String[2];
 
                             JSONObject day = weatherArray.getJSONObject(i);
-                            data[0]=  day.get("icon").toString();
-                            data[1]= day.get("temp").toString();
+                            data[0]=  day.get("iconId").toString();
+                            data[1]= day.get("temperature").toString();
                             info.add(data);
                         }
                         weatherInfo.addAll(info);

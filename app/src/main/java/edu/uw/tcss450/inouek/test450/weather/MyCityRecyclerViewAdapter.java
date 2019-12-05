@@ -95,9 +95,9 @@ public class MyCityRecyclerViewAdapter extends RecyclerView.Adapter<MyCityRecycl
 
                                         JSONObject day = weatherArray.getJSONObject(i);
 
-                                        long time = Integer.valueOf(day.getString("date")).intValue();
+                                        long time = Long.valueOf(day.getString("date")).intValue()* 1000L;
                                         Calendar currCal = Calendar.getInstance();
-                                        Date dateObject = new Date(time * 1000);
+                                        Date dateObject = new Date(time);
                                         currCal.setTime(dateObject);
                                         //Date currCalDate = new Date(time);
                                         String iconID = day.getString("iconId");
@@ -111,6 +111,10 @@ public class MyCityRecyclerViewAdapter extends RecyclerView.Adapter<MyCityRecycl
                                         temp_max = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_max)));
 
                                         int date = currCal.get(Calendar.DAY_OF_MONTH);
+
+                                        Log.e("Day of Month " , String.valueOf(date));
+
+
                                         int month = currCal.get(Calendar.MONTH) + 1;
                                         weather[i] = (new TenDaysWeatherPost.Builder(iconID,
                                                 "" + month + " / " + date + " / "

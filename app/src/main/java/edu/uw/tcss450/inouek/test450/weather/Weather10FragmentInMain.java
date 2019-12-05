@@ -93,12 +93,16 @@ public class Weather10FragmentInMain extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle saveInstanceState){
         super.onViewCreated(view,saveInstanceState);
-        TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
+        CurrentFiveDaysWeatherModel viewModel = CurrentFiveDaysWeatherModel.getFactory().create(CurrentFiveDaysWeatherModel.class);
+
         viewModel.getCurrentWeather().observe(this, weathers->{
             if(this.isVisible()){
                 Log.e("home is visible?", "Yes!");
                 recyclerViewAdapter.swap(weathers);
                 recyclerViewAdapter.notifyDataSetChanged();
+            } else {
+                Log.e("home is visible?", "No....");
+
             }
         });
     }
