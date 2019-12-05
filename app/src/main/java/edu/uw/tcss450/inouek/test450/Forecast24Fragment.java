@@ -41,6 +41,7 @@ import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 import edu.uw.tcss450.inouek.test450.weather.CityPost;
 import edu.uw.tcss450.inouek.test450.weather.CityViewModel;
 import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
+import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment;
 
 
 /**
@@ -123,18 +124,22 @@ public class Forecast24Fragment extends Fragment {
         Log.e("uri", locationUri.toString());
         new GetAsyncTask.Builder(locationUri.toString())
                 .onPostExecute(s->{
-                    try {
-                        Log.e("inside of the data", s);
-                        // s in there should be result
+                    Log.e("inside of the data", s);
+                    Log.e("response data type", s.getClass().getName());
+                    Log.e("get the position", String.valueOf(Weather10Fragment.position));
 
-                        JSONArray weatherArray = new JSONArray(s);
+                    try {
+                        //Log.e("inside of the data", s);
+                        //Log.e("response data type", s.getClass().getName());
+                        // s in there should be result
 
                         //JSONObject day = weatherArray.getJSONObject();
                         ArrayList<String[]> info = new ArrayList<>();
 
-//
                         String[] data;
+
                         //get 10 days weather info
+                        JSONArray weatherArray = new JSONArray(s);
                         for (int i = 0; i < weatherArray.length(); i++) {
                             data = new String[2];
 
@@ -143,9 +148,9 @@ public class Forecast24Fragment extends Fragment {
                             data[1]= day.get("temperature").toString();
                             info.add(data);
                         }
+
                         weatherInfo.addAll(info);
                         adapter.notifyDataSetChanged();
-                        //initRecylerView(myView);
 
                     }catch(JSONException e){
                         e.printStackTrace();
@@ -154,7 +159,8 @@ public class Forecast24Fragment extends Fragment {
                 } )
                 .addHeaderField("lat", lat.setScale(6, RoundingMode.HALF_UP).toString())
                 .addHeaderField("long", lon.setScale(6, RoundingMode.HALF_UP).toString())
-                .addHeaderField("days_from_today", "0")
+                //.addHeaderField("days_from_today", String.valueOf(1))
+                .addHeaderField("days_from_today", String.valueOf(Weather10Fragment.position))
                 .build().execute();
     }
 

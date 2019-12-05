@@ -124,6 +124,8 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
+
+                Weather10Fragment.position = position;
             }
         });
     }
