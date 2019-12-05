@@ -178,8 +178,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         JwTokenModel jwTokenModel = JwTokenModel.getFactory().create(JwTokenModel.class);
         jwTokenModel.changeJwToken(mJwToken);
         mCredentials = args.getCredentials();
-
         Weather10Fragment.mCredentials = mCredentials;
+
 
         if (args.getChatMessage() != null)
         {
@@ -429,10 +429,11 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         @Override
         public void onReceive(Context context, Intent intent)
         {
+            Log.d("Received", intent.getStringExtra("TYPE"));
             NavController nc = Navigation.findNavController(HomeActivity.this, R.id.nav_host_fragment);
             NavDestination nd = nc.getCurrentDestination();
             if(intent.hasExtra("TYPE")) {
-                if (intent.getStringExtra("TYPE") == "msg" && nd.getId() != R.id.nav_chat) {
+                if (intent.getStringExtra("TYPE").compareTo("msg") == 0 && nd.getId() != R.id.nav_chat) {
                     if (intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE")) {
                         String sender = intent.getStringExtra("SENDER");
                         String messageText = intent.getStringExtra("MESSAGE");
