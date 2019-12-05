@@ -99,6 +99,7 @@
 
     <string name="search_for_friends">Search for Friends</string>
     <string name="button_send_friend_request">Send Friend Request</string>
+    <string name="button_start_chat">Start Chat</string>
 
     <!--////////////// KEYS ////////// KEYS ///////// KEYS ///////// -->
     <string name="credentials_key">Crdntls ky </string>

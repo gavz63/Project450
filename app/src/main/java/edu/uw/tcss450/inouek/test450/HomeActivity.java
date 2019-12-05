@@ -128,7 +128,9 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 }
                 for (Location location : locationResult.getLocations()) {
                     LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+                    SelectLocationViewModel selectLocationViewModel = SelectLocationViewModel.getFactory().create(SelectLocationViewModel.class);
                     viewModel.changeLocation(location);
+                    selectLocationViewModel.changeLocation(location);
                     Log.d("Location Update", location.toString());
                 }
 
@@ -216,7 +218,9 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                                 Log.d("LOCATION", location.toString());
 
                                 LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+                                SelectLocationViewModel selectLocationViewModel = SelectLocationViewModel.getFactory().create(SelectLocationViewModel.class);
                                 viewModel.changeLocation(location);
+                                selectLocationViewModel.changeLocation(location);
                                 findWeather();
                             }
                         }
@@ -274,7 +278,6 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     @Override
     public void onResume() {
         super.onResume();
-        //findWeather();
         //Start location update
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED
@@ -391,8 +394,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 int date = currCal.get(Calendar.DAY_OF_MONTH);
                 int month = currCal.get(Calendar.MONTH) + 1;
                 weather[i] = (new TenDaysWeatherPost.Builder(iconID,
-                        week_name[currCal.get(Calendar.DAY_OF_WEEK)-1] + " "
-                                + month + "/" + date,
+                        "" + month + " / " + date + " / "
+                                + week_name[currCal.get(Calendar.DAY_OF_WEEK)-1],
                         "High: " + temp_max + "°F\n"
                             + "Low: " + temp_min + "°F")
                         .build());

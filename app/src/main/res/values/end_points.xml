@@ -21,6 +21,7 @@
     <string name="ep_contacts_profile">profile</string>
     <string name="ep_contacts_delete">delete</string>
     <string name="ep_contacts_accept">accept</string>
+    <string name="ep_contacts_find_current">find_current</string>
     <string name="ep_weather">weather</string>
     <string name="ep_weather_locations">locations</string>
     <string name="ep_weather_locations_add">add</string>
