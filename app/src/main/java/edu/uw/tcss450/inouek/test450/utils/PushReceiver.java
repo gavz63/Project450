@@ -60,10 +60,14 @@ public class PushReceiver extends BroadcastReceiver
             i.putExtra("MESSAGE", messageText);
             i.putExtras(intent.getExtras());
 
+            Log.e("PUSHY RECEIVED ", i.getStringExtra("TYPE"));
+            Log.e("PUSHY RECEIVED ", i.getStringExtra("SENDER"));
+            Log.e("PUSHY RECEIVED ", i.getStringExtra("MESSAGE"));
+
             context.sendBroadcast(i);
 
         }
-        else
+        else if(messageText.compareTo("Deletion") != 0)
         {
             //app is in the background so create and post a notification
             Log.d("PUSHY", "Message received in background: " + messageText);
