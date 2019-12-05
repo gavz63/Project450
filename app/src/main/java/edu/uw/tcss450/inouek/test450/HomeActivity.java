@@ -58,11 +58,13 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamic;
 import edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamicDirections;
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
 import edu.uw.tcss450.inouek.test450.utils.PushReceiver;
+import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 import edu.uw.tcss450.inouek.test450.weather.CityFragment;
 import edu.uw.tcss450.inouek.test450.weather.CityPost;
 import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
@@ -98,6 +100,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     private AppBarConfiguration mAppBarConfiguration;
     private Credentials mCredentials;
     private String mJwToken;
+
+    private int choice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +182,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         JwTokenModel jwTokenModel = JwTokenModel.getFactory().create(JwTokenModel.class);
         jwTokenModel.changeJwToken(mJwToken);
         mCredentials = args.getCredentials();
+        Weather10Fragment.mCredentials = mCredentials;
+
 
         if (args.getChatMessage() != null)
         {
@@ -237,41 +243,53 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     private boolean onNavigationSelected(final MenuItem menuItem) {
         NavController navController =
                 Navigation.findNavController(this, R.id.nav_host_fragment);
-        switch (menuItem.getItemId()) {
-            case R.id.nav_account:
-                MobileNavigationDirections.ActionGlobalNavAccount userPage =
-                        UserFragmentDirections.actionGlobalNavAccount(mCredentials);
-                navController.navigate(userPage);
-                break;
-            case R.id.nav_chatlist:
-                ((Toolbar) findViewById(R.id.toolbar)).getNavigationIcon().setColorFilter(mDefault);
-                MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
-                        ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
-                navController.navigate(chatPage);
-                break;
-            //TODO WEATHER NAVIGATION
-            case R.id.nav_weather:
 
-                MobileNavigationDirections.ActionGlobalWeatherMainFragment weatherPage =
-                        WeatherMainFragmentDirections.actionGlobalWeatherMainFragment(mCredentials, mJwToken);
-                navController.navigate(weatherPage);
+        if(ConnectionsHomeDynamic.counter >= ConnectionsHomeDynamic.target-1)
+        {
 
-                // test should put weather fragment, just put test for testing purpose
-                //navController.navigate(R.id.test_forecast24);
+            switch (menuItem.getItemId()) {
+                case R.id.nav_account:
+                    choice = 0;
+                    MobileNavigationDirections.ActionGlobalNavAccount userPage =
+                            UserFragmentDirections.actionGlobalNavAccount(mCredentials);
+                    navController.navigate(userPage);
+                    break;
+                case R.id.nav_chatlist:
+                    choice = 1;
+                    ((Toolbar) findViewById(R.id.toolbar)).getNavigationIcon().setColorFilter(mDefault);
+                    MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
+                            ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
+                    navController.navigate(chatPage);
+                    break;
+                //TODO WEATHER NAVIGATION
+                case R.id.nav_weather:
+                    choice = 2;
+                    MobileNavigationDirections.ActionGlobalWeatherMainFragment weatherPage =
+                            WeatherMainFragmentDirections.actionGlobalWeatherMainFragment(mCredentials, mJwToken);
+                    navController.navigate(weatherPage);
 
-                break;
-            case R.id.nav_connections:
-                MobileNavigationDirections.ActionGlobalNavConnections connectionsPage =
-                        ConnectionsHomeDynamicDirections.actionGlobalNavConnections(mCredentials, mJwToken);
-                navController.navigate(connectionsPage);
-                break;
-            case R.id.nav_home:
-                navController.navigate(MobileNavigationDirections.actionGlobalNavHome());
-                break;
+                    // test should put weather fragment, just put test for testing purpose
+                    //navController.navigate(R.id.test_forecast24);
+
+                    break;
+                case R.id.nav_connections:
+                    if(choice != 3) {
+                        choice = 3;
+                        MobileNavigationDirections.ActionGlobalNavConnections connectionsPage =
+                                ConnectionsHomeDynamicDirections.actionGlobalNavConnections(mCredentials, mJwToken);
+                        navController.navigate(connectionsPage);
+                    }
+                    break;
+                case R.id.nav_home:
+                    choice = 4;
+                    navController.navigate(MobileNavigationDirections.actionGlobalNavHome());
+                    break;
+            }
         }
         //Close the drawer
         ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawers();
         return true;
+
     }
 
     @Override

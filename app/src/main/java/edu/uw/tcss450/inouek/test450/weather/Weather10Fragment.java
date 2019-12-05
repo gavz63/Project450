@@ -48,6 +48,9 @@ import java.util.ListIterator;
 
 import edu.uw.tcss450.inouek.test450.ConnectionsNavDynamicDirections;
 import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.WeatherMainFragment;
+import edu.uw.tcss450.inouek.test450.WeatherMainFragmentDirections;
+import edu.uw.tcss450.inouek.test450.model.Credentials;
 
 /**
  * A fragment representing a list of Items.
@@ -64,7 +67,7 @@ public class Weather10Fragment extends Fragment {
     private ArrayList<TenDaysWeatherPost> weathersArray;
     private OnListFragmentInteractionListener mListener;
     private MyWeatherRecyclerViewAdapter recyclerViewAdapter;
-
+    public static Credentials mCredentials;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -150,8 +153,16 @@ public class Weather10Fragment extends Fragment {
     }
 
     private void onClick(TenDaysWeatherPost weather){
-        NavController navController = Navigation.findNavController(getActivity(), R.id.weatherMainFragment);
-        navController.navigate(R.id.action_weatherMainFragment_to_forecast24Fragment);
+
+
+        WeatherMainFragmentDirections.ActionWeatherMainFragmentToForecast24Fragment nav =
+                WeatherMainFragmentDirections.actionWeatherMainFragmentToForecast24Fragment(
+                        mCredentials
+        );
+        Navigation.findNavController(getView()).navigate(nav);
+
+//        NavController navController = Navigation.findNavController(getActivity(), R.id.weatherMainFragment);
+//        navController.navigate(R.id.action_weatherMainFragment_to_forecast24Fragment);
     }
 
 
