@@ -213,19 +213,21 @@ public class ChatFragment extends Fragment
 		public void onReceive(Context context, Intent intent)
 		{
 			if(intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE")) {
-				String sender = intent.getStringExtra("SENDER");
-				String username = "";
-				int color = 0;
-				try {
-					JSONObject senderJSON = new JSONObject(sender);
-					username = senderJSON.getString("username");
-					color = senderJSON.getInt("color");
-				} catch (JSONException e) {
-					e.printStackTrace();
+				if(intent.getStringExtra("TYPE") == "msg") {
+					String sender = intent.getStringExtra("SENDER");
+					String username = "";
+					int color = 0;
+					try {
+						JSONObject senderJSON = new JSONObject(sender);
+						username = senderJSON.getString("username");
+						color = senderJSON.getInt("color");
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+					String messageText = intent.getStringExtra("MESSAGE");
+					messageOutput.add(0, new ChatContent.Message(username, messageText, color));
+					viewAdapter.notifyDataSetChanged();
 				}
-				String messageText = intent.getStringExtra("MESSAGE");
-				messageOutput.add(0,new ChatContent.Message(username,messageText,color));
-				viewAdapter.notifyDataSetChanged();
 			}
 		}
 	}
