@@ -28,7 +28,7 @@ public class ResendEmailDialog extends DialogFragment {
                         //closes the popup by default
                     }
                 })
-                .setNegativeButton(R.string.resend_popup_resend, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.resend_popup_resend, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Resends the email
                         Uri uri = new Uri.Builder()
