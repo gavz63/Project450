@@ -2,6 +2,10 @@ package edu.uw.tcss450.inouek.test450.Connections;
 
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -34,6 +38,7 @@ import edu.uw.tcss450.inouek.test450.ConnectionsNavDynamicDirections;
 import edu.uw.tcss450.inouek.test450.MobileNavigationDirections;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
+import edu.uw.tcss450.inouek.test450.utils.PushReceiver;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
 
@@ -50,6 +55,8 @@ public class ConnectionsHomeDynamic extends Fragment {
     private String mJwToken;
     BottomNavigationView mBottomNav;
     AlertDialog mDialog;
+    private PushRequestReceiver mPushRequestReceiver;
+    int currentOption = 0;
 
     String[] ContactsIds;
     String[] ContactsUsernames;
@@ -115,12 +122,15 @@ public class ConnectionsHomeDynamic extends Fragment {
         switch (menuItem.getItemId())
         {
             case R.id.connections_nav_bar_connections:
+                currentOption = 0;
                 LoadBaseConnections();
                 return true;
             case R.id.connections_nav_bar_sent:
+                currentOption = 1;
                 LoadSentConnectionRequests();
                 return true;
             case R.id.connections_nav_bar_received:
+                currentOption = 2;
                 LoadReceivedConnectionRequests();
                 return true;
         }
@@ -620,12 +630,103 @@ public class ConnectionsHomeDynamic extends Fragment {
         navController.navigate(received);
     }
 
-    public void SendMessageNavigation(String u)
+    public void SendMessageNavigation(String contactUsername)
     {
-        NavController navController =
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
-                ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
-        navController.navigate(chatPage);
+        Uri uri = new Uri.Builder()
+            .scheme("https")
+            .appendPath(getString(R.string.ep_base_url))
+            .appendPath(getString(R.string.ep_messaging_base))
+            .appendPath(getString(R.string.ep_messaging_chat))
+            .build();
+
+        JSONObject args = new JSONObject();
+        try
+        {
+            args.put
+            (
+                "members",
+                new JSONArray(new String[]{mCredentials.getUsername(),contactUsername})
+            );
+        }
+        catch (JSONException e)
+        {
+            Log.e("JsonFailure","Failed to set up json args for chat navigation.");
+        }
+
+        new SendPostAsyncTask.Builder(uri.toString(),args)
+        .addHeaderField("authorization", mJwToken)
+        .onPostExecute(this::NavigateToChat)
+        .onCancelled(str->Log.e("SendMessageNavigation",str))
+        .build()
+        .execute();
     }
+
+    private void NavigateToChat(String jsonMsg)
+    {
+        try
+        {
+            JSONObject msg = new JSONObject(jsonMsg);
+            if (msg.has("chatId"))
+            {
+                NavController navController =
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+                MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
+                    ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
+                chatPage.setGotoChat(msg.getLong("chatId"));
+                navController.navigate(chatPage);
+            }
+        }
+        catch (JSONException e)
+        {
+            Log.e("JsonFailure","Failed to parse returned json");
+        }
+    }
+
+    private class PushRequestReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra("TYPE")) {
+                if(intent.getStringExtra("TYPE") == "REQUEST")
+                {
+                    Load();
+                }
+            }
+        }
+    }
+
+    public void Load()
+    {
+        if(currentOption == 0)
+        {
+            LoadBaseConnections();
+        }
+        else if(currentOption == 1)
+        {
+            LoadSentConnectionRequests();
+        }
+        else if(currentOption == 2)
+        {
+            LoadReceivedConnectionRequests();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mPushRequestReceiver == null) {
+            mPushRequestReceiver = new PushRequestReceiver();
+        }
+        IntentFilter iFilter = new IntentFilter(PushReceiver.REQUEST_UPDATED);
+        getActivity().registerReceiver(mPushRequestReceiver, iFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mPushRequestReceiver != null){
+            getActivity().unregisterReceiver(mPushRequestReceiver);
+        }
+    }
+
 }

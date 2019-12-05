@@ -128,7 +128,9 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 }
                 for (Location location : locationResult.getLocations()) {
                     LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+                    SelectLocationViewModel selectLocationViewModel = SelectLocationViewModel.getFactory().create(SelectLocationViewModel.class);
                     viewModel.changeLocation(location);
+                    selectLocationViewModel.changeLocation(location);
                     Log.d("Location Update", location.toString());
                 }
 
@@ -177,6 +179,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         jwTokenModel.changeJwToken(mJwToken);
         mCredentials = args.getCredentials();
 
+
         if (args.getChatMessage() != null)
         {
             MobileNavigationDirections.ActionGlobalNavChatlist directions =
@@ -215,7 +218,9 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                                 Log.d("LOCATION", location.toString());
 
                                 LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+                                SelectLocationViewModel selectLocationViewModel = SelectLocationViewModel.getFactory().create(SelectLocationViewModel.class);
                                 viewModel.changeLocation(location);
+                                selectLocationViewModel.changeLocation(location);
                                 findWeather();
                             }
                         }
@@ -273,7 +278,6 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     @Override
     public void onResume() {
         super.onResume();
-        //findWeather();
         //Start location update
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED
@@ -390,8 +394,8 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                 int date = currCal.get(Calendar.DAY_OF_MONTH);
                 int month = currCal.get(Calendar.MONTH) + 1;
                 weather[i] = (new TenDaysWeatherPost.Builder(iconID,
-                        week_name[currCal.get(Calendar.DAY_OF_WEEK)-1] + " "
-                                + month + "/" + date,
+                        "" + month + " / " + date + " / "
+                                + week_name[currCal.get(Calendar.DAY_OF_WEEK)-1],
                         "High: " + temp_max + "°F\n"
                             + "Low: " + temp_min + "°F")
                         .build());
@@ -426,15 +430,15 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         {
             NavController nc = Navigation.findNavController(HomeActivity.this, R.id.nav_host_fragment);
             NavDestination nd = nc.getCurrentDestination();
-            if (nd.getId() != R.id.nav_chat)
-            {
-                if (intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE"))
-                {
-                    String sender = intent.getStringExtra("SENDER");
-                    String messageText = intent.getStringExtra("MESSAGE");
-                    //change the hamburger icon to red alerting the user of the notification
-                    ((Toolbar) findViewById(R.id.toolbar)).getNavigationIcon().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-                    Log.d("HOME", sender + ": " + messageText);
+            if(intent.hasExtra("TYPE")) {
+                if (intent.getStringExtra("TYPE") == "msg" && nd.getId() != R.id.nav_chat) {
+                    if (intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE")) {
+                        String sender = intent.getStringExtra("SENDER");
+                        String messageText = intent.getStringExtra("MESSAGE");
+                        //change the hamburger icon to red alerting the user of the notification
+                        ((Toolbar) findViewById(R.id.toolbar)).getNavigationIcon().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                        Log.d("HOME", sender + ": " + messageText);
+                    }
                 }
             }
         }

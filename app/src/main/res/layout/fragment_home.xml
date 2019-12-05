@@ -13,7 +13,7 @@
         tools:context=".HomeActivity" >
 
         <fragment
-            android:id="@+id/fragment_weathers"
+            android:id="@+id/fragment_weathers2"
             android:name="edu.uw.tcss450.inouek.test450.weather.Weather10Fragment"
             android:layout_width="wrap_content"
             android:layout_height="214dp"
@@ -30,7 +30,7 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_weathers" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_weathers2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
