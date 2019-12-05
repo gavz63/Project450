@@ -214,7 +214,7 @@ public class ChatFragment extends Fragment
 		{
 			Log.e("PUSHYRECEIVER", "PLEASE SEE THIS");
 			if(intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE")) {
-				if(intent.getStringExtra("TYPE") == "msg") {
+				if(intent.getStringExtra("TYPE").compareTo("msg") == 0) {
 					String sender = intent.getStringExtra("SENDER");
 					String username = "";
 					int color = 0;
