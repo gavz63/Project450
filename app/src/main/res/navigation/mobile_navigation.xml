@@ -103,8 +103,8 @@
             android:name="jwt"
             app:argType="string" />
         <action
-            android:id="@+id/action_weatherMainFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            android:id="@+id/action_weatherMainFragment_to_addLocationFragment"
+            app:destination="@id/addLocationFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_weatherMainFragment"
@@ -115,18 +115,9 @@
         android:label="fragment_weather_forecast24"
         tools:layout="@layout/fragment_weather_forecast24" />
     <fragment
-        android:id="@+id/mapFragment"
-        android:name="edu.uw.tcss450.inouek.test450.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" >
-        <action
-            android:id="@+id/action_mapFragment_to_mapForecast"
-            app:destination="@id/mapForecast" />
-    </fragment>
-    <fragment
-        android:id="@+id/mapForecast"
-        android:name="edu.uw.tcss450.inouek.test450.MapForecast"
-        android:label="fragment_map_forecase"
-        tools:layout="@layout/fragment_map_forecase" />
+        android:id="@+id/addLocationFragment"
+        android:name="edu.uw.tcss450.inouek.test450.weather.AddLocationFragment"
+        android:label="fragment_add_location"
+        tools:layout="@layout/fragment_add_location" />
 
 </navigation>

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 import edu.uw.tcss450.inouek.test450.model.Credentials;
+import edu.uw.tcss450.inouek.test450.weather.CityFragment;
 import edu.uw.tcss450.inouek.test450.weather.MyWeatherRecyclerViewAdapter;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherPost;
@@ -52,7 +54,9 @@ public class WeatherMainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         weathersArray = new ArrayList<TenDaysWeatherPost>();
         try {
-            mCredentials = UserFragmentArgs.fromBundle(getArguments()).getCredentials();
+            mCredentials = WeatherMainFragmentArgs.fromBundle(getArguments()).getCredentials();
+            CityFragment.mCredentials = mCredentials;
+            Log.e("setting", "mCredentials");
         } catch (IllegalArgumentException e) {
 
         }
@@ -70,27 +74,12 @@ public class WeatherMainFragment extends Fragment {
         FloatingActionButton fab = view.findViewById(R.id.add_city_button);
         fab.setOnClickListener(v ->
                 Navigation.findNavController(getActivity().findViewById(R.id.nav_host_fragment))
-                        .navigate(R.id.action_weatherMainFragment_to_mapFragment));
+                        .navigate(R.id.action_weatherMainFragment_to_addLocationFragment));
 
 
-        // Set the adapter
-//        if (view instanceof RecyclerView) {
-//            Context context = view.getContext();
-//            RecyclerView recyclerView = (RecyclerView) view;
-//            if (mColumnCount <= 1) {
-//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//            } else {
-//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-//            }
-//            recyclerView.setAdapter(recyclerViewAdapter = new MyWeatherRecyclerViewAdapter(weathersArray, this::onClick));
-//        }
+
         return view;
     }
-
-
-
-//    private void onClick(TenDaysWeatherPost weather){
-//    }
 
 
 }
