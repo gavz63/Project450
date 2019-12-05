@@ -134,8 +134,8 @@
     <fragment
         android:id="@+id/forecast24Fragment"
         android:name="edu.uw.tcss450.inouek.test450.Forecast24Fragment"
-        android:label="fragment_weather_forecast24"
-        tools:layout="@layout/fragment_weather_forecast24" >
+        android:label="ForecastToday'sWeather"
+        tools:layout="@layout/fragment_weather_forecast24">
         <argument
             android:name="credentials"
             app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
