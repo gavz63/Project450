@@ -34,7 +34,7 @@
         android:id="@+id/fragment_map"
         android:name="edu.uw.tcss450.inouek.test450.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="350dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
