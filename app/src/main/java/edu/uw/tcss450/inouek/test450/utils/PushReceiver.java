@@ -22,6 +22,8 @@ public class PushReceiver extends BroadcastReceiver
 
     public static final String RECEIVED_NEW_MESSAGE = "new message from pushy";
 
+    public static final String REQUEST_UPDATED = "new request from pushy";
+
     private static final String CHANNEL_ID = "1";
 
     @Override
@@ -53,6 +55,7 @@ public class PushReceiver extends BroadcastReceiver
 
             //create an Intent to broadcast a message to other parts of the app.
             Intent i = new Intent(RECEIVED_NEW_MESSAGE);
+            i.putExtra("TYPE", typeOfMessage);
             i.putExtra("SENDER", sender);
             i.putExtra("MESSAGE", messageText);
             i.putExtras(intent.getExtras());

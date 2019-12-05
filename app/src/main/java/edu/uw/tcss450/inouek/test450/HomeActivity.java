@@ -179,6 +179,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         jwTokenModel.changeJwToken(mJwToken);
         mCredentials = args.getCredentials();
 
+
         if (args.getChatMessage() != null)
         {
             MobileNavigationDirections.ActionGlobalNavChatlist directions =
@@ -429,15 +430,15 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         {
             NavController nc = Navigation.findNavController(HomeActivity.this, R.id.nav_host_fragment);
             NavDestination nd = nc.getCurrentDestination();
-            if (nd.getId() != R.id.nav_chat)
-            {
-                if (intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE"))
-                {
-                    String sender = intent.getStringExtra("SENDER");
-                    String messageText = intent.getStringExtra("MESSAGE");
-                    //change the hamburger icon to red alerting the user of the notification
-                    ((Toolbar) findViewById(R.id.toolbar)).getNavigationIcon().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-                    Log.d("HOME", sender + ": " + messageText);
+            if(intent.hasExtra("TYPE")) {
+                if (intent.getStringExtra("TYPE") == "msg" && nd.getId() != R.id.nav_chat) {
+                    if (intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE")) {
+                        String sender = intent.getStringExtra("SENDER");
+                        String messageText = intent.getStringExtra("MESSAGE");
+                        //change the hamburger icon to red alerting the user of the notification
+                        ((Toolbar) findViewById(R.id.toolbar)).getNavigationIcon().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                        Log.d("HOME", sender + ": " + messageText);
+                    }
                 }
             }
         }
