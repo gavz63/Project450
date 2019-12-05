@@ -56,6 +56,7 @@ public class WeatherMainFragment extends Fragment {
         try {
             mCredentials = WeatherMainFragmentArgs.fromBundle(getArguments()).getCredentials();
             CityFragment.mCredentials = mCredentials;
+            Weather10Fragment.mCredentials = mCredentials;
             Log.e("setting", "mCredentials");
         } catch (IllegalArgumentException e) {
 

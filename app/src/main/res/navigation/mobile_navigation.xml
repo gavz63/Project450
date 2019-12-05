@@ -96,24 +96,19 @@
         <argument
             android:name="credentials"
             app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
-        <action
-            android:id="@+id/action_weatherMainFragment_to_forecast24Fragment"
-            app:destination="@id/forecast24Fragment" />
         <argument
             android:name="jwt"
             app:argType="string" />
         <action
             android:id="@+id/action_weatherMainFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_weatherMainFragment_to_forecast24Fragment2"
+            app:destination="@id/forecast24Fragment2" />
     </fragment>
     <action
         android:id="@+id/action_global_weatherMainFragment"
         app:destination="@+id/weatherMainFragment" />
-    <fragment
-        android:id="@+id/forecast24Fragment"
-        android:name="edu.uw.tcss450.inouek.test450.Forecast24Fragment"
-        android:label="fragment_weather_forecast24"
-        tools:layout="@layout/fragment_weather_forecast24" />
     <fragment
         android:id="@+id/mapFragment"
         android:name="edu.uw.tcss450.inouek.test450.MapFragment"
@@ -128,5 +123,14 @@
         android:name="edu.uw.tcss450.inouek.test450.MapForecast"
         android:label="fragment_map_forecase"
         tools:layout="@layout/fragment_map_forecase" />
+    <fragment
+        android:id="@+id/forecast24Fragment2"
+        android:name="edu.uw.tcss450.inouek.test450.Forecast24Fragment"
+        android:label="fragment_weather_forecast24"
+        tools:layout="@layout/fragment_weather_forecast24" >
+        <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+    </fragment>
 
 </navigation>

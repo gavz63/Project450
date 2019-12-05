@@ -179,6 +179,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         jwTokenModel.changeJwToken(mJwToken);
         mCredentials = args.getCredentials();
 
+        Weather10Fragment.mCredentials = mCredentials;
 
         if (args.getChatMessage() != null)
         {
