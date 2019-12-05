@@ -103,12 +103,14 @@
             android:id="@+id/action_weatherMainFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
         <action
-            android:id="@+id/action_weatherMainFragment_to_forecast24Fragment2"
-            app:destination="@id/forecast24Fragment2" />
+            android:id="@+id/action_weatherMainFragment_to_forecast24Fragment"
+            app:destination="@id/forecast24Fragment" />
     </fragment>
+
     <action
         android:id="@+id/action_global_weatherMainFragment"
         app:destination="@+id/weatherMainFragment" />
+
     <fragment
         android:id="@+id/mapFragment"
         android:name="edu.uw.tcss450.inouek.test450.MapFragment"
@@ -118,13 +120,25 @@
             android:id="@+id/action_mapFragment_to_mapForecast"
             app:destination="@id/mapForecast" />
     </fragment>
+
     <fragment
         android:id="@+id/mapForecast"
         android:name="edu.uw.tcss450.inouek.test450.MapForecast"
         android:label="fragment_map_forecase"
         tools:layout="@layout/fragment_map_forecase" />
+    <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+
     <fragment
-        android:id="@+id/forecast24Fragment2"
+        android:id="@+id/addLocationFragment"
+        android:name="edu.uw.tcss450.inouek.test450.weather.AddLocationFragment"
+        android:label="fragment_add_location"
+        tools:layout="@layout/fragment_add_location" />
+
+
+    <fragment
+        android:id="@+id/forecast24Fragment"
         android:name="edu.uw.tcss450.inouek.test450.Forecast24Fragment"
         android:label="fragment_weather_forecast24"
         tools:layout="@layout/fragment_weather_forecast24" >
@@ -132,5 +146,6 @@
             android:name="credentials"
             app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
     </fragment>
+
 
 </navigation>

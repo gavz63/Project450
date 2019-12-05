@@ -75,7 +75,7 @@ public class WeatherMainFragment extends Fragment {
         FloatingActionButton fab = view.findViewById(R.id.add_city_button);
         fab.setOnClickListener(v ->
                 Navigation.findNavController(getActivity().findViewById(R.id.nav_host_fragment))
-                        .navigate(R.id.action_weatherMainFragment_to_mapFragment));
+                        .navigate(R.id.action_weatherMainFragment_to_forecast24Fragment));
 
 
 

@@ -48,6 +48,7 @@ import java.util.ListIterator;
 
 import edu.uw.tcss450.inouek.test450.ConnectionsNavDynamicDirections;
 import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.WeatherMainFragment;
 import edu.uw.tcss450.inouek.test450.WeatherMainFragmentDirections;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 
@@ -153,8 +154,9 @@ public class Weather10Fragment extends Fragment {
 
     private void onClick(TenDaysWeatherPost weather){
 
-        WeatherMainFragmentDirections.ActionWeatherMainFragmentToForecast24Fragment2 nav =
-                WeatherMainFragmentDirections.actionWeatherMainFragmentToForecast24Fragment2(
+
+        WeatherMainFragmentDirections.ActionWeatherMainFragmentToForecast24Fragment nav =
+                WeatherMainFragmentDirections.actionWeatherMainFragmentToForecast24Fragment(
                         mCredentials
         );
         Navigation.findNavController(getView()).navigate(nav);

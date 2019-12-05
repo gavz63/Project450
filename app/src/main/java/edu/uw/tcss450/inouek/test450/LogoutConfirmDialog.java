@@ -32,7 +32,7 @@ public class LogoutConfirmDialog extends DialogFragment {
                         logout();
                     }
                 })
-                .setNegativeButton(R.string.action_cancel_popup, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.action_cancel_popup, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //closes app by default
                     }});

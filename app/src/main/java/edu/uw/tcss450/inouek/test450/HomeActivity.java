@@ -165,7 +165,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_connections, R.id.nav_chat, R.id.nav_weather, R.id.nav_account)
+                R.id.nav_home, R.id.nav_connections, R.id.nav_chatlist, R.id.weatherMainFragment, R.id.nav_account)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
