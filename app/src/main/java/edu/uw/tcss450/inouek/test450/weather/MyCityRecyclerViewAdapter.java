@@ -57,7 +57,7 @@ public class MyCityRecyclerViewAdapter extends RecyclerView.Adapter<MyCityRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getCity());
-        holder.mContentView.setText(String.format("Lat: %s, Long: %s",
+        holder.mContentView.setText(String.format("Lat: %s\n Long: %s",
                 mValues.get(position).getLat(), mValues.get(position).getLong()));
         JwTokenModel jwTokenModel = JwTokenModel.getFactory().create(JwTokenModel.class);
         mJwToken = jwTokenModel.getJwToken().toString();
