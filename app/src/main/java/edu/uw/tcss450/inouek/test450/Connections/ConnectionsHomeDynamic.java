@@ -2,6 +2,10 @@ package edu.uw.tcss450.inouek.test450.Connections;
 
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -34,6 +38,7 @@ import edu.uw.tcss450.inouek.test450.ConnectionsNavDynamicDirections;
 import edu.uw.tcss450.inouek.test450.MobileNavigationDirections;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
+import edu.uw.tcss450.inouek.test450.utils.PushReceiver;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
 
@@ -49,6 +54,9 @@ public class ConnectionsHomeDynamic extends Fragment {
     private MaterialButton mSendFriendRequestButton;
     private String mJwToken;
     BottomNavigationView mBottomNav;
+    private PushRequestReceiver mPushRequestReceiver;
+
+    int currentOption = 0;
 
     String[] ContactsIds;
     String[] ContactsUsernames;
@@ -114,12 +122,15 @@ public class ConnectionsHomeDynamic extends Fragment {
         switch (menuItem.getItemId())
         {
             case R.id.connections_nav_bar_connections:
+                currentOption = 0;
                 LoadBaseConnections();
                 return true;
             case R.id.connections_nav_bar_sent:
+                currentOption = 1;
                 LoadSentConnectionRequests();
                 return true;
             case R.id.connections_nav_bar_received:
+                currentOption = 2;
                 LoadReceivedConnectionRequests();
                 return true;
         }
@@ -669,4 +680,52 @@ public class ConnectionsHomeDynamic extends Fragment {
             Log.e("JsonFailure","Failed to parse returned json");
         }
     }
+
+    private class PushRequestReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra("TYPE")) {
+                if(intent.getStringExtra("TYPE") == "REQUEST")
+                {
+                    Load();
+                }
+            }
+        }
+    }
+
+    public void Load()
+    {
+        if(currentOption == 0)
+        {
+            LoadBaseConnections();
+        }
+        else if(currentOption == 1)
+        {
+            LoadSentConnectionRequests();
+        }
+        else if(currentOption == 2)
+        {
+            LoadReceivedConnectionRequests();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mPushRequestReceiver == null) {
+            mPushRequestReceiver = new PushRequestReceiver();
+        }
+        IntentFilter iFilter = new IntentFilter(PushReceiver.REQUEST_UPDATED);
+        getActivity().registerReceiver(mPushRequestReceiver, iFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mPushRequestReceiver != null){
+            getActivity().unregisterReceiver(mPushRequestReceiver);
+        }
+    }
+
 }
