@@ -212,6 +212,7 @@ public class ChatFragment extends Fragment
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
+			Log.e("PUSHYRECEIVER", "PLEASE SEE THIS");
 			if(intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE")) {
 				if(intent.getStringExtra("TYPE") == "msg") {
 					String sender = intent.getStringExtra("SENDER");
