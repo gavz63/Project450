@@ -8,27 +8,36 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONObject;
 
+import edu.uw.tcss450.inouek.test450.MapFragment;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddLocationFragment extends Fragment {
+public class AddLocationFragment extends Fragment implements GoogleMap.OnMapClickListener{
 
     MaterialButton mButton;
     EditText mZipField;
     EditText mCityNameField;
+    MapFragment mMapFragment;
 
     public AddLocationFragment() {
         // Required empty public constructor
@@ -49,15 +58,21 @@ public class AddLocationFragment extends Fragment {
         mButton = view.findViewById(R.id.button_save_location);
         mZipField = view.findViewById(R.id.field_search_zipcode);
         mCityNameField = view.findViewById(R.id.field_cityname);
+        FragmentManager manager = getFragmentManager();
+        mMapFragment = (MapFragment) manager.findFragmentById(R.id.fragment_map);
+        //mMapFragment.onMapClick(this::onMapClick);
 
         mButton.setOnClickListener(this::saveLocation);
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Log.d("LAT/LONG", latLng.toString());
     }
 
     private void saveLocation(View v) {
 
         if (!anyErrors()) {
-
-            int zipcode = Integer.parseInt(mZipField.getText().toString());
 
             Uri uri = new Uri.Builder()
                     .scheme("https")

@@ -57,6 +57,7 @@ public class ConnectionsHomeDynamic extends Fragment {
     private MaterialButton mSendFriendRequestButton;
     private String mJwToken;
     BottomNavigationView mBottomNav;
+    AlertDialog mDialog;
     private PushRequestReceiver mPushRequestReceiver;
 
     ArrayList<SendPostAsyncTask> list = new ArrayList<SendPostAsyncTask>();
@@ -164,8 +165,8 @@ public class ConnectionsHomeDynamic extends Fragment {
                 .onPostExecute(this::handleGetSuggestionsOnPost)
                 .build().execute();
         builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        mDialog = builder.create();
+        mDialog.show();
     }
 
     private void sendFriendRequestOnClick(View v) {
@@ -254,6 +255,7 @@ public class ConnectionsHomeDynamic extends Fragment {
                 mAutoCompleteTextView.setError(null);
                 mAutoCompleteTextView.setText("");
                 mAutoCompleteTextView.setHint("Friend request sent!");
+                mDialog.dismiss();
             } else {
                 if (resultsJSON.getString("error").startsWith("Receiver")) {
                     mAutoCompleteTextView.setError("Please try again, the given user does not exist");
