@@ -1,11 +1,17 @@
 package edu.uw.tcss450.inouek.test450;
 
 
+import android.content.Context;
+import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +36,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
+import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
+import edu.uw.tcss450.inouek.test450.weather.CityPost;
+import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
+import edu.uw.tcss450.inouek.test450.weather.MyCityRecyclerViewAdapter;
+import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,13 +52,18 @@ public class Forecast24Fragment extends Fragment {
 
     TextView test;
 
-    String lat = String.valueOf(38.123);
-    String lon = String.valueOf(-78.543);
-    String API_KEY = "328ab211749548638aae28278dfd7a9c";
+    private String mJwToken;
+
+
+    Double lat = 38.123;
+    Double lon = -78.543;
+    //String API_KEY = "328ab211749548638aae28278dfd7a9c";
 
     // need to pass these variables to my adaptor
     ArrayList<String> weatherInfo = new ArrayList<>();
     View myView;
+    SelectLocationViewModel model;
+    Location geoInfo;
 
     // weatherbit.io 
     //Using another web API: which having 48 hrs forecast
@@ -61,6 +78,7 @@ public class Forecast24Fragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getActivity().onBackPressed();
+         model = ViewModelProviders.of(this).get(SelectLocationViewModel.class);
     }
 
 
@@ -71,7 +89,18 @@ public class Forecast24Fragment extends Fragment {
         myView = inflater.inflate(R.layout.fragment_weather_forecast24,
                 container, false);
 
-        //initRecylerView(myView);
+        // get the lat and lon from Select location view model
+        geoInfo = model.getLocationValue();
+        lat = geoInfo.getLatitude();
+        lon = geoInfo.getLongitude();
+
+        Log.d("Latitude of forecast", lat.toString());
+        Log.d("Latitude of forecast", lon.toString());
+
+        JwTokenModel jwTokenModel = JwTokenModel.getFactory().create(JwTokenModel.class);
+        mJwToken = jwTokenModel.getJwToken().toString();
+
+        initRecylerView(myView);
         return myView;
     }
 
@@ -85,104 +114,89 @@ public class Forecast24Fragment extends Fragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    // this method will excute the link and find the weather data and info
-    public void FindWeather (View v){
-        try{
-            // want to make asynctask to get the data in background
-            ExecuteTask tasky = new ExecuteTask();
-            String url = "https://api.weatherbit.io/v2.0/forecast/hourly?&key="+API_KEY+"&hours=48&lat="+lat+"&lon="+lon;
-            //tasky.execute("Here in the URL of the website"+cityToFind+"API key");
-            tasky.execute(url);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+    private void onClick(){
+        System.out.println("City Name: " + "Lat: " + lat + "/ Lon: " + lon);
+        Uri tenDayWeatherUri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_weather))
+                .appendPath(getString(R.string.ep_weather_24))
+                .appendQueryParameter("lat", lat)
+                .appendQueryParameter("lon", lon)
+                .appendQueryParameter("day",  Integer.toString(Weather10Fragment.position))
+                .build();
+        new GetAsyncTask.Builder(tenDayWeatherUri.toString())
+                .onPostExecute(this::onPostExecute)
+                .addHeaderField("authorization", mJwToken) //add the JWT as a header
+                .build().execute();
+        System.out.println("clicked");
     }
 
+    // this method will excute the link and find the weather data and info
+//    public void FindWeather (View v){
+//        try{
+//            // want to make asynctask to get the data in background
+//            ExecuteTask tasky = new ExecuteTask();
+//            String url = "https://api.weatherbit.io/v2.0/forecast/hourly?&key="+API_KEY+"&hours=48&lat="+lat+"&lon="+lon;
+//            //tasky.execute("Here in the URL of the website"+cityToFind+"API key");
+//            tasky.execute(url);
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    // this task will get all from website in background
-    public class ExecuteTask extends AsyncTask<String, Void, String> {
+    // used to update the UI
+    public void onPostExecute(String result) {
 
-        @Override
-        protected String doInBackground(String... strings) {
+        try {
 
-            String response = "";
-            HttpURLConnection urlConnection = null;
-            String url = strings[0];
+            Log.d("myTag", "Getting some result");
 
-            try {
-                // strings[0] is the urls
-                URL urlObject = new URL(url);
-                urlConnection = (HttpURLConnection) urlObject.openConnection();
-                InputStream content = urlConnection.getInputStream();
-                BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-                String s = "";
-                while ((s = buffer.readLine()) != null) {
-                    response += s;
+            String messageWeather = "";
+            String messageTemp = "";
+
+            // s in there should be result
+            JSONObject jsonObject = new JSONObject(result);
+
+            // data with 48 {} information
+            JSONArray weatherArray = jsonObject.getJSONArray("data");
+            // get the city name
+            String city = jsonObject.getString("city_name");
+
+            ArrayList<String> temp24hours = new ArrayList<>();
+
+            // Now we want to get the texts as they are in JSON ..
+            // it is case sensitive in JSON, get element in the weather
+            for (int i = 0; i < 24; i++) {
+                JSONObject jsonSecondary = weatherArray.getJSONObject(i);
+                String temp  = jsonSecondary.getString("temp");
+                temp24hours.add(temp);
+
+                String description = jsonSecondary.getJSONObject("weather").getString("description");
+
+                if (temp != "" ) {
+                    messageWeather += "Temperature: " + temp + "\r\n" + "Description: "+ description + "\r\n";
                 }
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            return response;
-        }
 
-        @Override
-        // used to update the UI
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            try {
-
-                Log.d("myTag", "Getting some result");
-
-                String messageWeather = "";
-                String messageTemp = "";
-
-                // s in there should be result
-                JSONObject jsonObject = new JSONObject(result);
-
-                // data with 48 {} information
-                JSONArray weatherArray = jsonObject.getJSONArray("data");
-                // get the city name
-                String city = jsonObject.getString("city_name");
-
-                ArrayList<String> temp24hours = new ArrayList<>();
-
-                // Now we want to get the texts as they are in JSON ..
-                // it is case sensitive in JSON, get element in the weather
-                for (int i = 0; i < 24; i++) {
-                    JSONObject jsonSecondary = weatherArray.getJSONObject(i);
-                    String temp  = jsonSecondary.getString("temp");
-                    temp24hours.add(temp);
-
-                    String description = jsonSecondary.getJSONObject("weather").getString("description");
-
-                    if (temp != "" ) {
-                        messageWeather += "Temperature: " + temp + "\r\n" + "Description: "+ description + "\r\n";
-                    }
-
-                }
-
-                if (city != "") {
-                    messageTemp = "City : " + city + "\r\n";
-                }
-
-                if (messageTemp != "") {
-                    // send message back to text
-                    test.setText(messageWeather);
-                    weatherInfo.add(messageWeather);
-                    // add to recyler view
-                    initRecylerView(myView);
-                    //tempText.setText(messageTemp);
-                } else {
-                    //Toast.makeText(WeatherActivity.this, "An Error Occurred", Toast.LENGTH_LONG);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (city != "") {
+                messageTemp = "City : " + city + "\r\n";
             }
+
+            if (messageTemp != "") {
+                // send message back to text
+                test.setText(messageWeather);
+                weatherInfo.add(messageWeather);
+                // add to recyler view
+                initRecylerView(myView);
+                //tempText.setText(messageTemp);
+            } else {
+                //Toast.makeText(WeatherActivity.this, "An Error Occurred", Toast.LENGTH_LONG);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

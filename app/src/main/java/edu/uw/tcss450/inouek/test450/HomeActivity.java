@@ -381,4 +381,5 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     public void onListFragmentInteraction(CityPost item) {
 
     }
+
 }

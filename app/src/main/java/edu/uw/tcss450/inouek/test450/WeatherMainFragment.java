@@ -47,6 +47,7 @@ public class WeatherMainFragment extends Fragment {
     public WeatherMainFragment() {
         // Required empty public constructor
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,13 +69,9 @@ public class WeatherMainFragment extends Fragment {
 
         // open map fragment
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.add_city_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fab.setOnClickListener(v ->
                 Navigation.findNavController(getActivity().findViewById(R.id.nav_host_fragment))
-                        .navigate(R.id.action_weatherMainFragment_to_mapFragment);
-            }
-        });
+                        .navigate(R.id.action_weatherMainFragment_to_mapFragment));
 
 
         // Set the adapter

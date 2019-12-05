@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import edu.uw.tcss450.inouek.test450.Connections.MyProfileRecyclerViewAdapter;
+import edu.uw.tcss450.inouek.test450.weather.CityFragment;
 
 public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder> {
     // for debug

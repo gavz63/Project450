@@ -82,39 +82,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapClick(LatLng latLng) {
-        Log.d("LAT/LONG", latLng.toString());
-
-        geoInfo = latLng.toString();
-
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title("New Marker"));
-
-        Double l1=latLng.latitude;
-        Double l2=latLng.longitude;
-        String coordl1 = l1.toString();
-        String coordl2 = l2.toString();
-
-        // latlng will return
-        // bundle to store the longtitude and latitude information
-        Fragment fragment = new Fragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("geoInfoFromMap", geoInfo);
-        bundle.putString("geoLatitude", coordl1);
-        bundle.putString("geoLongtitude", coordl2);
-        fragment.setArguments(bundle);
-
-        // display the map forecast
-        Log.d("open fragment", "beofre opening");
-        openForecastFragment();
-        Log.d("open fragment", "already openned");
+        // to do save the lantitude and longtitude into the db
 
     }
 
-    public void openForecastFragment(){
-        Navigation.findNavController(getActivity().findViewById(R.id.nav_host_fragment))
-                .navigate(R.id.action_mapFragment_to_mapForecast);
-    }
 }
 
 

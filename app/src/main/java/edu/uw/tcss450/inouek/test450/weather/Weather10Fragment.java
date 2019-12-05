@@ -64,6 +64,7 @@ public class Weather10Fragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private MyWeatherRecyclerViewAdapter recyclerViewAdapter;
 
+    public static int position = 0;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -71,6 +72,8 @@ public class Weather10Fragment extends Fragment {
      */
     public Weather10Fragment() {
     }
+
+
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
@@ -146,11 +149,12 @@ public class Weather10Fragment extends Fragment {
         mListener = null;
     }
 
+    // go the forecast 24 fragment and the item position we clicked
     private void onClick(TenDaysWeatherPost weather){
         NavController navController = Navigation.findNavController(getActivity(), R.id.weatherMainFragment);
         navController.navigate(R.id.action_weatherMainFragment_to_forecast24Fragment);
-    }
 
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -168,3 +172,4 @@ public class Weather10Fragment extends Fragment {
     }
 
 }
+
