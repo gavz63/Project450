@@ -539,6 +539,8 @@ public class ConnectionsHomeDynamic extends Fragment {
 
     public void LoadReceivedConnectionRequests()
     {
+            Lock();
+
             count = 0;
 
             PROFILES.clear();
