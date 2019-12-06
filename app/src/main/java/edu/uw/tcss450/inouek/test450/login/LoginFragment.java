@@ -348,7 +348,7 @@ public class LoginFragment extends Fragment {
                                 (
                                     getArguments().getString("message"),
                                     getArguments().getString("sender"),
-                                    getArguments().getLong("chatid",0)
+                                    getArguments().getLong("chatid")
                                 );
                                 homeActivity.setChatMessage(chat);
                             }
