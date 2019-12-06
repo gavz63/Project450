@@ -128,7 +128,14 @@
         android:id="@+id/addLocationFragment"
         android:name="edu.uw.tcss450.inouek.test450.weather.AddLocationFragment"
         android:label="Add Location"
-        tools:layout="@layout/fragment_add_location" />
+        tools:layout="@layout/fragment_add_location" >
+        <argument
+            android:name="credentials"
+            app:argType="edu.uw.tcss450.inouek.test450.model.Credentials" />
+        <argument
+            android:name="jwt"
+            app:argType="string" />
+    </fragment>
 
 
     <fragment

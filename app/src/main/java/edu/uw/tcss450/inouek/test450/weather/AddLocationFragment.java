@@ -1,6 +1,8 @@
 package edu.uw.tcss450.inouek.test450.weather;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,21 +27,28 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.button.MaterialButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+
 import edu.uw.tcss450.inouek.test450.MapFragment;
+import edu.uw.tcss450.inouek.test450.MobileNavigationDirections;
 import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddLocationFragment extends Fragment implements GoogleMap.OnMapClickListener{
+public class AddLocationFragment extends Fragment {
 
-    MaterialButton mButton;
-    EditText mZipField;
-    EditText mCityNameField;
-    MapFragment mMapFragment;
+    private MaterialButton mButton;
+    private EditText mCityNameField;
+    private double mLat;
+    private double mLong;
+    private Credentials mCredentials;
+    private String mJwt;
 
     public AddLocationFragment() {
         // Required empty public constructor
@@ -55,19 +66,18 @@ public class AddLocationFragment extends Fragment implements GoogleMap.OnMapClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mCredentials = AddLocationFragmentArgs.fromBundle(getArguments()).getCredentials();
+        mJwt = AddLocationFragmentArgs.fromBundle(getArguments()).getJwt();
+
         mButton = view.findViewById(R.id.button_save_location);
-        mZipField = view.findViewById(R.id.field_search_zipcode);
         mCityNameField = view.findViewById(R.id.field_cityname);
-        FragmentManager manager = getFragmentManager();
-        mMapFragment = (MapFragment) manager.findFragmentById(R.id.fragment_map);
-        //mMapFragment.onMapClick(this::onMapClick);
+
+        LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+        Location location = viewModel.getCurrentLocation().getValue();
+        mLat = location.getLatitude();
+        mLong = location.getLongitude();
 
         mButton.setOnClickListener(this::saveLocation);
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-        Log.d("LAT/LONG", latLng.toString());
     }
 
     private void saveLocation(View v) {
@@ -77,40 +87,33 @@ public class AddLocationFragment extends Fragment implements GoogleMap.OnMapClic
             Uri uri = new Uri.Builder()
                     .scheme("https")
                     .appendPath(getString(R.string.ep_base_url))
+                    .appendPath(getString(R.string.ep_weather))
                     .appendPath(getString(R.string.ep_weather_locations))
                     .appendPath(getString(R.string.ep_weather_locations_add))
                     .build();
 
             JSONObject message = new JSONObject();
+            try {
+                message.put("cityname", mCityNameField.getText().toString());
+                message.put("lat", mLat);
+                message.put("long", mLong);
+                message.put("username", mCredentials.getUsername());
 
-//            new SendPostAsyncTask.Builder(uri.toString(), message)
-//                    .onPreExecute()
-//                    .onPostExecute()
-//                    .build().execute();
+            } catch (JSONException e) {
+                mCityNameField.setError("JSONError my b");
+            }
+
+            new SendPostAsyncTask.Builder(uri.toString(), message)
+                    .onPreExecute(() -> {
+                        getActivity().findViewById(R.id.add_location_progress).setVisibility(View.VISIBLE);
+                        getActivity().findViewById(R.id.button_save_location).setEnabled(false);
+                    }).onPostExecute(this::handleSaveLocationOnPost)
+                    .build().execute();
         }
     }
 
     private boolean anyErrors() {
         boolean anyErrors = false;
-
-        try {
-            Integer.parseInt(mZipField.getText().toString());
-        } catch (NumberFormatException e) {
-            anyErrors = true;
-        }
-
-        if (mZipField.getText().toString().length() != 5) {
-            anyErrors = true;
-            if (mZipField.getText().toString().equals("")) {
-                mZipField.setError("No zipcode entered");
-            }
-        }
-
-        if (anyErrors) {
-            mZipField.setError("Zipcode is invalid");
-        } else {
-            mZipField.setError(null);
-        }
 
         if (mCityNameField.getText().toString().equals("")) {
             anyErrors = true;
@@ -122,5 +125,32 @@ public class AddLocationFragment extends Fragment implements GoogleMap.OnMapClic
         return anyErrors;
     }
 
+    private void handleSaveLocationOnPost(String s) {
+        try {
+            JSONObject resultsJSON = new JSONObject(s);
 
+            boolean success = resultsJSON.getBoolean("success");
+
+            if (success) {
+                NavController controller = Navigation
+                        .findNavController(getActivity().findViewById(R.id.nav_host_fragment));
+
+                MobileNavigationDirections.ActionGlobalWeatherMainFragment action =
+                        MobileNavigationDirections.actionGlobalWeatherMainFragment(mCredentials, mJwt);
+
+                controller.navigate(action);
+
+            } else {
+                mCityNameField.setError(resultsJSON.get("error").toString());
+            }
+        } catch (JSONException e) {
+            mCityNameField.setError(e.getMessage());
+        }
+        getActivity().findViewById(R.id.add_location_progress).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.button_save_location).setEnabled(true);
+    }
+
+    public void setLat(double lat) { mLat = lat; }
+
+    public void setLong(double lng) { mLong = lng; }
 }
