@@ -733,12 +733,12 @@ public class ConnectionsHomeDynamic extends Fragment {
     {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e("PUSHYFROMCONNECTIONS", "1");
+
             if(intent.hasExtra("TYPE")) {
-                Log.e("PUSHYFROMCONNECTIONS", "2");
                 if(intent.getStringExtra("TYPE").compareTo("request") == 0)
                 {
-                    Log.e("PUSHYFROMCONNECTIONS", "3");
+                    Log.e("PUSHYFROMCONNECTIONS", "1");
+
                     Load();
                 }
             }

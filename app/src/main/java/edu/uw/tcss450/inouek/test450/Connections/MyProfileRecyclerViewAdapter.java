@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import edu.uw.tcss450.inouek.test450.Connections.Profile.ProfileContent;
 import edu.uw.tcss450.inouek.test450.Connections.ProfileFragment.OnListFragmentInteractionListener;
+import edu.uw.tcss450.inouek.test450.HomeActivity;
 import edu.uw.tcss450.inouek.test450.R;
 
 import java.util.List;
@@ -56,6 +57,7 @@ public class MyProfileRecyclerViewAdapter extends RecyclerView.Adapter<MyProfile
         holder.mView.findViewById(R.id.button_send_message).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HomeActivity.choice = -1;
                 ProfileContent.object.SendMessageNavigation(holder.mItem.username);
             }
         });
