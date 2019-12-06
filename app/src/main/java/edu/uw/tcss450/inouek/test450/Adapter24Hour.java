@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +22,7 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
     // for debug
     private static final String TAG = "Adapter24Hour";
     private Context myContext; //
-    private ArrayList<String[]> mWeatherInfo;
+    private ArrayList<String[]> mWeatherInfo; //[0,1], 0 is weather icon and 1 is temperature
 
     public Adapter24Hour (Context Context, ArrayList<String[]> weatherInfo){
         myContext = Context;
@@ -44,7 +45,52 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
         // this funciton will be called when each new item was put into the list
         Log.d(TAG, "On Bind View Holder : called. ");
 
-        holder.icon.setText("Description: " + mWeatherInfo.get(position)[0] + "\n" + " temperature: " + mWeatherInfo.get(position)[1] + "\n");
+        String icon = mWeatherInfo.get(position)[0];
+
+        if(icon != null){
+            switch(icon) {
+                case "clear-day":
+                    holder.mIcon.setImageResource(R.drawable.ic_01d);
+                    break;
+                case "clear-night":
+                    holder.mIcon.setImageResource(R.drawable.ic_01n);
+                    break;
+                case "partly-cloudy-day":
+                    holder.mIcon.setImageResource(R.drawable.ic_02d);
+                    break;
+                case "partly-cloudy-night":
+                    holder.mIcon.setImageResource(R.drawable.ic_02n);
+                    break;
+                case "cloudy":
+                    holder.mIcon.setImageResource(R.drawable.ic_03d);
+                    break;
+                case "04n":
+                    holder.mIcon.setImageResource(R.drawable.ic_04d);
+                    break;
+                case "rain":
+                    holder.mIcon.setImageResource(R.drawable.ic_09d);
+                    break;
+                case "sleet":
+                    holder.mIcon.setImageResource(R.drawable.ic_10d);
+                    break;
+                case "wind":
+                    holder.mIcon.setImageResource(R.drawable.ic_60d);
+                    break;
+                case "snow":
+                    holder.mIcon.setImageResource(R.drawable.ic_13d);
+                    break;
+                case "fog":
+                    holder.mIcon.setImageResource(R.drawable.ic_50d);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        holder.icon.setText("Next " + mWeatherInfo.get(position)[2]  +
+                " hour's Weather " + "\n"  +
+                 "Description: " + mWeatherInfo.get(position)[0] + "\n" +
+                " Temperature: " + mWeatherInfo.get(position)[1] + "\n");
     }
 
     @Override
@@ -58,7 +104,9 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
     // and it should have text to display weather info and has its own layout
     public class ViewHolder extends RecyclerView.ViewHolder{
 
+        
         TextView icon;
+        ImageView mIcon;
 
         //RelativeLayout parentLayout;
 
@@ -66,6 +114,7 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
             super(itemView);
 
             icon = (TextView)itemView.findViewById(R.id.textView);
+            mIcon = (ImageView) itemView.findViewById(R.id.weather_icon);
             //parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }

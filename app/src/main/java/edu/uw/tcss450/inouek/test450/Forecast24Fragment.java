@@ -146,11 +146,12 @@ public class Forecast24Fragment extends Fragment {
                         //get 10 days weather info
                         JSONArray weatherArray = new JSONArray(s);
                         for (int i = 0; i < weatherArray.length(); i++) {
-                            data = new String[2];
+                            data = new String[3];
 
                             JSONObject day = weatherArray.getJSONObject(i);
                             data[0]=  day.get("iconId").toString();
                             data[1]= day.get("temperature").toString();
+                            data[2] = String.valueOf(i + 1);
                             info.add(data);
                         }
 
