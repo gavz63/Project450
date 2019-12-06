@@ -129,8 +129,8 @@ public class ChatFragment extends Fragment
 				JSONObject json = new JSONObject(str);
 				JSONArray messageArray = json.getJSONArray("messages");
 				if (!hasSetChatname) {
-					String chatname = json.getString("chatName");
-					mActionBar.setTitle(chatname);
+					String chatName = json.getString("chatName");
+					mActionBar.setTitle(chatName);
 				}
 
 				for(int i=0; i<messageArray.length(); i++)
@@ -183,7 +183,7 @@ public class ChatFragment extends Fragment
 				//its up to you to decide if you want to send the message to the output here
 				//or wait for the message to come back from the web service.
 			}
-			refreshMessages();
+			//refreshMessages();
 		}
 		catch (JSONException e)
 		{
