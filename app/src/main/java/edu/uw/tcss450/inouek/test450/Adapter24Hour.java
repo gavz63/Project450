@@ -90,7 +90,7 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
         holder.icon.setText("Next " + mWeatherInfo.get(position)[2]  +
                 " hour's Weather " + "\n"  +
                  "Description: " + mWeatherInfo.get(position)[0] + "\n" +
-                " Temperature: " + mWeatherInfo.get(position)[1] + "\n");
+                "Temperature: " + mWeatherInfo.get(position)[1] + "\n");
     }
 
     @Override
@@ -104,7 +104,7 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
     // and it should have text to display weather info and has its own layout
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        
+
         TextView icon;
         ImageView mIcon;
 
