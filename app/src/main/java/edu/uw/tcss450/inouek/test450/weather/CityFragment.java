@@ -80,9 +80,9 @@ public class CityFragment extends Fragment {
         cities.add(new CityPost.Builder("Current Location",
                 String.valueOf(location.getLongitude()),
                 String.valueOf(location.getLatitude())).build());
-        cities.add(new CityPost.Builder("Tokyo",
-                "35.652832",
-                "139.839478").build());
+//        cities.add(new CityPost.Builder("Tokyo",
+//                "35.652832",
+//                "139.839478").build());
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -186,7 +186,7 @@ public class CityFragment extends Fragment {
         new SendPostAsyncTask.Builder(locationUri.toString(), json)
                 .onPostExecute(s->{
                     try {
-
+                        Log.e("inside", s);
                         // s in there should be result
 
                         JSONArray cityArray = new JSONArray(s);
@@ -198,8 +198,8 @@ public class CityFragment extends Fragment {
 
                             JSONObject day = cityArray.getJSONObject(i);
                             String cityName = day.getString("nickname");
-                            String lat = day.getString("Lat");
-                            String lon = day.getString("Long");
+                            String lat = day.getString("lat");
+                            String lon = day.getString("long");
 
                             cityPosts[i] = (new CityPost.Builder(cityName, lon, lat)
                                     .build());
@@ -213,19 +213,19 @@ public class CityFragment extends Fragment {
                         cities.add(new CityPost.Builder("Current Location",
                                 (lat.setScale(6, RoundingMode.HALF_UP).toString()),
                                  lon.setScale(6, RoundingMode.HALF_UP).toString()).build());
-
-                        cities.add(new CityPost.Builder("New York",
-                                "40.730610",
-                                "-73.935242").build());
-
-                        cities.add(new CityPost.Builder("Tokyo",
-                                "35.652832",
-                                "139.839478").build());
-
-
-                        cities.add(new CityPost.Builder("Mexico",
-                                "19.432608",
-                                "-99.133209").build());
+//
+//                        cities.add(new CityPost.Builder("New York",
+//                                "40.730610",
+//                                "-73.935242").build());
+//
+//                        cities.add(new CityPost.Builder("Tokyo",
+//                                "35.652832",
+//                                "139.839478").build());
+//
+//
+//                        cities.add(new CityPost.Builder("Mexico",
+//                                "19.432608",
+//                                "-99.133209").build());
                         cities.addAll(Arrays.asList(cityPosts));
                         CityViewModel cityViewModel = CityViewModel.getFactory().create(CityViewModel.class);
                         cityViewModel.changeData(cities);
