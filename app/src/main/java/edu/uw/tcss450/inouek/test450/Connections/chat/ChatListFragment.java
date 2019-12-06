@@ -129,11 +129,15 @@ public class ChatListFragment extends Fragment
 		ChatListFragmentArgs args = ChatListFragmentArgs.fromBundle(getArguments());
 		if(args.getChatMessage() != null)
 		{
-			gotoChat(args.getChatMessage().getChatId());
+			long chatId = args.getChatMessage().getChatId();
+			getArguments().remove("chatMessage");
+			gotoChat(chatId);
 		}
 		else if(args.getGotoChat() != null)
 		{
-			gotoChat(args.getGotoChat());
+			long chatId = args.getGotoChat();
+			getArguments().remove("gotoChat");
+			gotoChat(chatId);
 		}
 
 		FloatingActionButton fab = view.findViewById(R.id.chats_floatingActionButton);

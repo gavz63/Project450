@@ -105,7 +105,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     private Credentials mCredentials;
     private String mJwToken;
 
-    private int choice = 0;
+    public static int choice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
