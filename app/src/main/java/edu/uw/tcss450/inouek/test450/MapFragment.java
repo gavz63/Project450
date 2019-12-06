@@ -32,12 +32,17 @@ import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
 
     private GoogleMap mMap;
-    private String geoInfo;
 
     public MapFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_map, container, false);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -48,7 +53,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         //add this fragment as the OnMapReadyCallback -> See onMapReady()
         mapFragment.getMapAsync(this);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -82,10 +86,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapClick(LatLng latLng) {
-        // to do save the lantitude and longtitude into the db
-
+        Log.d("LAT/LONG", latLng.toString());
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("New Marker"));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18.0f));
     }
-
 }
 
 

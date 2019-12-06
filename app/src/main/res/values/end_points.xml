@@ -7,6 +7,8 @@
     <string name="ep_messaging_base">messaging</string>
     <string name="ep_messaging_send">send</string>
     <string name="ep_messaging_getall">getAll</string>
+    <string name="ep_messaging_chatlist">chatlist</string>
+    <string name="ep_messaging_chat">chat</string>
     <string name="ep_pushy">pushy</string>
     <string name="ep_register">register</string>
     <string name="ep_resend">resend</string>
@@ -19,6 +21,7 @@
     <string name="ep_contacts_profile">profile</string>
     <string name="ep_contacts_delete">delete</string>
     <string name="ep_contacts_accept">accept</string>
+    <string name="ep_contacts_find_current">find_current</string>
     <string name="ep_weather">weather</string>
     <string name="ep_weather_locations">locations</string>
     <string name="ep_weather_locations_add">add</string>

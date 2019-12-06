@@ -160,7 +160,7 @@ public class ProfileContent {
     public static void DenyRequest(String username)
     {
         option = 2;
-        DeleteRequest(username, myUsername);
+        DeleteRequest(myUsername, username);
 
     }
 

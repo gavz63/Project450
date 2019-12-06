@@ -2,6 +2,10 @@ package edu.uw.tcss450.inouek.test450.Connections;
 
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,6 +16,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,12 +33,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import edu.uw.tcss450.inouek.test450.Connections.Profile.ProfileContent;
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
 import edu.uw.tcss450.inouek.test450.ConnectionsNavDynamicDirections;
 import edu.uw.tcss450.inouek.test450.MobileNavigationDirections;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
+import edu.uw.tcss450.inouek.test450.utils.PushReceiver;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
 
@@ -49,10 +57,20 @@ public class ConnectionsHomeDynamic extends Fragment {
     private MaterialButton mSendFriendRequestButton;
     private String mJwToken;
     BottomNavigationView mBottomNav;
+    AlertDialog mDialog;
+    private PushRequestReceiver mPushRequestReceiver;
+
+    public static ArrayList<SendPostAsyncTask> list = new ArrayList<SendPostAsyncTask>();
+
+    int currentOption = 0;
 
     String[] ContactsIds;
     String[] ContactsUsernames;
-    int count = 0;
+    public static int count = 0;
+    public static int target = 0;
+    public static int counter = 0;
+
+    public static boolean stillVisible = true;
 
     public ConnectionsHomeDynamic() {
         // Required empty public constructor
@@ -106,24 +124,28 @@ public class ConnectionsHomeDynamic extends Fragment {
         NavController nc = Navigation.findNavController(getActivity(), R.id.hostFragment);
         nc.setGraph(R.navigation.connections_nav_dynamic, getArguments());
 
+        stillVisible = true;
+
         LoadBaseConnections();
     }
 
     private boolean onNavigationSelected(final MenuItem menuItem) {
-
-        switch (menuItem.getItemId())
-        {
-            case R.id.connections_nav_bar_connections:
-                LoadBaseConnections();
-                return true;
-            case R.id.connections_nav_bar_sent:
-                LoadSentConnectionRequests();
-                return true;
-            case R.id.connections_nav_bar_received:
-                LoadReceivedConnectionRequests();
-                return true;
-        }
+            switch (menuItem.getItemId()) {
+                case R.id.connections_nav_bar_connections:
+                        currentOption = 0;
+                        LoadBaseConnections();
+                        return true;
+                case R.id.connections_nav_bar_sent:
+                        currentOption = 1;
+                        LoadSentConnectionRequests();
+                        return true;
+                case R.id.connections_nav_bar_received:
+                        currentOption = 2;
+                        LoadReceivedConnectionRequests();
+                        return true;
+            }
         return false;
+
     }
 
     private void fabOnClick(View v) {
@@ -148,8 +170,8 @@ public class ConnectionsHomeDynamic extends Fragment {
                 .onPostExecute(this::handleGetSuggestionsOnPost)
                 .build().execute();
         builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        mDialog = builder.create();
+        mDialog.show();
     }
 
     private void sendFriendRequestOnClick(View v) {
@@ -238,11 +260,13 @@ public class ConnectionsHomeDynamic extends Fragment {
                 mAutoCompleteTextView.setError(null);
                 mAutoCompleteTextView.setText("");
                 mAutoCompleteTextView.setHint("Friend request sent!");
+                mDialog.dismiss();
             } else {
                 if (resultsJSON.getString("error").startsWith("Receiver")) {
                     mAutoCompleteTextView.setError("Please try again, the given user does not exist");
                 } else {
                     mAutoCompleteTextView.setError("Cannot send friend request");
+                    Log.e("Send", result);
                 }
             }
             mSendFriendRequestButton.setEnabled(true);
@@ -256,32 +280,39 @@ public class ConnectionsHomeDynamic extends Fragment {
 
     public void LoadBaseConnections()
     {
-        PROFILES.clear();
-        NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
-        ConnectionsNavDynamicDirections.ActionGlobalNavLanding connectionsHome =
-                ConnectionsNavDynamicDirections.actionGlobalNavLanding(mCredentials);
-        navController.navigate(connectionsHome);
+            Lock();
+            count = 0;
+            counter = 0;
 
-        Log.e("LoadConnections", "Start");
-        Uri uri = new Uri.Builder()
-                .scheme("https")
-                .appendPath(getString(R.string.ep_base_url))
-                .appendPath(getString(R.string.ep_contacts))
-                .appendPath(getString(R.string.ep_contacts_base))
-                .build();
+            PROFILES.clear();
+            NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
+            ConnectionsNavDynamicDirections.ActionGlobalNavLanding connectionsHome =
+                    ConnectionsNavDynamicDirections.actionGlobalNavLanding(mCredentials);
+            navController.navigate(connectionsHome);
 
-        JSONObject message = new JSONObject();
+            Log.e("LoadConnections", "Start");
+            Uri uri = new Uri.Builder()
+                    .scheme("https")
+                    .appendPath(getString(R.string.ep_base_url))
+                    .appendPath(getString(R.string.ep_contacts))
+                    .appendPath(getString(R.string.ep_contacts_base))
+                    .build();
 
-        try {
-            message.put("username", mCredentials.getUsername());
-        } catch (JSONException e) {
-            Log.e("LoadConnection", "Error");
-        }
+            JSONObject message = new JSONObject();
 
-        new SendPostAsyncTask.Builder(uri.toString(), message)
-                .onPostExecute(this::handleBaseOnPost)
-                .build().execute();
-        Log.e("LoadConnections", "Stop");
+            try {
+                message.put("username", mCredentials.getUsername());
+            } catch (JSONException e) {
+                Log.e("LoadConnection", "Error");
+            }
+
+            SendPostAsyncTask t = new SendPostAsyncTask.Builder(uri.toString(), message)
+                    .onPostExecute(this::handleBaseOnPost)
+                    .build();
+            t.execute();
+            list.add(t);
+            Log.e("LoadConnections", "Stop");
+
     }
 
     private void handleBaseOnPost(String result)
@@ -306,7 +337,6 @@ public class ConnectionsHomeDynamic extends Fragment {
                 }
                 LoadBaseUsernames();
             } else {
-
             }
 
         } catch (JSONException e) {
@@ -324,9 +354,9 @@ public class ConnectionsHomeDynamic extends Fragment {
                 .build();
 
         ContactsUsernames = new String[ContactsIds.length];
-        count = 0;
+        target = ContactsIds.length;
 
-        for(int i = 0; i < ContactsIds.length; i++) {
+        for (int i = 0; i < ContactsIds.length; i++) {
             Log.e("Test", "THIS SHOULD PRINT");
             JSONObject message = new JSONObject();
 
@@ -335,10 +365,11 @@ public class ConnectionsHomeDynamic extends Fragment {
             } catch (JSONException e) {
                 Log.e("LoadConnection", "Error");
             }
-
-            new SendPostAsyncTask.Builder(uri.toString(), message)
+            SendPostAsyncTask t = new SendPostAsyncTask.Builder(uri.toString(), message)
                     .onPostExecute(this::GetBaseProfileFromIdPost)
-                    .build().execute();
+                    .build();
+            t.execute();
+            list.add(t);
         }
     }
 
@@ -362,6 +393,7 @@ public class ConnectionsHomeDynamic extends Fragment {
                 Log.e("User", username);
                 ContactsUsernames[count++] = username;
                 PROFILES.add(new ProfileContent.Profile(id, name, email, username));
+
             } else {
 
             }
@@ -370,40 +402,48 @@ public class ConnectionsHomeDynamic extends Fragment {
             Log.e("Profiles", e.toString());
         }
 
-        NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
-        ConnectionsNavDynamicDirections.ActionGlobalNavLanding connectionsHome =
-                ConnectionsNavDynamicDirections.actionGlobalNavLanding(mCredentials);
-        navController.navigate(connectionsHome);
+            NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
+            ConnectionsNavDynamicDirections.ActionGlobalNavLanding connectionsHome =
+                    ConnectionsNavDynamicDirections.actionGlobalNavLanding(mCredentials);
+            navController.navigate(connectionsHome);
+            counter++;
     }
 
     public void LoadSentConnectionRequests()
     {
-        PROFILES.clear();
-        NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
-        ConnectionsNavDynamicDirections.ActionGlobalNavSent sent =
-                ConnectionsNavDynamicDirections.actionGlobalNavSent(mCredentials);
-        navController.navigate(sent);
+            Lock();
 
-        Log.e("LoadSent", "Start");
-        Uri uri = new Uri.Builder()
-                .scheme("https")
-                .appendPath(getString(R.string.ep_base_url))
-                .appendPath(getString(R.string.ep_contacts))
-                .appendPath(getString(R.string.ep_contacts_sent))
-                .build();
+            count = 0;
+            counter++;
 
-        JSONObject message = new JSONObject();
+            PROFILES.clear();
+            NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
+            ConnectionsNavDynamicDirections.ActionGlobalNavSent sent =
+                    ConnectionsNavDynamicDirections.actionGlobalNavSent(mCredentials);
+            navController.navigate(sent);
 
-        try {
-            message.put("username", mCredentials.getUsername());
-        } catch (JSONException e) {
-            Log.e("LoadSent", "Error");
-        }
+            Log.e("LoadSent", "Start");
+            Uri uri = new Uri.Builder()
+                    .scheme("https")
+                    .appendPath(getString(R.string.ep_base_url))
+                    .appendPath(getString(R.string.ep_contacts))
+                    .appendPath(getString(R.string.ep_contacts_sent))
+                    .build();
 
-        new SendPostAsyncTask.Builder(uri.toString(), message)
-                .onPostExecute(this::handleSentOnPost)
-                .build().execute();
-        Log.e("LoadSent", "Stop");
+            JSONObject message = new JSONObject();
+
+            try {
+                message.put("username", mCredentials.getUsername());
+            } catch (JSONException e) {
+                Log.e("LoadSent", "Error");
+            }
+
+            SendPostAsyncTask t = new SendPostAsyncTask.Builder(uri.toString(), message)
+                    .onPostExecute(this::handleSentOnPost)
+                    .build();
+            t.execute();
+            list.add(t);
+            Log.e("LoadSent", "Stop");
     }
 
     private void handleSentOnPost(String result)
@@ -428,7 +468,6 @@ public class ConnectionsHomeDynamic extends Fragment {
                 }
                 LoadSentUsernames();
             } else {
-
             }
 
         } catch (JSONException e) {
@@ -446,7 +485,7 @@ public class ConnectionsHomeDynamic extends Fragment {
                 .build();
 
         ContactsUsernames = new String[ContactsIds.length];
-        count = 0;
+        target = ContactsIds.length;
 
         for(int i = 0; i < ContactsIds.length; i++) {
             JSONObject message = new JSONObject();
@@ -457,9 +496,11 @@ public class ConnectionsHomeDynamic extends Fragment {
                 Log.e("Sent", "Error");
             }
 
-            new SendPostAsyncTask.Builder(uri.toString(), message)
+            SendPostAsyncTask t = new SendPostAsyncTask.Builder(uri.toString(), message)
                     .onPostExecute(this::GetSentProfileFromIdPost)
-                    .build().execute();
+                    .build();
+            t.execute();
+            list.add(t);
         }
     }
 
@@ -483,48 +524,55 @@ public class ConnectionsHomeDynamic extends Fragment {
                 Log.e("User", username);
                 ContactsUsernames[count++] = username;
                 PROFILES.add(new ProfileContent.Profile(id, name, email, username));
-            } else {
 
+            } else {
             }
 
         } catch (JSONException e) {
             Log.e("SentProfiles", e.toString());
         }
 
-        NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
-        ConnectionsNavDynamicDirections.ActionGlobalNavSent sent =
-                ConnectionsNavDynamicDirections.actionGlobalNavSent(mCredentials);
-        navController.navigate(sent);
+            NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
+            ConnectionsNavDynamicDirections.ActionGlobalNavSent sent =
+                    ConnectionsNavDynamicDirections.actionGlobalNavSent(mCredentials);
+            navController.navigate(sent);
+            counter++;
     }
 
     public void LoadReceivedConnectionRequests()
     {
-        PROFILES.clear();
-        NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
-        ConnectionsNavDynamicDirections.ActionGlobalNavReceived received =
-                ConnectionsNavDynamicDirections.actionGlobalNavReceived(mCredentials);
-        navController.navigate(received);
+            Lock();
 
-        Log.e("LoadReceived", "Start");
-        Uri uri = new Uri.Builder()
-                .scheme("https")
-                .appendPath(getString(R.string.ep_base_url))
-                .appendPath(getString(R.string.ep_contacts))
-                .appendPath(getString(R.string.ep_contacts_received))
-                .build();
+            count = 0;
 
-        JSONObject message = new JSONObject();
+            PROFILES.clear();
+            NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
+            ConnectionsNavDynamicDirections.ActionGlobalNavReceived received =
+                    ConnectionsNavDynamicDirections.actionGlobalNavReceived(mCredentials);
+            navController.navigate(received);
 
-        try {
-            message.put("username", mCredentials.getUsername());
-        } catch (JSONException e) {
-            Log.e("Receieved", "Error");
-        }
+            Log.e("LoadReceived", "Start");
+            Uri uri = new Uri.Builder()
+                    .scheme("https")
+                    .appendPath(getString(R.string.ep_base_url))
+                    .appendPath(getString(R.string.ep_contacts))
+                    .appendPath(getString(R.string.ep_contacts_received))
+                    .build();
 
-        new SendPostAsyncTask.Builder(uri.toString(), message)
-                .onPostExecute(this::handleReceivedOnPost)
-                .build().execute();
-        Log.e("LoadReceived", "Stop");
+            JSONObject message = new JSONObject();
+
+            try {
+                message.put("username", mCredentials.getUsername());
+            } catch (JSONException e) {
+                Log.e("Receieved", "Error");
+            }
+
+            SendPostAsyncTask t = new SendPostAsyncTask.Builder(uri.toString(), message)
+                    .onPostExecute(this::handleReceivedOnPost).build();
+            t.execute();
+            list.add(t);
+            Log.e("LoadReceived", "Stop");
+
     }
 
     private void handleReceivedOnPost(String result)
@@ -567,7 +615,7 @@ public class ConnectionsHomeDynamic extends Fragment {
                 .build();
 
         ContactsUsernames = new String[ContactsIds.length];
-        count = 0;
+        target = ContactsIds.length;
 
         for(int i = 0; i < ContactsIds.length; i++) {
             JSONObject message = new JSONObject();
@@ -578,9 +626,11 @@ public class ConnectionsHomeDynamic extends Fragment {
                 Log.e("LoadUsername error", "Error");
             }
 
-            new SendPostAsyncTask.Builder(uri.toString(), message)
+            SendPostAsyncTask t = new SendPostAsyncTask.Builder(uri.toString(), message)
                     .onPostExecute(this::GetReceivedProfileFromIdPost)
-                    .build().execute();
+                    .build();
+                    t.execute();
+                    list.add(t);
         }
     }
 
@@ -605,25 +655,144 @@ public class ConnectionsHomeDynamic extends Fragment {
                 ContactsUsernames[count++] = username;
                 PROFILES.add(new ProfileContent.Profile(id, name, email, username));
             } else {
-
             }
 
         } catch (JSONException e) {
             Log.e("Received", e.toString());
         }
 
-        NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
-        ConnectionsNavDynamicDirections.ActionGlobalNavReceived received =
-                ConnectionsNavDynamicDirections.actionGlobalNavReceived(mCredentials);
-        navController.navigate(received);
+            NavController navController = Navigation.findNavController(getActivity(), R.id.hostFragment);
+            ConnectionsNavDynamicDirections.ActionGlobalNavReceived received =
+                    ConnectionsNavDynamicDirections.actionGlobalNavReceived(mCredentials);
+                navController.navigate(received);
+                counter++;
     }
 
-    public void SendMessageNavigation(String u)
+    public void SendMessageNavigation(String contactUsername)
     {
-        NavController navController =
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
-                ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
-        navController.navigate(chatPage);
+        Uri uri = new Uri.Builder()
+            .scheme("https")
+            .appendPath(getString(R.string.ep_base_url))
+            .appendPath(getString(R.string.ep_messaging_base))
+            .appendPath(getString(R.string.ep_messaging_chat))
+            .build();
+
+        JSONObject args = new JSONObject();
+        try
+        {
+            args.put
+                (
+                    "members",
+                    new JSONArray(new String[]{mCredentials.getUsername(),contactUsername})
+                );
+        }
+        catch (JSONException e)
+        {
+            Log.e("JsonFailure","Failed to set up json args for chat navigation.");
+        }
+
+        new SendPostAsyncTask.Builder(uri.toString(),args)
+            .addHeaderField("authorization", mJwToken)
+            .onPostExecute(this::NavigateToChat)
+            .onCancelled(str->Log.e("SendMessageNavigation",str))
+            .build()
+            .execute();
     }
+
+    private void NavigateToChat(String jsonMsg)
+    {
+        try
+        {
+            JSONObject msg = new JSONObject(jsonMsg);
+            if (msg.has("chatId"))
+            {
+                NavController navController =
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+                MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
+                    ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
+                chatPage.setGotoChat(msg.getLong("chatId"));
+                navController.navigate(chatPage);
+            }
+        }
+        catch (JSONException e)
+        {
+            Log.e("JsonFailure","Failed to parse returned json");
+        }
+    }
+
+//    public void SendMessageNavigation(String u)
+//    {
+//        NavController navController =
+//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+//        MobileNavigationDirections.ActionGlobalNavChatlist chatPage =
+//                ChatListFragmentDirections.actionGlobalNavChatlist(mCredentials, mJwToken);
+//        navController.navigate(chatPage);
+//    }
+
+    private class PushRequestReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(intent.hasExtra("TYPE")) {
+                if(intent.getStringExtra("TYPE").compareTo("request") == 0)
+                {
+                    Log.e("PUSHYFROMCONNECTIONS", "1");
+
+                    Load();
+                }
+            }
+        }
+    }
+
+    public void Load()
+    {
+        if(currentOption == 0)
+        {
+            LoadBaseConnections();
+        }
+        else if(currentOption == 1)
+        {
+            LoadSentConnectionRequests();
+        }
+        else if(currentOption == 2)
+        {
+            LoadReceivedConnectionRequests();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.e("RESUME", "SET PUSH RECEIVER");
+
+        if (mPushRequestReceiver == null) {
+            mPushRequestReceiver = new PushRequestReceiver();
+        }
+        IntentFilter iFilter = new IntentFilter(PushReceiver.RECEIVED_NEW_MESSAGE);
+        getActivity().registerReceiver(mPushRequestReceiver, iFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Log.e("PAUSE", "PAUSE PUSH RECEIVER");
+
+        if (mPushRequestReceiver != null){
+            getActivity().unregisterReceiver(mPushRequestReceiver);
+        }
+    }
+
+    public void Lock()
+    {
+        for(SendPostAsyncTask t : list)
+        {
+            t.cancel(true);
+        }
+
+        list.clear();
+    }
+
 }

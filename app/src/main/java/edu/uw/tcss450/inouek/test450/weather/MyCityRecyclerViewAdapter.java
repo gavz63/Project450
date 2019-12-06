@@ -2,16 +2,30 @@ package edu.uw.tcss450.inouek.test450.weather;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.location.Location;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.SelectLocationViewModel;
+import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
 import edu.uw.tcss450.inouek.test450.weather.CityFragment.OnListFragmentInteractionListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import static edu.uw.tcss450.inouek.test450.HomeActivity.KelvinToFahrenheit;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link CityPost} and makes a call to the
@@ -22,6 +36,8 @@ public class MyCityRecyclerViewAdapter extends RecyclerView.Adapter<MyCityRecycl
 
     private final List<CityPost> mValues;
     private final OnListFragmentInteractionListener mListener;
+    public static Uri.Builder uri;
+    private String mJwToken;
 
     public MyCityRecyclerViewAdapter(List<CityPost> items, OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -35,22 +51,98 @@ public class MyCityRecyclerViewAdapter extends RecyclerView.Adapter<MyCityRecycl
         return new ViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getCity());
-        holder.mContentView.setText(String.format("Lat: %s, Long: %s",
+        holder.mContentView.setText(String.format("Lat: %s\n Long: %s",
                 mValues.get(position).getLat(), mValues.get(position).getLong()));
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        JwTokenModel jwTokenModel = JwTokenModel.getFactory().create(JwTokenModel.class);
+        mJwToken = jwTokenModel.getJwToken().toString();
+        holder.mView.findViewById(R.id.city_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
+                String cityName = holder.mIdView.getText().toString();
+                String lat = mValues.get(position).getLat();
+                String lon =  mValues.get(position).getLong();
+                SelectLocationViewModel selectLocationViewModel = SelectLocationViewModel.getFactory().create(SelectLocationViewModel.class);
+                Location location = new Location("dummyprovider");
+                location.setLatitude(Double.valueOf(lat));
+                location.setLongitude(Double.valueOf(lon));
+                selectLocationViewModel.changeLocation(location);
+                Log.e("error","City Name: " + cityName + " / " + "Lat: " + lat + "/ Lon: " + lon);
+                Uri tenDayWeatherUri = uri.clearQuery().appendQueryParameter("lat", lat)
+                        .appendQueryParameter("lon", lon)
+                        .build();
+
+
+                Log.e("weather uri",tenDayWeatherUri.toString());
+
+
+                new GetAsyncTask.Builder(tenDayWeatherUri.toString())
+                        .onPostExecute(s -> {
+
+                                try {
+                                    Log.e("weather data", s);
+                                    JSONArray weatherArray = new JSONArray(s);
+
+                                    TenDaysWeatherPost[] weather = new TenDaysWeatherPost[weatherArray.length()];
+                                    //get 10 days weather info
+                                    for (int i = 0; i < weatherArray.length(); i++) {
+
+
+                                        JSONObject day = weatherArray.getJSONObject(i);
+
+                                        long time = Long.valueOf(day.getString("date")).intValue()* 1000L;
+                                        Calendar currCal = Calendar.getInstance();
+                                        Date dateObject = new Date(time);
+                                        currCal.setTime(dateObject);
+                                        //Date currCalDate = new Date(time);
+                                        String iconID = day.getString("iconId");
+                                        //System.out.println(iconID);
+
+                                        String[] week_name = {"Sun", "Mon", "Tue", "Wed",
+                                                "Thur", "Fri", "Sat"};
+                                        String temp_min = day.getString("minTemp");
+                                        temp_min = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_min)));
+                                        String temp_max = day.getString("maxTemp");
+                                        temp_max = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_max)));
+
+                                        int date = currCal.get(Calendar.DAY_OF_MONTH);
+
+                                        Log.e("Day of Month " , String.valueOf(date));
+
+
+                                        int month = currCal.get(Calendar.MONTH) + 1;
+                                        weather[i] = (new TenDaysWeatherPost.Builder(iconID,
+                                                "" + month + " / " + date + " / "
+                                                        + week_name[currCal.get(Calendar.DAY_OF_WEEK)-1],
+                                                "High: " + temp_max + "°F\n"
+                                                        + "Low: " + temp_min + "°F")
+                                                .build());
+                                    }
+                                    ArrayList<TenDaysWeatherPost> weathers = new ArrayList(Arrays.asList(weather));
+                                    Log.e("Weather Change: ", weathers.toString());
+
+
+                                    TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
+                                    viewModel.changeData(weathers);
+
+                                    Log.e("error","end update");
+                                }catch(JSONException e){
+                                    Log.e("Weather is Not Changing", "Error");
+                                    e.printStackTrace();
+                                }
+
+                            })
+                        .addHeaderField("authorization", mJwToken) //add the JWT as a header
+                        .build().execute();
+                Log.e("error","clicked");
             }
+
+
         });
     }
 
@@ -83,4 +175,6 @@ public class MyCityRecyclerViewAdapter extends RecyclerView.Adapter<MyCityRecycl
         mValues.addAll(data);
         notifyDataSetChanged();
     }
+
+
 }

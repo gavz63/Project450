@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -26,9 +29,12 @@ import java.util.Date;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.WeatherMainFragment;
 import edu.uw.tcss450.inouek.test450.WeatherMainFragmentArgs;
+import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
+import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
 
 import static edu.uw.tcss450.inouek.test450.HomeActivity.KelvinToFahrenheit;
+import static edu.uw.tcss450.inouek.test450.WeatherMainFragmentArgs.fromBundle;
 
 
 /**
@@ -46,7 +52,7 @@ public class CityFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private MyCityRecyclerViewAdapter recyclerViewAdapter;
     private ArrayList<CityPost> cities;
-
+    public static Credentials mCredentials;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,6 +75,14 @@ public class CityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cities = new ArrayList<>();
+        LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+        Location location = viewModel.getCurrentLocation().getValue();
+        cities.add(new CityPost.Builder("Current Location",
+                String.valueOf(location.getLongitude()),
+                String.valueOf(location.getLatitude())).build());
+        cities.add(new CityPost.Builder("Tokyo",
+                "35.652832",
+                "139.839478").build());
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -78,20 +92,16 @@ public class CityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_city_list, container, false);
-        LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
-        Location location = viewModel.getCurrentLocation().getValue();
 
-        cities.add(new CityPost.Builder("Current Location",
-                String.valueOf(location.getLongitude()),
-                String.valueOf(location.getLatitude())).build());
-        cities.add(new CityPost.Builder("Tokyo",
-                                        "35.652832",
-                                        "139.839478").build());
         JwTokenModel jwTokenModel = JwTokenModel.getFactory().create(JwTokenModel.class);
         mJwToken = jwTokenModel.getJwToken().toString();
 
-        getCityList();
-        
+        try {
+            getCityList();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -102,6 +112,13 @@ public class CityFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(recyclerViewAdapter = new MyCityRecyclerViewAdapter(cities, this::onClick));
+            Uri.Builder tenDayWeatherUri = new Uri.Builder()
+                    .scheme("https")
+                    .appendPath(getString(R.string.ep_base_url))
+                    .appendPath(getString(R.string.ep_weather))
+                    .appendPath(getString(R.string.ep_weather_10));
+            MyCityRecyclerViewAdapter.uri = tenDayWeatherUri;
+
         }
         return view;
     }
@@ -135,23 +152,7 @@ public class CityFragment extends Fragment {
         mListener = null;
     }
     private void onClick(CityPost city){
-        String cityName = city.getCity();
-        String lat = city.getLat();
-        String lon = city.getLong();
-        System.out.println("City Name: " + cityName + " / " + "Lat: " + lat + "/ Lon: " + lon);
-        Uri tenDayWeatherUri = new Uri.Builder()
-                .scheme("https")
-                .appendPath(getString(R.string.ep_base_url))
-                .appendPath(getString(R.string.ep_weather))
-                .appendPath(getString(R.string.ep_weather_10))
-                .appendQueryParameter("lat", lat)
-                .appendQueryParameter("lon", lon)
-                .build();
-        new GetAsyncTask.Builder(tenDayWeatherUri.toString())
-                .onPostExecute(this::getTenDayWeatherOnPost)
-                .addHeaderField("authorization", mJwToken) //add the JWT as a header
-                .build().execute();
-        System.out.println("clicked");
+
     }
 
 
@@ -172,108 +173,71 @@ public class CityFragment extends Fragment {
     }
 
 
-    private void getCityList(){
-        Uri tenDayWeatherUri = new Uri.Builder()
+    private void getCityList() throws JSONException {
+        Log.e("getCityList","Called");
+        Uri locationUri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
                 .appendPath(getString(R.string.ep_weather))
                 .appendPath(getString(R.string.ep_weather_locations))
                 .build();
-        new GetAsyncTask.Builder(tenDayWeatherUri.toString())
-                .onPostExecute(this::getCityOnPost)
-                .addHeaderField("authorization", mJwToken) //add the JWT as a header
+        JSONObject json = new JSONObject();
+        json.put("username", mCredentials.getUsername());
+        new SendPostAsyncTask.Builder(locationUri.toString(), json)
+                .onPostExecute(s->{
+                    try {
+
+                        // s in there should be result
+
+                        JSONArray cityArray = new JSONArray(s);
+
+                        CityPost[] cityPosts = new CityPost[cityArray.length()];
+                        //get 10 days weather info
+                        for (int i = 0; i < cityArray.length(); i++) {
+
+
+                            JSONObject day = cityArray.getJSONObject(i);
+                            String cityName = day.getString("nickname");
+                            String lat = day.getString("Lat");
+                            String lon = day.getString("Long");
+
+                            cityPosts[i] = (new CityPost.Builder(cityName, lon, lat)
+                                    .build());
+                        }
+                        cities = new ArrayList();
+                        LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
+                        Location location = viewModel.getCurrentLocation().getValue();
+                        BigDecimal lat = new BigDecimal(location.getLatitude());
+                        BigDecimal lon = new BigDecimal(location.getLongitude());
+
+                        cities.add(new CityPost.Builder("Current Location",
+                                (lat.setScale(6, RoundingMode.HALF_UP).toString()),
+                                 lon.setScale(6, RoundingMode.HALF_UP).toString()).build());
+
+                        cities.add(new CityPost.Builder("New York",
+                                "40.730610",
+                                "-73.935242").build());
+
+                        cities.add(new CityPost.Builder("Tokyo",
+                                "35.652832",
+                                "139.839478").build());
+
+
+                        cities.add(new CityPost.Builder("Mexico",
+                                "19.432608",
+                                "-99.133209").build());
+                        cities.addAll(Arrays.asList(cityPosts));
+                        CityViewModel cityViewModel = CityViewModel.getFactory().create(CityViewModel.class);
+                        cityViewModel.changeData(cities);
+
+
+                    }catch(JSONException e){
+                        e.printStackTrace();
+                    }
+
+                })
                 .build().execute();
     }
 
-    private void getCityOnPost(String s) {
 
-        try {
-
-            // s in there should be result
-
-            JSONArray cityArray = new JSONArray(s);
-
-            CityPost[] cityPosts = new CityPost[cityArray.length()];
-            //get 10 days weather info
-            for (int i = 0; i < cityArray.length(); i++) {
-
-
-                JSONObject day = cityArray.getJSONObject(i);
-                String cityName = day.getString("nickname");
-                String lat = day.getString("Lat");
-                String lon = day.getString("Long");
-
-                cityPosts[i] = (new CityPost.Builder(cityName, lon, lat)
-                        .build());
-            }
-            cities = new ArrayList();
-            LocationViewModel viewModel = LocationViewModel.getFactory().create(LocationViewModel.class);
-            Location location = viewModel.getCurrentLocation().getValue();
-
-            cities.add(new CityPost.Builder("Current Location",
-                    String.valueOf(location.getLongitude()),
-                    String.valueOf(location.getLatitude())).build());
-            cities.addAll(Arrays.asList(cityPosts));
-            CityViewModel cityViewModel = CityViewModel.getFactory().create(CityViewModel.class);
-            cityViewModel.changeData(cities);
-
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
-
-        return;
-    }
-
-    private void getTenDayWeatherOnPost(String s) {
-
-        try {
-
-            // s in there should be result
-            //JSONObject jsonObject = new JSONObject(s);
-
-            //String tenDaysWeather = jsonObject.getString("list");
-
-            JSONArray weatherArray = new JSONArray(s);
-
-            TenDaysWeatherPost[] weather = new TenDaysWeatherPost[weatherArray.length()];
-            //get 10 days weather info
-            for (int i = 0; i < weatherArray.length(); i++) {
-
-
-                JSONObject day = weatherArray.getJSONObject(i);
-
-                long time = Integer.valueOf(day.getString("date")).intValue();
-                Calendar currCal = Calendar.getInstance();
-                Date dateObject = new Date(time * 1000);
-                currCal.setTime(dateObject);
-                //Date currCalDate = new Date(time);
-                String iconID = day.getString("iconId");
-               //System.out.println(iconID);
-
-                String[] week_name = {"Sun", "Mon", "Tue", "Wed",
-                        "Thur", "Fri", "Sat"};
-                String temp_min = day.getString("minTemp");
-                temp_min = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_min)));
-                String temp_max = day.getString("maxTemp");
-                temp_max = String.format("%.2f", KelvinToFahrenheit(Float.parseFloat(temp_max)));
-
-                int date = currCal.get(Calendar.DAY_OF_MONTH);
-                int month = currCal.get(Calendar.MONTH) + 1;
-                weather[i] = (new TenDaysWeatherPost.Builder(iconID,
-                        "" + month + " / " + date + " / "
-                                + week_name[currCal.get(Calendar.DAY_OF_WEEK)-1],
-                        temp_min + "/" + temp_max)
-                        .build());
-            }
-            ArrayList<TenDaysWeatherPost> weathers = new ArrayList(Arrays.asList(weather));
-
-            TenDaysWeatherModel viewModel = TenDaysWeatherModel.getFactory().create(TenDaysWeatherModel.class);
-            viewModel.changeData(weathers);
-
-            System.out.println("end update");
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
-
-    }
 }

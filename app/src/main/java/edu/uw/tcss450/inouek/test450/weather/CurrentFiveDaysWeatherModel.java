@@ -1,6 +1,5 @@
-package edu.uw.tcss450.inouek.test450;
+package edu.uw.tcss450.inouek.test450.weather;
 
-import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -8,30 +7,30 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.ArrayList;
 
-import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
+public class CurrentFiveDaysWeatherModel extends ViewModel {
 
-public class SelectLocationViewModel extends ViewModel {
     /**
      * This ViewModel will be a singleton, meaning there will be only one instantiation and this
      * static variable will reference it. To implement this design pattern, we need a factory
      * method. See getFactory()
      */
-    private static SelectLocationViewModel mInstance;
+    private static CurrentFiveDaysWeatherModel mInstance;
 
     /**
      * Stores the Location object wrapped in a MutableLiveData. MutableLiveData implements a flavor
      * of the Observer Design Pattern. We will add Observers to this state in the fragments.
      */
-    private MutableLiveData<Location> currentLocation;
+    private MutableLiveData<ArrayList<TenDaysWeatherPost>> currentWeathers;
 
 
     /**
      * Private to limit instantiation to this class and this class only. To obtain one (the only
      * one) of these objects, users must call the factory method.
      */
-    private SelectLocationViewModel() {
-        currentLocation = new MutableLiveData<>();
+    private CurrentFiveDaysWeatherModel() {
+        currentWeathers = new MutableLiveData<>();
     }
 
 
@@ -40,17 +39,17 @@ public class SelectLocationViewModel extends ViewModel {
      * of Observers. Note the Polymorphic return type.
      * @return the LaveData to observe
      */
-    public LiveData<Location> getCurrentLocation() {
-        return currentLocation;
+    public LiveData<ArrayList<TenDaysWeatherPost>> getCurrentWeather() {
+        return currentWeathers;
     }
 
 
     /**
      * Change the Location state of this ViewModel.
-     * @param location the new Location
+     * @param "List<TenDaysWeatherPost>" the new Location
      */
-    public void changeLocation(final Location location) {
-        currentLocation.setValue(location);
+    public void changeData(final ArrayList<TenDaysWeatherPost> weathers) {
+        currentWeathers.setValue(weathers);
     }
 
 
@@ -64,12 +63,13 @@ public class SelectLocationViewModel extends ViewModel {
 
             @NonNull
             @Override
-            public SelectLocationViewModel create(@NonNull Class modelClass) {
+            public CurrentFiveDaysWeatherModel create(@NonNull Class modelClass) {
                 if (mInstance == null) {
-                    mInstance = new SelectLocationViewModel();
+                    mInstance = new CurrentFiveDaysWeatherModel();
                 }
                 return mInstance;
             }
         };
     }
+
 }

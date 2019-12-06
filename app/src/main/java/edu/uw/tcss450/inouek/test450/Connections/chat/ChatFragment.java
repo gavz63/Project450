@@ -174,6 +174,7 @@ public class ChatFragment extends Fragment
 				//its up to you to decide if you want to send the message to the output here
 				//or wait for the message to come back from the web service.
 			}
+			refreshMessages();
 		}
 		catch (JSONException e)
 		{
@@ -211,20 +212,23 @@ public class ChatFragment extends Fragment
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
+			Log.e("PUSHYRECEIVER", "PLEASE SEE THIS");
 			if(intent.hasExtra("SENDER") && intent.hasExtra("MESSAGE")) {
-				String sender = intent.getStringExtra("SENDER");
-				String username = "";
-				int color = 0;
-				try {
-					JSONObject senderJSON = new JSONObject(sender);
-					username = senderJSON.getString("username");
-					color = senderJSON.getInt("color");
-				} catch (JSONException e) {
-					e.printStackTrace();
+				if(intent.getStringExtra("TYPE").compareTo("msg") == 0) {
+					String sender = intent.getStringExtra("SENDER");
+					String username = "";
+					int color = 0;
+					try {
+						JSONObject senderJSON = new JSONObject(sender);
+						username = senderJSON.getString("username");
+						color = senderJSON.getInt("color");
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+					String messageText = intent.getStringExtra("MESSAGE");
+					messageOutput.add(0, new ChatContent.Message(username, messageText, color));
+					viewAdapter.notifyDataSetChanged();
 				}
-				String messageText = intent.getStringExtra("MESSAGE");
-				messageOutput.add(0,new ChatContent.Message(username,messageText,color));
-				viewAdapter.notifyDataSetChanged();
 			}
 		}
 	}

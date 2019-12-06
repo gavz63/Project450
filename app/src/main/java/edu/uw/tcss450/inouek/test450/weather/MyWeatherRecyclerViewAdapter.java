@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,7 +117,6 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
 
         }
 
-        //holder.mIcon.setImageBitmap(mValues.get(position).getIcon());
 
 
         holder.mDate.setText(mValues.get(position).getDate());
@@ -140,7 +140,6 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
     public void swap(ArrayList<TenDaysWeatherPost> data){
         mValues.clear();
         mValues.addAll(data);
-        notifyDataSetChanged();
     }
 
     @Override

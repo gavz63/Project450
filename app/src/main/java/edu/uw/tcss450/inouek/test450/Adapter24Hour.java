@@ -21,9 +21,9 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
     // for debug
     private static final String TAG = "Adapter24Hour";
     private Context myContext; //
-    private ArrayList<String> mWeatherInfo;
+    private ArrayList<String[]> mWeatherInfo;
 
-    public Adapter24Hour (Context Context, ArrayList<String> weatherInfo){
+    public Adapter24Hour (Context Context, ArrayList<String[]> weatherInfo){
         myContext = Context;
         mWeatherInfo = weatherInfo;
     }
@@ -44,7 +44,7 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
         // this funciton will be called when each new item was put into the list
         Log.d(TAG, "On Bind View Holder : called. ");
 
-        holder.description.setText(mWeatherInfo.get(position));
+        holder.icon.setText("Description: " + mWeatherInfo.get(position)[0] + "\n" + " temperature: " + mWeatherInfo.get(position)[1] + "\n");
     }
 
     @Override
@@ -58,13 +58,14 @@ public class Adapter24Hour extends RecyclerView.Adapter<Adapter24Hour.ViewHolder
     // and it should have text to display weather info and has its own layout
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView description;
+        TextView icon;
+
         //RelativeLayout parentLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            description = (TextView)itemView.findViewById(R.id.item_24_forecast);
+            icon = (TextView)itemView.findViewById(R.id.textView);
             //parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }

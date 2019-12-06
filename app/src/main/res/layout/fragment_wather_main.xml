@@ -29,13 +29,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="214dp">
+            android:layout_height="wrap_content">
 
             <fragment
                 android:id="@+id/fragment_weathers"
                 android:name="edu.uw.tcss450.inouek.test450.weather.Weather10Fragment"
                 android:layout_width="wrap_content"
-                android:layout_height="214dp"
+                android:layout_height="240dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +51,7 @@
                 android:id="@+id/fragment_city"
                 android:name="edu.uw.tcss450.inouek.test450.weather.CityFragment"
                 android:layout_width="match_parent"
-                android:layout_height="522dp"
+                android:layout_height="591dp"
                 tools:layout="@layout/fragment_city_list" />
 
         </FrameLayout>
