@@ -103,10 +103,6 @@ public class ChatListFragment extends Fragment
 				{
 					e.printStackTrace();
 				}
-				if(chats.size() == 0)
-				{
-					chats.add(new Chat(1, "Global Chat"));
-				}
 				viewAdapter.notifyDataSetChanged();
 			});
 			SendPostAsyncTask task = taskBuilder.build();
