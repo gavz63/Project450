@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.uw.tcss450.inouek.test450.HomeActivity;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.utils.PushReceiver;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
@@ -36,6 +38,8 @@ public class ChatFragment extends Fragment
 	private long chatId,userId;
 	private int color;
 	private String username,jwt;
+	private boolean hasSetChatname;
+	private ActionBar mActionBar;
 
 	private List<ChatContent.Message> messageOutput = new ArrayList<>();
 	private ChatMessageRecyclerViewAdapter viewAdapter;
@@ -124,6 +128,11 @@ public class ChatFragment extends Fragment
 			{
 				JSONObject json = new JSONObject(str);
 				JSONArray messageArray = json.getJSONArray("messages");
+				if (!hasSetChatname) {
+					String chatName = json.getString("chatName");
+					mActionBar.setTitle(chatName);
+				}
+
 				for(int i=0; i<messageArray.length(); i++)
 				{
 					messageOutput.add(new ChatContent.Message(messageArray.getJSONObject(i)));
@@ -174,7 +183,7 @@ public class ChatFragment extends Fragment
 				//its up to you to decide if you want to send the message to the output here
 				//or wait for the message to come back from the web service.
 			}
-			refreshMessages();
+			//refreshMessages();
 		}
 		catch (JSONException e)
 		{
@@ -203,6 +212,11 @@ public class ChatFragment extends Fragment
 		}
 	}
 
+	@Override
+	public void onAttach(@NonNull Context context) {
+		super.onAttach(context);
+		mActionBar = ((HomeActivity) context).getSupportActionBar();
+	}
 
 	/**
 	 * A BroadcastReceiver that listens for messages sent from PushReceiver

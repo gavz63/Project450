@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 
@@ -23,6 +24,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import edu.uw.tcss450.inouek.test450.weather.AddLocationFragment;
 import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
 
 
@@ -32,6 +37,7 @@ import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
 
     private GoogleMap mMap;
+    private AddLocationFragment mParent;
 
     public MapFragment() {
         // Required empty public constructor
@@ -52,6 +58,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         //add this fragment as the OnMapReadyCallback -> See onMapReady()
         mapFragment.getMapAsync(this);
+        mParent = (AddLocationFragment) getParentFragment();
     }
 
     @Override
@@ -87,10 +94,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public void onMapClick(LatLng latLng) {
         Log.d("LAT/LONG", latLng.toString());
+        mMap.clear();
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title("New Marker"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18.0f));
+
+        BigDecimal lat = new BigDecimal(latLng.latitude);
+        BigDecimal lon = new BigDecimal(latLng.longitude);
+
+        lat.setScale(6, RoundingMode.HALF_UP);
+        lon.setScale(6, RoundingMode.HALF_UP);
+
+        mParent.setLat(lat.doubleValue());
+        mParent.setLong(lon.doubleValue());
     }
 }
 

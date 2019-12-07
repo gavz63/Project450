@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat;
 
 import edu.uw.tcss450.inouek.test450.HomeActivity;
 import edu.uw.tcss450.inouek.test450.R;
+import edu.uw.tcss450.inouek.test450.login.LoginActivity;
 import me.pushy.sdk.Pushy;
 
 import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
@@ -72,7 +73,7 @@ public class PushReceiver extends BroadcastReceiver
             //app is in the background so create and post a notification
             Log.d("PUSHY", "Message received in background: " + messageText);
 
-            Intent i = new Intent(context, HomeActivity.class);
+            Intent i = new Intent(context, LoginActivity.class);
             i.putExtras(intent.getExtras());
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);

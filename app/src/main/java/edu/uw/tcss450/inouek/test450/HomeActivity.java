@@ -390,7 +390,6 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
     private void getTenDayWeatherOnPost(String s) {
 
         try {
-            Log.e("weather info :", s);
 
             JSONArray weatherArray = new JSONArray(s);
 
@@ -400,12 +399,9 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
 
                 JSONObject day = weatherArray.getJSONObject(i);
-                Log.e("day: ", day.toString());
                 Calendar currCal = Calendar.getInstance();
                 long time = Long.parseLong(day.getString("date"));
-                Log.e("time: ", Long.toString(time));
                 Date dateObject = new Date(time * 1000L);
-                Log.e("Date: ", dateObject.toString());
                 currCal.setTime(dateObject);
                 String iconID = day.getString("iconId");
 

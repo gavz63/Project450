@@ -29,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatMessageNotification;
+import edu.uw.tcss450.inouek.test450.HomeActivity;
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
@@ -338,21 +339,10 @@ public class LoginFragment extends Fragment {
                                     .actionLoginFragmentToHomeActivity(c);
                     homeActivity.setJwt(mJwt);
 
-                    if (getArguments() != null)
+                    Bundle args = getArguments();
+                    if(args != null)
                     {
-                        if (getArguments().containsKey("type"))
-                        {
-                            if (getArguments().getString("type").equals("msg"))
-                            {
-                                ChatMessageNotification chat = new ChatMessageNotification
-                                (
-                                    getArguments().getString("message"),
-                                    getArguments().getString("sender"),
-                                    getArguments().getLong("chatid",0)
-                                );
-                                homeActivity.setChatMessage(chat);
-                            }
-                        }
+                        ChatMessageNotification.TryParse(args, homeActivity::setChatMessage);
                     }
 
                     Navigation.findNavController(getView()).navigate(homeActivity);
