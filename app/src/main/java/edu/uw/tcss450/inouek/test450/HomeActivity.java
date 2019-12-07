@@ -60,6 +60,7 @@ import java.util.Date;
 
 import edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamic;
 import edu.uw.tcss450.inouek.test450.Connections.ConnectionsHomeDynamicDirections;
+import edu.uw.tcss450.inouek.test450.Connections.Profile.ProfileContent;
 import edu.uw.tcss450.inouek.test450.Connections.chat.ChatListFragmentDirections;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
@@ -74,6 +75,8 @@ import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherModel;
 import edu.uw.tcss450.inouek.test450.weather.TenDaysWeatherPost;
 import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment;
 import edu.uw.tcss450.inouek.test450.weather.Weather10FragmentInMain;
+
+import static android.view.View.INVISIBLE;
 
 //Testing change on git
 public class HomeActivity extends AppCompatActivity implements Weather10Fragment.OnListFragmentInteractionListener,
@@ -160,14 +163,13 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
         View actionView = menuItem.getActionView();
         mNightModeSwitch = actionView.findViewById(R.id.night_mode_switch);
         mNightModeSwitch.setOnCheckedChangeListener((mNightModeSwitch, isChecked) -> {
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_NO);
-            }
-
+                if (isChecked) {
+                    AppCompatDelegate.setDefaultNightMode(
+                            AppCompatDelegate.MODE_NIGHT_YES);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(
+                            AppCompatDelegate.MODE_NIGHT_NO);
+                }
         });
 
         // Passing each menu ID as a set of Ids because each
@@ -251,7 +253,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
 
         if(ConnectionsHomeDynamic.counter >= ConnectionsHomeDynamic.target-1)
         {
-
+            mNightModeSwitch.setVisibility(View.VISIBLE);
             switch (menuItem.getItemId()) {
                 case R.id.nav_account:
                     choice = 0;
@@ -279,6 +281,7 @@ public class HomeActivity extends AppCompatActivity implements Weather10Fragment
                     break;
                 case R.id.nav_connections:
                     if(choice != 3) {
+                        mNightModeSwitch.setVisibility(View.INVISIBLE);
                         choice = 3;
                         MobileNavigationDirections.ActionGlobalNavConnections connectionsPage =
                                 ConnectionsHomeDynamicDirections.actionGlobalNavConnections(mCredentials, mJwToken);

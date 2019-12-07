@@ -126,7 +126,9 @@ public class ConnectionsHomeDynamic extends Fragment {
 
         stillVisible = true;
 
-        LoadBaseConnections();
+        Log.e("START UP", " STARTING");
+
+            LoadBaseConnections();
     }
 
     private boolean onNavigationSelected(final MenuItem menuItem) {
@@ -776,8 +778,9 @@ public class ConnectionsHomeDynamic extends Fragment {
 
     @Override
     public void onPause() {
-        super.onPause();
 
+        super.onPause();
+        Lock();
         Log.e("PAUSE", "PAUSE PUSH RECEIVER");
 
         if (mPushRequestReceiver != null){
@@ -793,6 +796,7 @@ public class ConnectionsHomeDynamic extends Fragment {
         }
 
         list.clear();
+        Log.e("THIS HAPPENED", "IT REALLY DID");
     }
 
 }
