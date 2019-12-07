@@ -44,6 +44,8 @@ public class PushReceiver extends BroadcastReceiver
         //The WS sent us the name of the sender
         String sender = intent.getStringExtra("sender");
 
+        String username = intent.getStringExtra("username");
+
         String messageText = intent.getStringExtra("message");
 
         ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
@@ -83,14 +85,14 @@ public class PushReceiver extends BroadcastReceiver
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
             builder.setAutoCancel(true);
             builder.setSmallIcon(R.drawable.ic_chat_notification);
-            if(sender != null)
+            if(username != null)
             {
                 if(messageText.compareTo("Your Friends List has recently been modified.") == 0)
                 {
-                    builder.setContentTitle("Friend Notification from: " + sender);
+                    builder.setContentTitle("Friend Notification from: " + username);
                 }
                 else {
-                    builder.setContentTitle("Message Notification from: " + sender);
+                    builder.setContentTitle("Message Notification from: " + username);
                 }
             }
             else if(messageText.compareTo("One of your friends has added you to a chat!") == 0)
