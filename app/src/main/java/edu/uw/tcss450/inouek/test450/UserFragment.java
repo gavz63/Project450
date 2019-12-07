@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +76,7 @@ public class UserFragment extends Fragment {
             for (ImageView avatar : avatars) {
                 avatar.setOnClickListener(a -> {
                     this.setAvatar(Integer.parseInt((String) avatar.getTag()));
+                    Log.e("See Data", (String) avatar.getTag());
                     dialog.cancel();
                 });
             }

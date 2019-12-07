@@ -141,8 +141,6 @@ public class MyCityRecyclerViewAdapter extends RecyclerView.Adapter<MyCityRecycl
                         .build().execute();
                 Log.e("error","clicked");
             }
-
-
         });
     }
 

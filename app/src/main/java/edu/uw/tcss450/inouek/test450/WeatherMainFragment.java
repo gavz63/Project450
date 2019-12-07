@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,7 +38,8 @@ import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment;
  *
  */
 public class WeatherMainFragment extends Fragment {
-    Credentials mCredentials;
+    private Credentials mCredentials;
+    private String mJwt;
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
@@ -56,6 +58,7 @@ public class WeatherMainFragment extends Fragment {
         weathersArray = new ArrayList<TenDaysWeatherPost>();
         try {
             mCredentials = WeatherMainFragmentArgs.fromBundle(getArguments()).getCredentials();
+            mJwt = WeatherMainFragmentArgs.fromBundle(getArguments()).getJwt();
             CityFragment.mCredentials = mCredentials;
             Weather10Fragment.mCredentials = mCredentials;
             Log.e("setting", "mCredentials");
@@ -75,9 +78,16 @@ public class WeatherMainFragment extends Fragment {
         // open map fragment
 
         FloatingActionButton fab = view.findViewById(R.id.add_city_button);
-        fab.setOnClickListener(v ->
-                Navigation.findNavController(getActivity().findViewById(R.id.nav_host_fragment))
-                        .navigate(R.id.action_weatherMainFragment_to_addLocationFragment2));
+
+        fab.setOnClickListener(v -> {
+            NavController controller = Navigation
+                    .findNavController(getActivity().findViewById(R.id.nav_host_fragment));
+
+            WeatherMainFragmentDirections.ActionWeatherMainFragmentToAddLocationFragment2 action =
+                WeatherMainFragmentDirections.actionWeatherMainFragmentToAddLocationFragment2(mCredentials, mJwt);
+            controller.navigate(action);
+        });
+        
         return view;
     }
 
