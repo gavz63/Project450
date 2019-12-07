@@ -80,6 +80,8 @@ public class Weather10Fragment extends Fragment {
     public Weather10Fragment() {
     }
 
+
+
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static Weather10Fragment newInstance(int columnCount) {
@@ -156,8 +158,8 @@ public class Weather10Fragment extends Fragment {
         mListener = null;
     }
 
+    // go the forecast 24 fragment and the item position we clicked
     private void onClick(TenDaysWeatherPost weather){
-
         WeatherMainFragmentDirections.ActionWeatherMainFragmentToForecast24Fragment nav =
                 WeatherMainFragmentDirections.actionWeatherMainFragmentToForecast24Fragment(
                         mCredentials
@@ -183,3 +185,4 @@ public class Weather10Fragment extends Fragment {
     }
 
 }
+

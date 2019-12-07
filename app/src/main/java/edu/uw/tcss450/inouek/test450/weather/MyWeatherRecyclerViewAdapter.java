@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.uw.tcss450.inouek.test450.R;
 import edu.uw.tcss450.inouek.test450.weather.Weather10Fragment.OnListFragmentInteractionListener;
@@ -22,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * {@link RecyclerView.Adapter} that can display a {@link TenDaysWeatherPost} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
@@ -32,6 +34,7 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
     private final List<TenDaysWeatherPost> mValues;
     private final OnListFragmentInteractionListener mListener;
 
+
     public MyWeatherRecyclerViewAdapter(List<TenDaysWeatherPost> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -41,6 +44,7 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_weather_item, parent, false);
+
         return new ViewHolder(view);
     }
 
@@ -109,6 +113,8 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
                 default:
                     break;
             }
+
+
         }
 
 
@@ -124,10 +130,11 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
-
                 Weather10Fragment.position = position;
             }
         });
+
+
     }
 
     public void swap(ArrayList<TenDaysWeatherPost> data){
@@ -147,6 +154,7 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
         public final TextView mTemp;
         public TenDaysWeatherPost mItem;
 
+
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -159,5 +167,14 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
         public String toString() {
             return super.toString();
         }
+
     }
+
+
+
 }
+
+
+
+
+

@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+
 import edu.uw.tcss450.inouek.test450.weather.LocationViewModel;
 
 public class SelectLocationViewModel extends ViewModel {

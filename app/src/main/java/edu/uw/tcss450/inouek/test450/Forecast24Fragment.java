@@ -1,6 +1,7 @@
 package edu.uw.tcss450.inouek.test450;
 
 
+import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -8,6 +9,9 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,11 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +36,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-
+import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
+import edu.uw.tcss450.inouek.test450.weather.CityPost;
+import edu.uw.tcss450.inouek.test450.weather.JwTokenModel;
+import edu.uw.tcss450.inouek.test450.weather.MyCityRecyclerViewAdapter;
 import edu.uw.tcss450.inouek.test450.model.Credentials;
 import edu.uw.tcss450.inouek.test450.utils.GetAsyncTask;
 import edu.uw.tcss450.inouek.test450.utils.SendPostAsyncTask;
@@ -61,6 +66,7 @@ public class Forecast24Fragment extends Fragment {
     ArrayList<String[]> weatherInfo = new ArrayList<>();
     View myView;
     Credentials mCredentials;
+
     // weatherbit.io 
     //Using another web API: which having 48 hrs forecast
     // 185f29dc08694f95a92201318dea4b23
@@ -90,7 +96,6 @@ public class Forecast24Fragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return myView;
     }
 
@@ -117,9 +122,9 @@ public class Forecast24Fragment extends Fragment {
                 .appendPath(getString(R.string.ep_base_url))
                 .appendPath(getString(R.string.ep_weather))
                 .appendPath(getString(R.string.ep_weather_24))
-//                .appendQueryParameter("lat", lat.setScale(6, RoundingMode.HALF_UP))
-//                .appendQueryParameter("long", lon.setScale(6, RoundingMode.HALF_UP))
-//                .appendQueryParameter("days_from_today", "0")
+//              .appendQueryParameter("lat", lat.setScale(6, RoundingMode.HALF_UP))
+//              .appendQueryParameter("long", lon.setScale(6, RoundingMode.HALF_UP))
+//              .appendQueryParameter("days_from_today", "0")
                 .build();
         Log.e("uri", locationUri.toString());
         new GetAsyncTask.Builder(locationUri.toString())
@@ -141,11 +146,12 @@ public class Forecast24Fragment extends Fragment {
                         //get 10 days weather info
                         JSONArray weatherArray = new JSONArray(s);
                         for (int i = 0; i < weatherArray.length(); i++) {
-                            data = new String[2];
+                            data = new String[3];
 
                             JSONObject day = weatherArray.getJSONObject(i);
                             data[0]=  day.get("iconId").toString();
                             data[1]= day.get("temperature").toString();
+                            data[2] = String.valueOf(i + 1);
                             info.add(data);
                         }
 
@@ -163,6 +169,19 @@ public class Forecast24Fragment extends Fragment {
                 .addHeaderField("days_from_today", String.valueOf(Weather10Fragment.position))
                 .build().execute();
     }
+
+    // this method will excute the link and find the weather data and info
+//    public void FindWeather (View v){
+//        try{
+//            // want to make asynctask to get the data in background
+//            ExecuteTask tasky = new ExecuteTask();
+//            String url = "https://api.weatherbit.io/v2.0/forecast/hourly?&key="+API_KEY+"&hours=48&lat="+lat+"&lon="+lon;
+//            //tasky.execute("Here in the URL of the website"+cityToFind+"API key");
+//            tasky.execute(url);
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // this task will get all from website in background
